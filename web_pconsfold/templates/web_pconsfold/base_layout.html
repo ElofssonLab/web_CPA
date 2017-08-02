@@ -1,0 +1,155 @@
+<html>
+<head>
+<title>PConsfold</title>
+<title></title>
+<meta name="description" content="PConsfold" />
+<meta name="keywords" content="localization, bioinformatics, prediction, system
+biology" />
+<meta name="robots" content="index, follow" />
+
+{% block html_head_meta %}{% endblock %}
+
+<link rel="stylesheet" href="{{STATIC_URL}}css/template_css.css" type="text/css" />
+<link rel="stylesheet" href="{{STATIC_URL}}css/jquery.dataTables.css" type="text/css" />
+
+<!--<script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/sorttable.js"></script>-->
+<script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/3Dmol-min.js"></script>
+<script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/jquery.js"></script>
+<script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/jquery.dataTables.min.js"></script>
+
+<script language="javascript">
+if (document.images) {
+  arrow = new Image(); arrow.src = "{{STATIC_URL}}images/arrow.png";
+  arrow90 = new Image(); arrow90.src = "{{STATIC_URL}}images/arrow90.png";
+}
+
+function print_todays_date( ) {
+  var d = new Date( );                  // Get today's date and time
+  document.write(d.toLocaleString( ));  // Insert it into the document
+}
+
+function hideShow(element){
+  if((document.getElementById(element).style.display == 'none') || (document.getElementById(element).style.display == '')) {
+    document.getElementById(element).style.display = 'block';
+    if (document.images) {
+      document.getElementById("arrow").src=arrow.src;
+    }
+  } else if(document.getElementById(element).style.display == 'block') {
+    document.getElementById(element).style.display = 'none';
+    if (document.images) {
+      document.getElementById("arrow").src=arrow90.src;
+    }
+  }
+}
+
+function example_fill(){
+  document.seq_form.rawseq.value='>sp|P04201|MAS_HUMAN\nMDGSNVTSFVVEEPTNISTGRNASVGNAHRQIPIVHWVIMSISPVGFVENGILLWFLCFRMRRNPFTVYITHLSIADISLLFCIFILSIDYALDYELSSGHYYTIVTLSVTFLFGYNTGLYLLTAISVERCLSVLYPIWYRCHRPKYQSALVCALLWALSCLVTTMEYVMCIDREEESHSRNDCRAVIIFIAILSFLVFTPLMLVSSTILVVKIRKNTWASHSSKLYIVIMVTIIIFLIFAMPMRLLYLLYYEYWSTFGNLHHISLLFSTINSSANPFIYFFVGSSKKKRFKESLKVVLTRAFKDEMQPRRQKDNCNTVTVETVV\n';
+}
+
+var ImgArraySubmitNumJob = [
+    "{{STATIC_URL}}log/stat/submit_day.stat.txt.numjob.png",
+    "{{STATIC_URL}}log/stat/submit_week.stat.txt.numjob.png",
+    "{{STATIC_URL}}log/stat/submit_month.stat.txt.numjob.png"
+];
+function ChangeImgSubmitNumJob(imgPtr) {
+    document.getElementById('imgNumJobSubmit').src = ImgArraySubmitNumJob[imgPtr];
+}
+var ImgArraySubmitNumSeq = [
+    "{{STATIC_URL}}log/stat/submit_day.stat.txt.numseq.png",
+    "{{STATIC_URL}}log/stat/submit_week.stat.txt.numseq.png",
+    "{{STATIC_URL}}log/stat/submit_month.stat.txt.numseq.png"
+];
+function ChangeImgSubmitNumSeq(imgPtr) {
+    document.getElementById('imgNumSeqSubmit').src = ImgArraySubmitNumSeq[imgPtr];
+}
+
+
+{% block javascript_function %}{% endblock %}
+
+</script>
+
+<noscript>
+    <style type="text/css">
+.pagecontainer {display:none;}
+    </style>
+    <div class="noscriptmsg">
+        <p><font color="red" size="4"> You don't have javascript enabled. The web-server may behave improperly.</font></p>
+    </div>
+</noscript>
+
+</head>
+
+<body>
+<!-- TOP panel begins-->
+<table width="900" height=140 border="0" cellspacing="0" cellpadding="0" align="center">
+
+  <!--
+  <tr>
+    <td align="left" class="title">TOPCONS2</td>
+
+    <td></td>
+    <td align="right" class="headerdate">
+      <script language="JavaScript"> print_todays_date(); </script>
+    </td>
+  </tr>
+  -->
+
+  <tr>
+    <td width="100%" height="124" colspan="100%" align="right" valign="top" background="{{STATIC_URL}}images/header_pconsfold.png">
+    </td>
+
+  </tr>
+</table>
+<!-- TOP panel ends-->
+
+<!-- Main part begins-->
+<table width="900" height="80%" border="0" align="center" cellpadding="5" cellspacing="0" bgcolor="#FFFFFF">
+  <tr>
+
+    <!-- Right panel with input forms-->
+    <td width="100%" valign="top" style="background-repeat: repeat-y; background-position: top right;" background="{{STATIC_URL}}images/cbr_right_shadow.png">
+      <table class="blog" cellpadding="0" cellspacing="0">
+        <tr>
+          <td valign="top">
+            <!-- add div to set the fixed width for the table -->
+            <div id="content_right_panel" style=height:100%;width:900;overflow:auto>
+              <table width="100%"  cellpadding="0" cellspacing="0">
+                <tr>
+                  <td valign="top" width="100%">
+                    {% block content_right_panel %}{% endblock %}
+                  </td>
+                </tr>
+              </table>
+
+              <table cellpadding="0" cellspacing="0" class="moduletable">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <!-- Right panel with input forms ends-->
+  </tr>
+</table>
+
+
+<!-- Add a line separator -->
+<!--<hr>-->
+<!-- BOTTOM panel begins -->
+<table width="900" height=75 border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="23"><img src="{{STATIC_URL}}images/cbr_lower_left_gray.png" alt="" width="23" height="75" border="0" /></td>
+
+    <td height="5%" align="center" bgcolor="#FFFFFF" style="background-repeat: repeat-y; background-position: top left;" background="{{STATIC_URL}}images/cbr_graymenu_bg137.png">
+
+    </td>
+
+    <td width="23"><img src="{{STATIC_URL}}images/cbr_lower_right.png" alt="" width="23" height="75" border="0" /></td>
+  </tr>
+</table>
+<!-- BOTTOM panel ends -->
+</body>
+</html>

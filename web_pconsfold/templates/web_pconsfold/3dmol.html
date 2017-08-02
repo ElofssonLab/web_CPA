@@ -1,0 +1,43 @@
+<html>
+<head> 
+<script src="http://3Dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
+
+<script>
+$(function() {
+  let element = $('#container-01');
+  let config = { backgroundColor: 'white' };
+  let viewer = $3Dmol.createViewer( element, config );
+  let pdbUri = 'http://pconsfold.bioinfo.se/data/29.0/PF00004.26/model.pdb';
+  jQuery.ajax( pdbUri, { 
+    success: function(data) {
+      let v = viewer;
+      v.addModel( data, "pdb" );                       /* load data */
+      v.setStyle({}, {cartoon: {colorscheme:{prop:'b', gradient: new $3Dmol.Gradient.Sinebow(0,50)}}});  /* style all atoms */
+      v.zoomTo();                                      /* set camera */
+      v.render();                                      /* render scene */
+      v.zoom(1.2, 1000);                               /* slight zoom */
+    },
+    error: function(hdr, status, err) {
+      console.error( "Failed to load PDB " + pdbUri + ": " + err );
+    },
+  });
+});
+</script>
+
+<style>
+.mol-container {
+  width: 60%;
+  height: 400px;
+  position: relative;
+}
+</style>
+
+</head> 
+
+<body>
+
+<div id="container-01" class="mol-container"></div>
+
+</body>
+</html>
+

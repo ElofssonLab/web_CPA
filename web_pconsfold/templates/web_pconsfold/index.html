@@ -1,0 +1,36 @@
+{% extends "web_pconsfold/base_layout.html" %}
+
+{%block content_right_panel %}
+<br>
+<h2>Pconsfold: pfam data</h2>
+<table>
+	<tr>
+{% for cell in headers %}
+<td>{{ cell }}</td>
+{% endfor %}
+	</tr>
+{% for line in tableData %}
+<tr>
+{% for cell in line %}
+{% if forloop.counter0 == 0 %}
+<td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
+{% else %}
+<td>{{cell}}</td>
+{% endif %}
+{%endfor%}
+</tr>
+{% endfor %}
+</table>
+    <br><br><br>
+    <hr>
+   <table cellspacing=0 cellpadding=5 border=0>
+     <tr><td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
+       <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
+     </tr>
+     <tr><td>
+         <h3>Reference</h3>
+            {% include "web_pconsfold/refs.html" %}
+     </td></tr>
+ </table>
+
+{% endblock %}
