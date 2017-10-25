@@ -3,24 +3,37 @@
 {%block content_right_panel %}
 <br>
 <h2>Pconsfold: pfam data</h2>
-<table>
+
+<table id="maintable" class="sortable">
+	<thead>
 	<tr>
-{% for cell in headers %}
-<td>{{ cell }}</td>
-{% endfor %}
+		{% for cell in headers %}
+			<th>{{ cell }}</th>
+		{% endfor %}
 	</tr>
-{% for line in tableData %}
-<tr>
-{% for cell in line %}
-{% if forloop.counter0 == 0 %}
-<td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
-{% else %}
-<td>{{cell}}</td>
-{% endif %}
-{%endfor%}
-</tr>
-{% endfor %}
+	</thead>
+	<tfoot>
+	<tr>
+		{% for cell in headers %}
+			<th>{{ cell }}</th>
+		{% endfor %}
+	</tr>
+	</tfoot>
+	<tbody>
+	{% for line in tableData %}
+		<tr>
+			{% for cell in line %}
+				{% if forloop.counter0 == 0 %}
+					<td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
+				{% else %}
+					<td>{{cell}}</td>
+				{% endif %}
+			{%endfor%}
+		</tr>
+	{% endfor %}
+	</tbody>
 </table>
+
     <br><br><br>
     <hr>
    <table cellspacing=0 cellpadding=5 border=0>

@@ -487,6 +487,12 @@ pre{
 table.sortable{
   border-collapse: collapse;
 }
+table.sortable thead{
+	background-color:#eee;
+	color:#666666;
+  font-weight: bold;
+  cursor: default;
+	}
 table.sortable th {
   background-color:#DDD;
   color:#666666;

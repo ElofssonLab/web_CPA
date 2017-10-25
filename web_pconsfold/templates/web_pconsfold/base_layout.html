@@ -16,6 +16,7 @@ biology" />
 <script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/3Dmol-min.js"></script>
 <script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/jquery.js"></script>
 <script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/sorttable.js"></script>
 
 <script language="javascript">
 if (document.images) {
@@ -28,7 +29,17 @@ function print_todays_date( ) {
   document.write(d.toLocaleString( ));  // Insert it into the document
 }
 
-function hideShow(element){
+
+$(document).ready(function(){
+	$('#maintable').DataTable({
+		"pagingType": "full_numbers"
+	});
+});
+
+
+
+
+function hideShow(elemene){
   if((document.getElementById(element).style.display == 'none') || (document.getElementById(element).style.display == '')) {
     document.getElementById(element).style.display = 'block';
     if (document.images) {
