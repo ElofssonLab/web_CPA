@@ -4,36 +4,38 @@
 <br>
 <h2>Pconsfold: pfam data</h2>
 
-<table id="maintable" class="sortable">
-	<thead>
-	<tr>
-		{% for cell in headers %}
-			<th>{{ cell }}</th>
-		{% endfor %}
-	</tr>
-	</thead>
-	<tfoot>
-	<tr>
-		{% for cell in headers %}
-			<th>{{ cell }}</th>
-		{% endfor %}
-	</tr>
-	</tfoot>
-	<tbody>
-	{% for line in tableData %}
+<div class="clusterize">
+	<!-- <table>  id="maintable" class="sortable">
+	</table>-->
+	<div id="scrollArea" class="clusterize-scroll">
+		<table id="maintable" class="sortable" cellspacing="0" width="100%">
+		<thead>
 		<tr>
-			{% for cell in line %}
-				{% if forloop.counter0 == 0 %}
-					<td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
-				{% else %}
-					<td>{{cell}}</td>
-				{% endif %}
-			{%endfor%}
+			{% for cell in headers %}
+				<th>{{ cell }}</th>
+			{% endfor %}
 		</tr>
-	{% endfor %}
-	</tbody>
-</table>
-
+		</thead>
+		<tbody id="contentArea" class="clusterize-content">
+		<!--{#% for line in tableData %#}-->
+			<tr class="clusterize-no-data">
+				<td>Loading data...</td>
+			</tr>
+	{% comment %}
+	{{ tableData }}
+				{% for cell in line %}
+					{% if forloop.counter0 == 0 %}
+						<td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
+					{% else %}
+						<td>{{cell}}</td>
+					{% endif %}
+				{%endfor%}
+	{% endcomment %}
+		<!--{#% endfor %#}-->
+		</tbody>
+		</table>
+	</div>
+</div>
     <br><br><br>
     <hr>
    <table cellspacing=0 cellpadding=5 border=0>
@@ -45,5 +47,16 @@
             {% include "web_pconsfold/refs.html" %}
      </td></tr>
  </table>
+<script type="text/javascript">
+	// var data = ['<tr><td>PF00001.18</td><td>250</td><td>2742.7259233964332</td><td>1</td><td>1</td><td>0.317236</td></tr>', '<tr><td>PF00002.21</td><td>239</td><td>884.9928890837408</td><td>1</td><td>1</td><td>0.4728856</td></tr>']
+	var data = {{ tableData|safe }}
+	var clusterize = new Clusterize({
+		rows: data,
+		scrollId: 'scrollArea',
+		contentId: 'contentArea'
 
+});
+</script>
+<script>
+</script>
 {% endblock %}

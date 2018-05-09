@@ -1,9 +1,9 @@
-{% extends "pred/base_layout.html" %}
+{% extends "web_pconsfold/base_layout.html" %}
 
 {%block content_right_panel %}
-    {% if username %}
+   <!--  {% if username %}
       {% include "pred/user_header.html" %}
-    {% endif %}
+    {% endif %} -->
   <h2>Help</h2>
   <table cellspacing=0 cellpadding=0 border=0>
     <tr>
@@ -28,16 +28,7 @@
         </tr>
         <tr><td>
         <p>
-        SubCon is a new ensemble method for improved subcellular localization
-        prediction in Human. SubCons combines up to five predictors methods,
-        SherLoc2, LocTree2, MultiLoc2, CELLO2.5 and YLoc (the latest two if
-        available) using a random forest classifier. LocTree2 requires PSSM. To
-        speed up the creation of PSSM file, we use our tool PRODRES (more info
-        at https://github.com/ElofssonLab/PRODRES). PRODRES is faster in
-        createing PSSM profile and it has the same accuracy as Psi-Blast. It is
-        recomended to read carefully the instruction and install it! However,
-        SubCons runs Psi-Blast as alternative to PRODRES (THIS MAKE SUBCONS
-        MUCH SLOWER)
+	The Pconsfold2 pipeline uses the contact predictions from PconsC3, the CONFOLD folding algorithm and model quality estimations to predict structure of proteins. Here we show the result of applying this to Pfam families, both with and without known models.
         </p>
         </td></tr>
       </table>
@@ -53,25 +44,9 @@
         </tr>
         <tr><td>
             <p>
-            Input to the server is an amino acid sequence in <a
-              href='http://blast.ncbi.nlm.nih.gov/blastcgihelp.shtml'
-              target=\'_blank\'>FASTA</a> format. The user can either submit paste
-            one or more sequences in the text-area provided, or, alternatively,
-            upload a file for batch submission of sequences).
+		The main site shows a list of all Pfam families and their generated models. 
+		Click on a family of interest to see details.
             </p>
-
-            <i>Example input:</i> <br>
-            <span style="font-family: courier">
-              &gt;sp|P04201|MAS_HUMAN<br>
-              MDGSNVTSFVVEEPTNISTGRNASVGNAHRQIPIVHWVIMSISPVGFVENGILLWFLCFR<br>
-              MRRNPFTVYITHLSIADISLLFCIFILSIDYALDYELSSGHYYTIVTLSVTFLFGYNTGL<br>
-              YLLTAISVERCLSVLYPIWYRCHRPKYQSALVCALLWALSCLVTTMEYVMCIDREEESHS<br>
-              RNDCRAVIIFIAILSFLVFTPLMLVSSTILVVKIRKNTWASHSSKLYIVIMVTIIIFLIF<br>
-              AMPMRLLYLLYYEYWSTFGNLHHISLLFSTINSSANPFIYFFVGSSKKKRFKESLKVVLT<br>
-              RAFKDEMQPRRQKDNCNTVTVETVV<br>
-
-            </span>
-            <br>
 
       </td></tr>
     </table>
@@ -100,7 +75,7 @@
       </tr>
       {% include "pred/refs.html" %}
   </table>
-
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28881974">Large-scale structure prediction by improved contact predictions and model quality assessment</a>
   <br><br>
   <a name="5"></a>
 

@@ -4,9 +4,23 @@
 
 
 	<h1>{{ pdb_id }} </h1>
+<div>
+<p>
+{% for f in ls_list %}
+<a href="{{ f.1 }}">{{ f.0 }}</a><br>
+{% endfor %}
+</p>
+</div>
+<div id="litemol" style="width: 640px; height: 480px; margin-top: 200px; position: relative"></div>
 <div id="container-01" class="mol-container"></div>
-
-
+<script>
+var plugin = LiteMol.Plugin.create({ target: '#litemol'});
+plugin.loadMolecule({
+	id: '{{ pdb_id }}',
+	url: '{{ modelURL }}',
+	format: 'pdb' // cif default
+});
+</script>
 <script>
 $(function() {
   let element = $('#container-01');
