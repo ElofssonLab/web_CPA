@@ -1,62 +1,29 @@
 {% extends "web_pconsfold/base_layout.html" %}
 
-{%block content_right_panel %}
-<br>
-<h2>Pconsfold: pfam data</h2>
+{%block content_main %}
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+<img id="logo_img" src="{{STATIC_URL}}images/header_pconsfold2.png" alt="Pconsfold">
+          <h1 class="display-3">Pconsfold</h1>
+  <p class="lead">
+  Welcome to the Pconsfold PFAM modelling database.
+  </p>
+  <p><a class="btn btn-lg btn-warning" ui-sref="app.search"><span class="glyphicon glyphicon-search"></span> Start searching</a>
+  <a class="btn btn-lg btn-warning" ui-sref="app.browse"><span class="glyphicon glyphicon-list-alt"></span> Start browsing</a></p>
+        </div>
+      </div>
 
-<div class="clusterize">
-	<!-- <table>  id="maintable" class="sortable">
-	</table>-->
-	<div id="scrollArea" class="clusterize-scroll">
-		<table id="maintable" class="sortable" cellspacing="0" width="100%">
-		<thead>
-		<tr>
-			{% for cell in headers %}
-				<th>{{ cell }}</th>
-			{% endfor %}
-		</tr>
-		</thead>
-		<tbody id="contentArea" class="clusterize-content">
-		<!--{#% for line in tableData %#}-->
-			<tr class="clusterize-no-data">
-				<td>Loading data...</td>
-			</tr>
-	{% comment %}
-	{{ tableData }}
-				{% for cell in line %}
-					{% if forloop.counter0 == 0 %}
-						<td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
-					{% else %}
-						<td>{{cell}}</td>
-					{% endif %}
-				{%endfor%}
-	{% endcomment %}
-		<!--{#% endfor %#}-->
-		</tbody>
-		</table>
-	</div>
-</div>
-    <br><br><br>
-    <hr>
-   <table cellspacing=0 cellpadding=5 border=0>
-     <tr><td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
-       <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
-     </tr>
-     <tr><td>
-         <h3>Reference</h3>
-            {% include "web_pconsfold/refs.html" %}
-     </td></tr>
- </table>
-<script type="text/javascript">
-	// var data = ['<tr><td>PF00001.18</td><td>250</td><td>2742.7259233964332</td><td>1</td><td>1</td><td>0.317236</td></tr>', '<tr><td>PF00002.21</td><td>239</td><td>884.9928890837408</td><td>1</td><td>1</td><td>0.4728856</td></tr>']
-	var data = {{ tableData|safe }}
-	var clusterize = new Clusterize({
-		rows: data,
-		scrollId: 'scrollArea',
-		contentId: 'contentArea'
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col">
+            <h2>Welcome</h2>
+            <p>Welcome to Pconsfold modelling database. This website contain PFAM families modelled using the Pconsfold pipeline</p>
+          </div>
+        </div>
 
-});
-</script>
-<script>
-</script>
+        <hr>
+
+      </div> <!-- /container -->
 {% endblock %}

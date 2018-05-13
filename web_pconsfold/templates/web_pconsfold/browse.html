@@ -1,0 +1,27 @@
+{% extends "web_pconsfold/base_layout.html" %}
+
+{%block content_main %}
+      <div class="container" style="padding-top: 25px">
+        <div class="row">
+         <table id="browse_table" class="table table-striped table-bordered"
+             style="width:100%"></table>
+        </div>
+      </div> <!-- /container -->
+<script type="text/javascript">
+	var dataset = {{ tableData|safe }};
+$(document).ready(function() {
+    $('#browse_table').DataTable( {
+        data: dataset,
+        columns: [
+            { title: "ID" },
+            { title: "N" },
+            { title: "Meff" },
+            { title: "has PDB" },
+            { title: "has Model" },
+            { title: "FDR" }
+        ]
+    } );
+} );
+</script>
+
+{% endblock %}
