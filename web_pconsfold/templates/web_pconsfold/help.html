@@ -1,9 +1,7 @@
 {% extends "web_pconsfold/base_layout.html" %}
 
-{%block content_right_panel %}
-   <!--  {% if username %}
-      {% include "pred/user_header.html" %}
-    {% endif %} -->
+{%block content_main %}
+      <div class="container" style="padding-top: 25px">
   <h2>Help</h2>
   <table cellspacing=0 cellpadding=0 border=0>
     <tr>
@@ -73,9 +71,8 @@
       <tr><td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
         <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
       </tr>
-      {% include "pred/refs.html" %}
+      {% include "web_pconsfold/refs.html" %}
   </table>
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/28881974">Large-scale structure prediction by improved contact predictions and model quality assessment</a>
   <br><br>
   <a name="5"></a>
 
@@ -106,6 +103,6 @@
   </table>
 
   </table>
-
+</div>
 {% endblock %}
 

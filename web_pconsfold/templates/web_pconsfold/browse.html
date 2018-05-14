@@ -9,6 +9,7 @@
       </div> <!-- /container -->
 <script type="text/javascript">
 	var dataset = {{ tableData|safe }};
+  var inital_search = "";
 $(document).ready(function() {
     $('#browse_table').DataTable( {
         data: dataset,
@@ -19,7 +20,8 @@ $(document).ready(function() {
             { title: "has PDB" },
             { title: "has Model" },
             { title: "FDR" }
-        ]
+        ],
+      "oSearch": {"sSearch": "{{ initial_search }}"}
     } );
 } );
 </script>

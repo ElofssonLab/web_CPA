@@ -9,8 +9,9 @@
   <p class="lead">
   Welcome to the Pconsfold PFAM modelling database.
   </p>
-  <p><a class="btn btn-lg btn-warning" ui-sref="app.search"><span class="glyphicon glyphicon-search"></span> Start searching</a>
-  <a class="btn btn-lg btn-warning" ui-sref="app.browse"><span class="glyphicon glyphicon-list-alt"></span> Start browsing</a></p>
+  <a href="{% url 'web_pconsfold:search' %}" class="btn btn-lg btn-outline-success">Start searching</a>
+  <a href="{% url 'web_pconsfold:browse' %}" class="btn btn-lg
+      btn-outline-success">Start browsing</a>
         </div>
       </div>
 

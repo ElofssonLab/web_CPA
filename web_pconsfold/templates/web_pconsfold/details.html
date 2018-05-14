@@ -1,16 +1,14 @@
 {% extends "web_pconsfold/base_layout.html" %}
 
-{%block content_right_panel %}
-
-
+{%block content_main %}
+      <div class="container" style="padding-top: 25px">
+        <div class="row">
 	<h1>{{ pdb_id }} </h1>
-<div>
 <p>
 {% for f in ls_list %}
 <a href="{{ f.1 }}">{{ f.0 }}</a><br>
 {% endfor %}
 </p>
-</div>
 <div id="litemol" style="width: 640px; height: 480px; margin-top: 200px; position: relative"></div>
 <div id="container-01" class="mol-container"></div>
 <script>
@@ -50,4 +48,9 @@ $(function() {
   position: relative;
 }
 </style>
+
+
+
+        </div>
+      </div> <!-- /container -->
 {% endblock %}
