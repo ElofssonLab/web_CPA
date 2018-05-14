@@ -1,1 +1,1 @@
-dev_settings.py
+pro_settings.py
