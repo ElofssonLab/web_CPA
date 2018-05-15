@@ -14,13 +14,14 @@ $(document).ready(function() {
     $('#browse_table').DataTable( {
         data: dataset,
         columns: [
-            { title: "ID" },
-            { title: "N" },
-            { title: "Meff" },
-            { title: "has PDB" },
-            { title: "has Model" },
-            { title: "FDR" }
+            { title: "PFAM-A acc" },
+            { title: "N", "searchable": false },
+            { title: "Meff", "searchable": false, className: "text-right"},
+            { title: "PDB structure", "searchable": false },
+            { title: "Model structure", "searchable": false },
+            { title: "FDR", "searchable": false, className: "text-right" }
         ],
+      "paging": true,
       "oSearch": {"sSearch": "{{ initial_search }}"}
     } );
 } );

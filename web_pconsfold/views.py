@@ -36,13 +36,26 @@ def get_browse(request):
         initial_search = ''
     listFile = open(os.path.join(settings.DATA_DIR,'list.txt'),'r')
     headers = listFile.readline().strip().split(',')
+    # tableData.append(headers)
     for line in listFile:
         #temp_string = '<tr><td>'
         splitline = line.strip().split(",")
         # tableData.append(splitline)
         # <td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
-        temp_string = '<a href="/details/' + splitline[0] + '">' + splitline[0] 
-        processed_lines = [temp_string] + splitline[1:]
+        pfam_acc = splitline[0].split('.')[0]
+        N = splitline[1] 
+        Meff = '{0:.2f}'.format(float(splitline[2])) if len(splitline[2]) > 0 else ''
+        pfam_link = '<a href="https://pfam.xfam.org/family/' + pfam_acc + '" target="_blank">' + pfam_acc + '</a>'
+        # processed_lines = [temp_string] + splitline[1:3]
+        pdb_link = '<a href="http://www.rcsb.org/pdb/search/smartSubquery.do?smartSearchSubtype=PfamIdQuery&pfamID=' + pfam_acc + '" target="_blank">RCSB</a>' if splitline[3] == '1' else 'Structure missing'
+        model_link = '<a href="/details/' + splitline[0] + '">Model</a>' if splitline[4] == '1' else 'Model missing'
+        if splitline[5] == 'NA':
+            FDR = ''
+        elif len(splitline[5]) > 0:
+            FDR = '{0:.3f}'.format(float(splitline[5]))
+        else:
+            FDR = ''
+        processed_lines = [pfam_link, N, Meff, pdb_link, model_link, str(FDR)]
         tableData.append(processed_lines)
         # temp_string += "</td><td>".join(splitline[1:]) + "</td></tr>"
         # tableData.append(temp_string)
