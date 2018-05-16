@@ -1,4 +1,3 @@
-#!/usr/bin/python
 
 ### USAGE ####
 ### ./make_CB_map.py input.pdb [output.dmap] 
