@@ -4,6 +4,8 @@ from django.conf import settings
 # from filebrowser.base import FileListing
 import os
 import json
+import glob
+
 # Create your views here.
 def index(request):
     # tableData = []
@@ -18,15 +20,39 @@ def index(request):
     #     tableData.append(temp_string)
     return render(request, 'web_pconsfold/index.html') # ,{'headers':headers, 'tableData': tableData})
 
-def details(request,pdb_id):
+
+def details(request, pdb_id):
     modelURL = os.path.join(settings.STATIC_URL, 'data/29.0/'+pdb_id+'/model.pdb')
+    # modelURLs = [modelURL]
+    dmapURL = os.path.join(settings.STATIC_URL, 'data/29.0/'+pdb_id+'/model.dmap')
+    # dmapURLs = [dmapURL]
     base_url = os.path.join(settings.DATA_DIR, '29.0/', pdb_id)
     ls_list = []
+    fasta_url = ''
     # for f in os.listdir('/big/pfam/web_pconsfold/static/data/29.0/' + pdb_id):
+    # prot_di = fix(id,glob.glob("{}/*.l3".format(jobDir)))
+    di_list = []
+    raw_DIs = glob.glob(base_url + "/*.l3")
+    for di in raw_DIs:
+        di_list.append(str(os.path.join(settings.STATIC_URL, "data/29.0/"+pdb_id,
+                di.split("/")[-1])))
+    DI = di_list[0]
     for f in os.listdir(base_url):
+        if f.endswith('.fa'):
+            fasta_url = os.path.join(settings.STATIC_URL, 'data/29.0/',
+            pdb_id, f)
         ls_list.append((f, os.path.join(settings.STATIC_URL, 'data/29.0/',
             pdb_id, f)))
-    return render(request, 'web_pconsfold/details.html',{'pdb_id':pdb_id, 'modelURL':modelURL, 'base_url':base_url, 'ls_list':ls_list})
+    return render(request, 'web_pconsfold/details.html', {'pdb_id': pdb_id,
+                                                          'modelURL': modelURL,
+                                                          # 'modelURLs': modelURLs,
+                                                          'dmapURL': dmapURL,
+                                                          # 'dmapURLs': dmapURLs,
+                                                          'DIs': di_list,
+                                                          'DI': DI,
+                                                          'base_url': base_url,
+                                                          'fasta_url': fasta_url,
+                                                          'ls_list': ls_list})
 
 def get_browse(request):
     tableData = []
