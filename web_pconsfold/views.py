@@ -33,6 +33,13 @@ def details(request, pdb_id):
     # prot_di = fix(id,glob.glob("{}/*.l3".format(jobDir)))
     di_list = []
     raw_DIs = glob.glob(base_url + "/*.l3")
+    fasta_url = glob.glob(base_url + "/*.fa")[0]
+    with open(fasta_url) as fa_handle:
+        fa_handle.readline()
+        seq = fa_handle.readline().strip()
+        # print seq
+        # print len(seq)
+        protein_len  = len(seq)
     for di in raw_DIs:
         di_list.append(str(os.path.join(settings.STATIC_URL, "data/29.0/"+pdb_id,
                 di.split("/")[-1])))
@@ -52,6 +59,7 @@ def details(request, pdb_id):
                                                           'DI': DI,
                                                           'base_url': base_url,
                                                           'fasta_url': fasta_url,
+                                                          'prot_len': protein_len,
                                                           'ls_list': ls_list})
 
 def get_browse(request):

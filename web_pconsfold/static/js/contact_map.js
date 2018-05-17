@@ -6,7 +6,7 @@
 // var DI_FILENAME = "http://troll.cent.uw.edu.pl/dzarmola/files_for_pcons/plik.l3";//{};//to be filled in by django
 // var DMAP_FILENAME = "http://troll.cent.uw.edu.pl/dzarmola/files_for_pcons/model.pdb.dmap";//{};//to be filled in by django
 // var FASTA_FILENAME = "http://troll.cent.uw.edu.pl/dzarmola/files_for_pcons/model.fasta";//{};//to be filled in by django
-var PROTEIN_LEN = 230;
+// var PROTEIN_LEN = 230;
 var PX_MAP_SIZE = 500; //Q: in relation to window size?
 var TIME_SKIP = 5;
 

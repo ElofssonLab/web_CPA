@@ -53,14 +53,14 @@ label + input[type=radio] + label {
   border-radius: 10px;
   overflow: hidden;
 }
-
+/*
 canvas { 
     background: #eee; 
-}
+} */
 /*meta.foundation-data-attribute-namespace {
   font-family: false; }*/
 
-
+/*
   #viewer1 {
 position: absolute;
 height: 500px;
@@ -72,7 +72,8 @@ position: absolute;
 margin: auto 500px;
 height: 500px;
 width: 500px;
-  }
+  } 
+  */
 #plot_canvas_LA{
 position: absolute;
 margin: 0px 20px;
@@ -90,10 +91,10 @@ position: absolute;
 margin: auto 60px;
 }
 #seq_canvas_div{
-display: block;
+/* display: block;
 position: absolute;
 margin: 550px 40px;
-width: 50%;
+width: 50%; */
 overflow: hidden;
 }
 #seq_canvas_div:hover{
@@ -159,6 +160,7 @@ display: inline;
   display: inline-block;
   width: 60px;
   height: 34px;
+  margin-bottom: 0rem;
 }
 
 /* Hide default HTML checkbox */
@@ -228,11 +230,11 @@ ol >li:last-child::after{
 }
 
 
-
+/*
 .slidecontainer {
-    width: 50%; /* Width of the outside container */
+    width: 50%; 
 }
-
+*/
 /* The slider itself */
 .range_slider {
     -webkit-appearance: none;  /* Override default CSS styles */
