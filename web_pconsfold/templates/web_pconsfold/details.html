@@ -76,7 +76,8 @@ var PFAM_MODEL = "{{ pdb_id }}";
   </div>
 
     <div class="row">
-     <div class="radio-group">
+      <div>
+     <div class="radio-group" style="position: absolute">
       DI scores file:<br/>
       <input type="radio" id="difile_hh0" name="selector" onchange="change_di_file(0)">
       <label for="difile_hh0">HH0</label>
@@ -87,12 +88,13 @@ var PFAM_MODEL = "{{ pdb_id }}";
       <input type="radio" id="difile_jh4" name="selector" onchange="change_di_file(3)" checked>
       <label for="difile_jh4">JH4</label>
      </div>
-     <div class="radio-group" id="model_radios">
+     <div class="radio-group" id="model_radios" style="position: absolute; margin-left: 400px">
       Model file:<br/>
       <input type="radio" id="model1" name="mselector" onchange="change_model_file(0)" checked><label for="model1">model1</label>
      </div>
+      </div>
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 100px">
      
      
      <ol><b>USAGE:</b>
