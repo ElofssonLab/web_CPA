@@ -82,7 +82,7 @@ def get_browse(request):
         pfam_link = '<a href="https://pfam.xfam.org/family/' + pfam_acc + '" target="_blank">' + pfam_acc + '</a>'
         # processed_lines = [temp_string] + splitline[1:3]
         pdb_link = '<a href="http://www.rcsb.org/pdb/search/smartSubquery.do?smartSearchSubtype=PfamIdQuery&pfamID=' + pfam_acc + '" target="_blank">RCSB</a>' if splitline[3] == '1' else 'Structure missing'
-        model_link = '<a href="/details/' + splitline[0] + '">Model</a>' if splitline[4] == '1' else 'Model missing'
+        model_link = '<a href="/details/' + splitline[0] + '">Model</a>' if splitline[4] == '1' else 'Missing'
         if splitline[5] == 'NA':
             FDR = ''
         elif len(splitline[5]) > 0:

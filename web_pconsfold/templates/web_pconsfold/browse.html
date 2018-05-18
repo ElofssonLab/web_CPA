@@ -4,26 +4,52 @@
       <div class="container" style="padding-top: 25px">
         <div class="row">
          <table id="browse_table" class="table table-striped table-bordered"
-             style="width:100%"></table>
+             style="width:100%">
+           <tfoot>
+             <tr>
+               <th>PFAM-A acc</th>
+               <th>N</th>
+               <th>Meff</th>
+               <th>PDB structure</th>
+               <th>Model structure</th>
+               <th>FDR</th>
+             </tr>
+             </tfoot>
+         </table>
         </div>
       </div> <!-- /container -->
 <script type="text/javascript">
 	var dataset = {{ tableData|safe }};
   var inital_search = "";
 $(document).ready(function() {
-    $('#browse_table').DataTable( {
+    $('#browse_table tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        } );
+    var table = $('#browse_table').DataTable( {
         data: dataset,
         columns: [
             { title: "PFAM-A acc" },
-            { title: "N", "searchable": false },
-            { title: "Meff", "searchable": false, className: "text-right"},
-            { title: "PDB structure", "searchable": false },
-            { title: "Model structure", "searchable": false },
-            { title: "FDR", "searchable": false, className: "text-right" }
+            { title: "N"},
+            { title: "Meff", className: "text-right"},
+            { title: "PDB structure"},
+            { title: "Model structure"},
+            { title: "FDR", className: "text-right" }
         ],
       "paging": true,
       "oSearch": {"sSearch": "{{ initial_search }}"}
     } );
+    table.columns().every( function () {
+            var that = this;
+     
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
 } );
 </script>
 
