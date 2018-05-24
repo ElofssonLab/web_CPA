@@ -8,7 +8,7 @@
 // var FASTA_FILENAME = "http://troll.cent.uw.edu.pl/dzarmola/files_for_pcons/model.fasta";//{};//to be filled in by django
 // var PROTEIN_LEN = 230;
 var PX_MAP_SIZE = 460; //Q: in relation to window size?
-var TIME_SKIP = 5;
+var TIME_SKIP = 5; //distance between valid index pair
 
 
 //
@@ -709,6 +709,9 @@ function pointColor(x,y){
 function validPoint(x,y){
 //TODO - just checks if valid, no colour coding
 	mode = CURRENT_MAP_MODE;
+	if (Math.abs(y-x)<TIME_SKIP){
+	    return 0;
+	}
 	try{
 	switch(mode){
 		case 0:
