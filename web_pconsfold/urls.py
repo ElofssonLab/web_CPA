@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from web_pconsfold import views
 urlpatterns = patterns('',
-        url(r'(?P<pdb_id>[PF]{2}[0-9]{5}.[0-9]{1,2})/$', views.details, name='details'),
+        url(r'(?P<pfam_id>[PF]{2}[0-9]{5}.[0-9]{1,2})/$', views.details, name='details'),
         url(r'^browse$', views.get_browse, name='browse'),
         # url(r'^browse/([a-zA-Z0-9]{,20})', views.get_browse, name='browse'),
         url(r'^search$', views.get_search, name='search'),

@@ -11,7 +11,7 @@ var DMAP_FILENAME =  "{{ dmapURL }}";//
 var DMAP_FILENAMES = ["{{ dmapURL }}"];//
 var FASTA_FILENAME = "{{ fasta_url }}";//
 var PROTEIN_LEN = {{ prot_len }};
-var PFAM_MODEL = "{{ pdb_id }}";
+var PFAM_MODEL = "{{ pfam_id }}";
 </script>
 <script data-main='{{STATIC_URL}}js/protein' src='{{STATIC_URL}}js/require.js'></script>
 <script src="{{STATIC_URL}}js/main.js"></script>
@@ -19,7 +19,7 @@ var PFAM_MODEL = "{{ pdb_id }}";
 <div class="container" style="padding-top: 25px">
   <div class ="row">
     <h1>
-      {{ pdb_id }}
+      {{ pfam_id }}
     </h1>
   </div>
   <div class="row">

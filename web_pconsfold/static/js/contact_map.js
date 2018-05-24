@@ -7,7 +7,7 @@
 // var DMAP_FILENAME = "http://troll.cent.uw.edu.pl/dzarmola/files_for_pcons/model.pdb.dmap";//{};//to be filled in by django
 // var FASTA_FILENAME = "http://troll.cent.uw.edu.pl/dzarmola/files_for_pcons/model.fasta";//{};//to be filled in by django
 // var PROTEIN_LEN = 230;
-var PX_MAP_SIZE = 500; //Q: in relation to window size?
+var PX_MAP_SIZE = 460; //Q: in relation to window size?
 var TIME_SKIP = 5;
 
 
@@ -38,13 +38,14 @@ var COLORING_MODE = 0;
 //0 - simple
 //1 - rainbow
 
-var POINT_SIZE = Math.max(1,Math.floor(PX_MAP_SIZE/PROTEIN_LEN)); //at least one px per dot?
+AXIS_CANVAS_WIDTH = 40;
+// var POINT_SIZE = Math.max(1,Math.floor(PX_MAP_SIZE/PROTEIN_LEN)); //at least one px per dot?
+var POINT_SIZE = Math.max(1,PX_MAP_SIZE/PROTEIN_LEN); //at least one px per dot?
 CANVAS.height = POINT_SIZE*PROTEIN_LEN;
 CANVAS_LA.height = POINT_SIZE*PROTEIN_LEN;
 CANVAS.width = POINT_SIZE*PROTEIN_LEN;
 CANVAS_BA.width = POINT_SIZE*PROTEIN_LEN;
 
-AXIS_CANVAS_WIDTH = 40;
 CANVAS_BA.height = AXIS_CANVAS_WIDTH;
 CANVAS_LA.width = AXIS_CANVAS_WIDTH;
 
