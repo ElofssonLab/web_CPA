@@ -107,17 +107,21 @@ def get_browse(request):
         pfam_acc = splitline[0].split('.')[0]
         N = splitline[1] 
         Meff = '{0:.2f}'.format(float(splitline[2])) if len(splitline[2]) > 0 else ''
-        pfam_link = '<a href="https://pfam.xfam.org/family/' + pfam_acc + '" target="_blank">' + pfam_acc + '</a>'
+        # pfam_link = '<a href="https://pfam.xfam.org/family/' + pfam_acc + '" target="_blank">' + pfam_acc + '</a>'
+        pfam_link = '<a href="/details/' + splitline[0] + '">' + pfam_acc + '</a>' if splitline[4] == '1' else pfam_acc
         # processed_lines = [temp_string] + splitline[1:3]
-        pdb_link = '<a href="http://www.rcsb.org/pdb/search/smartSubquery.do?smartSearchSubtype=PfamIdQuery&pfamID=' + pfam_acc + '" target="_blank">RCSB</a>' if splitline[3] == '1' else 'Missing'
-        model_link = '<a href="/details/' + splitline[0] + '">Model</a>' if splitline[4] == '1' else 'Missing'
+        # pdb_link = '<a href="http://www.rcsb.org/pdb/search/smartSubquery.do?smartSearchSubtype=PfamIdQuery&pfamID=' + pfam_acc + '" target="_blank">RCSB</a>' if splitline[3] == '1' else 'Missing'
+        # model_link = '<a href="/details/' + splitline[0] + '">Model</a>' if splitline[4] == '1' else 'Missing'
+        has_pdb_structure = "Yes" if splitline[3] == '1' else "No"
+        has_model = "Yes" if splitline[4] == '1' else "No"
         if splitline[5] == 'NA':
             FDR = ''
         elif len(splitline[5]) > 0:
             FDR = '{0:.3f}'.format(float(splitline[5]))
         else:
             FDR = ''
-        processed_lines = [pfam_link, N, Meff, pdb_link, model_link, str(FDR)]
+        clan_acc = splitline[6]
+        processed_lines = [pfam_link, clan_acc, N, Meff, str(FDR), has_pdb_structure, has_model]
         tableData.append(processed_lines)
         # temp_string += "</td><td>".join(splitline[1:]) + "</td></tr>"
         # tableData.append(temp_string)

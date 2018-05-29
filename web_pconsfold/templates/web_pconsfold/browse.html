@@ -7,49 +7,57 @@
              style="width:100%">
            <tfoot>
              <tr>
-               <th>PFAM-A acc</th>
-               <th>N</th>
+               <th>Acc</th>
+               <th>Clan</th>
+               <th>Length</th>
                <th>Meff</th>
-               <th>PDB structure</th>
-               <th>Model structure</th>
                <th>FDR</th>
+               <th>structure</th>
+               <th>model</th>
              </tr>
              </tfoot>
          </table>
         </div>
       </div> <!-- /container -->
+<style>
+tfoot {
+        display: table-header-group;
+            }
+</style>
 <script type="text/javascript">
 	var dataset = {{ tableData|safe }};
   var inital_search = "";
 $(document).ready(function() {
     $('#browse_table tfoot th').each( function () {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            $(this).html( '<input type="text" placeholder="Search '+title+'" style="width: 100%" />' );
         } );
     var table = $('#browse_table').DataTable( {
         data: dataset,
         columns: [
-            { title: "PFAM-A acc" },
-            { title: "N"},
+            { title: "PFAM-A acc"},
+            { title: "Clan"},
+            { title: "Length"},
             { title: "Meff", className: "text-right"},
-            { title: "PDB structure"},
-            { title: "Model structure"},
-            { title: "FDR", className: "text-right" }
+            { title: "FDR", className: "text-right" },
+            { title: "Has structure"},
+            { title: "Has model"}
         ],
+      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
       "paging": true,
       "oSearch": {"sSearch": "{{ initial_search }}"}
     } );
-    table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+//    table.columns().every( function () {
+//            var that = this;
+//     
+//            $( 'input', this.footer() ).on( 'keyup change', function () {
+//                if ( that.search() !== this.value ) {
+//                    that
+//                        .search( this.value )
+//                        .draw();
+//                }
+//            } );
+//        } );
 } );
 </script>
 
