@@ -1,0 +1,5 @@
+7tm_1
+7 transmembrane receptor (rhodopsin family)
+This family contains, amongst other G-protein-coupled receptors (GCPRs), members of the opsin family, which have been considered to be typical members of the rhodopsin superfamily. They share several motifs, mainly the seven transmembrane helices, GCPRs of the rhodopsin superfamily. All opsins bind a chromophore, such as 11-cis-retinal. The function of most opsins other than the photoisomerases is split into two steps: light absorption and G-protein activation. Photoisomerases, on the other hand, are not coupled to G-proteins - they are thought to generate and supply the chromophore that is used by visual opsins [1].
+CL0192
+GPCR_A

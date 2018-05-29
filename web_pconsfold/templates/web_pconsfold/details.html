@@ -23,6 +23,29 @@ var PFAM_MODEL = "{{ pfam_id }}";
     </h1>
   </div>
   <div class="row">
+    <h2>
+      {{ pfam_name }}
+    </h2>
+  </div>
+  <div class="row">
+    <h3>
+      {{ pfam_title }}
+    </h3>
+    </br>
+    <p>
+    {{ desc }}
+    </p>
+    Belongs to clan: {{ clan_id }}/{{ clan_name }}
+    </br> 
+  </div>
+
+  <div class="row">
+    <a href="{{ pfam_url }}">PFAM link</a>
+  </div>
+  <div class="row">
+    <a href="{{ pdb_url }}">PDB link</a> 
+  </div>
+  <div class="row">
         <div class="col-6">
             <div class="viewer_div" id="viewer1" ></div>       
         </div>

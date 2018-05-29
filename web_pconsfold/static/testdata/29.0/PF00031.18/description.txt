@@ -1,0 +1,5 @@
+Cystatin
+Cystatin domain
+Very diverse family.  Attempts to define separate sub-families failed.  Typically, either the N-terminal or C-terminal end is very divergent.  But splitting into two domains would make very short families. All members except Swiss:Q03196 and Swiss:Q10993 are found. Pfam:PF00666 are related to this family but have not been included.
+CL0121
+Cystatin

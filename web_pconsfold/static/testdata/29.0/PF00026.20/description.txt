@@ -1,0 +1,5 @@
+Asp
+Eukaryotic aspartyl protease
+Aspartyl (acid) proteases include pepsins, cathepsins, and renins.  Two-domain structure, probably arising from ancestral duplication.  This family does not include the retroviral nor retrotransposon proteases (Pfam:PF00077), which are much smaller and appear to be homologous to a single domain of the eukaryotic asp proteases.
+CL0129
+Peptidase_AA

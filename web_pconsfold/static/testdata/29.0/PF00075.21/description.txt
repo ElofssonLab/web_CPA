@@ -1,0 +1,5 @@
+RNase_H
+RNase H
+RNase H digests the RNA strand of an RNA/DNA hybrid. Important enzyme in retroviral replication cycle, and often found as a domain associated with reverse transcriptases. Structure is a mixed alpha+beta fold with three a/b/a layers.
+CL0219
+RNase_H

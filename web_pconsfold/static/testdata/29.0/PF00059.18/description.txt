@@ -1,0 +1,5 @@
+Lectin_C
+Lectin C-type domain
+This family includes both long and short form C-type
+CL0056
+C_Lectin

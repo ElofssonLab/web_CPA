@@ -1,0 +1,5 @@
+Neur
+Neuraminidase
+Neuraminidases cleave sialic acid residues from glycoproteins. Belong to the sialidase family - but this alignment does not generalise to the other sialidases. Structure is a 6-sheet beta propeller.
+CL0434
+Sialidase

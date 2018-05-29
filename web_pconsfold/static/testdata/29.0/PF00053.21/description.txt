@@ -1,0 +1,5 @@
+Laminin_EGF
+Laminin EGF domain
+This family is like Pfam:PF00008 but has 8 conserved  cysteines instead of six.
+CL0001
+EGF

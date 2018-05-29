@@ -1,0 +1,4 @@
+MCPsignal
+Methyl-accepting chemotaxis protein (MCP) signalling domain
+This domain is thought to transduce the signal to CheA since it is highly conserved in very diverse MCPs.
+

@@ -1,0 +1,4 @@
+IL8
+Small cytokines (intecrine/chemokine), interleukin-8 like
+Includes a number of secreted growth factors and interferons  involved in mitogenic, chemotactic, and inflammatory activity. Structure contains two highly conserved disulfide bonds.
+

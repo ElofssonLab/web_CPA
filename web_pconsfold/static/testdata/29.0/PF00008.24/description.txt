@@ -1,0 +1,5 @@
+EGF
+EGF-like domain
+There is no clear separation between noise and signal. Pfam:PF00053 is very similar, but has 8 instead of 6 conserved cysteines. Includes some cytokine receptors. The EGF domain misses the N-terminus regions of the Ca2+ binding EGF domains (this is the main reason of discrepancy between swiss-prot domain start/end and Pfam).  The family is hard to model due to many similar but  different sub-types of EGF domains. Pfam certainly misses a number of EGF domains.
+CL0001
+EGF

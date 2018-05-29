@@ -1,0 +1,5 @@
+Gp_dh_N
+Glyceraldehyde 3-phosphate dehydrogenase, NAD binding domain
+GAPDH is a tetrameric NAD-binding enzyme involved in glycolysis and glyconeogenesis. N-terminal domain is a Rossmann NAD(P) binding fold.
+CL0063
+NADP_Rossmann

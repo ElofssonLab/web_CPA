@@ -1,0 +1,5 @@
+EF-hand_1
+EF hand
+The EF-hands can be divided into two classes: signalling proteins and buffering/transport proteins.  The first group is the largest and includes the most well-known members of the family such as calmodulin, troponin C and S100B. These proteins typically undergo a calcium-dependent conformational change which opens a target binding site.  The latter group is represented by calbindin D9k and do not undergo calcium dependent conformational changes.
+CL0220
+EF_hand

@@ -34,9 +34,25 @@ def details(request, pfam_id):
     di_list = []
     raw_DIs = glob.glob(base_url + "/*.l3")
     fasta_url = glob.glob(base_url + "/*.fa")[0]
+    desc_file = glob.glob(base_url + "/description.txt")[0]
+    with open(desc_file, 'r') as desc_handle:
+        desc_list = desc_handle.readlines()
+        if len(desc_list) > 1:
+            pfam_name = desc_list[0].strip()
+            pfam_title = desc_list[1].strip()
+            desc = desc_list[2].strip()
+            clan_id = desc_list[3].strip()
+            clan_name = desc_list[4].strip()
+        else:
+            pfam_name = desc_list.strip()
+            pfam_title = ""
+            desc = ""
+            clan_id = ""
+            clan_name = ""
     # print fasta_url
     pdb_name = fasta_url.split('/')[-1].split('.')[2].replace('_', '')
-    pdb_url = "http://www.rcsb.org/structure/" + pdb_name
+    pdb_url = "http://www.rcsb.org/structure/" + pdb_name[:-1]
+    pfam_url = "https://pfam.xfam.org/family/" + pfam_id.split('.')[0]
     # print pdb_name
     with open(fasta_url) as fa_handle:
         fa_handle.readline()
@@ -56,6 +72,7 @@ def details(request, pfam_id):
         ls_list.append((f, os.path.join(settings.STATIC_URL, 'data/29.0/',
             pfam_id, f)))
     return render(request, 'web_pconsfold/details.html', {'pfam_id': pfam_id,
+                                                          'pfam_url': pfam_url,
                                                           'modelURL': modelURL,
                                                           # 'modelURLs': modelURLs,
                                                           'dmapURL': dmapURL,
@@ -66,6 +83,11 @@ def details(request, pfam_id):
                                                           'fasta_url': fasta_url,
                                                           'prot_len': protein_len,
                                                           'pdb_url': pdb_url,
+                                                          'pfam_name': pfam_name,
+                                                          'pfam_title': pfam_title,
+                                                          'desc': desc,
+                                                          'clan_id': clan_id,
+                                                          'clan_name': clan_name,
                                                           'ls_list': ls_list})
 
 def get_browse(request):

@@ -1,0 +1,5 @@
+SH3_1
+SH3 domain
+SH3 (Src homology 3) domains are often indicative of a protein involved in  signal transduction related to cytoskeletal organisation. First described in the Src cytoplasmic tyrosine kinase Swiss:P12931. The structure is a partly opened beta barrel.
+CL0010
+SH3
