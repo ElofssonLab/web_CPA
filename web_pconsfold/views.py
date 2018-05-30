@@ -41,12 +41,14 @@ def details(request, pfam_id):
             pfam_name = desc_list[0].strip()
             pfam_title = desc_list[1].strip()
             desc = desc_list[2].strip()
-            clan_id = desc_list[3].strip()
-            clan_name = desc_list[4].strip()
         else:
             pfam_name = desc_list.strip()
             pfam_title = ""
             desc = ""
+        if len(desc_list) > 4:
+            clan_id = desc_list[3].strip()
+            clan_name = desc_list[4].strip()
+        else:
             clan_id = ""
             clan_name = ""
     # print fasta_url
