@@ -44,8 +44,9 @@
             <p>
 		The main site shows a list of all Pfam families and whether they have a generated model or known structure. The table can be sorted and filtered by the search bar. Click on a family of interest to see details.
             </p>
-
+            
       </td></tr>
+
     </table>
 
     <br><br>
@@ -61,6 +62,25 @@
             <p>
             For each family a set of models has been predicted with the PconsFold2 pipeline. These models are ranked by model quality assessment. These model quality assessment scores further provide the basis for an estimate on the trustworhtiness of each model. This is especially helpful for families that do not have a known structure. The top ranked model is shown in the detail pages along with its predicted contacts. See <a href="https://www.ncbi.nlm.nih.gov/pubmed/28881974" target="_blank">PconsFold2</a> for more details.
             </p>
+      </td></tr>
+      <tr><td>
+              <h5>Length</h5>
+              <p>
+              Length of the representative sequence of the PFAM family.
+              </p>
+      </td></tr>
+      <tr><td>
+              <h5>M<sub>eff</sub></h5>
+              <p>
+              Number of effective sequences as described by <a href="https://doi.org/10.1103/PhysRevE.87.012707">Ekeberg <i>et al.</i>,2013</a>.
+              This is calculated from the alignments run by HHblits and Jackhmmer from the representative sequences for each family. The Pfam alignments were ignored.
+              </p>
+      </td></tr>
+      <tr><td>
+              <h5>FDR</h5>
+              <p>
+              False Discovery Rate, the expected proportion of type I errors.
+              </p>
       </td></tr>
     </table>
     <br><br>
