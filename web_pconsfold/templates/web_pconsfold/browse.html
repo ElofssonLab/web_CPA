@@ -13,7 +13,7 @@
                <th>Meff</th>
                <th>FDR</th>
                <th>structure</th>
-               <th>model</th>
+               <!--               <th>model</th> -->
              </tr>
              </tfoot>
          </table>
@@ -83,7 +83,7 @@ $(document).ready(function() {
             { title: "Meff", className: "text-right"},
             { title: "FDR", className: "text-right" },
             { title: "Has structure"},
-            { title: "Has model"}
+            // { title: "Has model"}
         ],
       "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
       "iDisplayLength": 25,
@@ -96,7 +96,7 @@ $(document).ready(function() {
     table.columns().every( function () {
             var that = this;
      
-            $( '#Acc, #Clan, #structure, #model', this.footer() ).on( 'keyup change', function () {
+            $( '#Acc, #Clan, #structure', this.footer() ).on( 'keyup change', function () {
                 if ( that.search() !== this.value ) {
                     that
                         .search( this.value )

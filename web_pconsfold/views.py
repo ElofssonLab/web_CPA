@@ -61,7 +61,7 @@ def details(request, pfam_id):
         seq = fa_handle.readline().strip()
         # print seq
         # print len(seq)
-        protein_len  = len(seq)
+        protein_len = len(seq)
     for di in raw_DIs:
         di_list.append(str(os.path.join(settings.STATIC_URL,
             "data/29.0/"+pfam_id,
@@ -107,7 +107,7 @@ def get_browse(request):
         # tableData.append(splitline)
         # <td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
         pfam_acc = splitline[0].split('.')[0]
-        N = splitline[1] 
+        N = splitline[1]
         Meff = '{0:.2f}'.format(float(splitline[2])) if len(splitline[2]) > 0 else ''
         # pfam_link = '<a href="https://pfam.xfam.org/family/' + pfam_acc + '" target="_blank">' + pfam_acc + '</a>'
         pfam_link = '<a href="/details/' + splitline[0] + '">' + pfam_acc + '</a>' if splitline[4] == '1' else pfam_acc
@@ -123,8 +123,9 @@ def get_browse(request):
         else:
             FDR = ''
         clan_acc = splitline[6]
-        processed_lines = [pfam_link, clan_acc, N, Meff, str(FDR), has_pdb_structure, has_model]
-        tableData.append(processed_lines)
+        if has_model == "Yes":
+            processed_lines = [pfam_link, clan_acc, N, Meff, str(FDR), has_pdb_structure, has_model]
+            tableData.append(processed_lines)
         # temp_string += "</td><td>".join(splitline[1:]) + "</td></tr>"
         # tableData.append(temp_string)
     jsondata = json.dumps(tableData)
