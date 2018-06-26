@@ -4,7 +4,7 @@
 <script src="{{STATIC_URL}}js/modernizr-2.8.3.min.js"></script>
 <script>
 var PROTEIN_STRUCTURE_FILE = "{{ modelURL }}";// to be filled by Django
-var PROTEIN_STRUCTURE_FILES = ["{{ modelURL }}"];// to be filled by Django
+var PROTEIN_STRUCTURE_FILES = {{ modelURLs|safe }};// to be filled by Django
 var DI_FILENAMES = {{ DIs|safe }};//
 var DI_FILENAME = "{{ DI }}";//
 var DMAP_FILENAME =  "{{ dmapURL }}";//

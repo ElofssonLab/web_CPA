@@ -32,6 +32,8 @@ def details(request, pfam_id):
     # for f in os.listdir('/big/pfam/web_pconsfold/static/data/29.0/' + pfam_id):
     # prot_di = fix(id,glob.glob("{}/*.l3".format(jobDir)))
     di_list = []
+    model_list = []
+    raw_models = glob.glob(base_url + "/*.pdb")
     raw_DIs = glob.glob(base_url + "/*.l3")
     fasta_url = glob.glob(base_url + "/*.fa")[0]
     desc_file = glob.glob(base_url + "/description.txt")[0]
@@ -66,6 +68,10 @@ def details(request, pfam_id):
         di_list.append(str(os.path.join(settings.STATIC_URL,
             "data/29.0/"+pfam_id,
                 di.split("/")[-1])))
+    for mod in raw_models:
+        model_list.append(str(os.path.join(settings.STATIC_URL,
+            "data/29.0/"+pfam_id,
+                mod.split("/")[-1])))
     DI = di_list[0]
     for f in os.listdir(base_url):
         if f.endswith('.fa'):
@@ -76,7 +82,7 @@ def details(request, pfam_id):
     return render(request, 'web_pconsfold/details.html', {'pfam_id': pfam_id,
                                                           'pfam_url': pfam_url,
                                                           'modelURL': modelURL,
-                                                          # 'modelURLs': modelURLs,
+                                                          'modelURLs': model_list,
                                                           'dmapURL': dmapURL,
                                                           # 'dmapURLs': dmapURLs,
                                                           'DIs': di_list,
