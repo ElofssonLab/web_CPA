@@ -53,7 +53,7 @@ def details(request, pfam_id):
         else:
             clan_id = ""
             clan_name = ""
-    # print fasta_url
+#    print fasta_url
     pdb_name = fasta_url.split('/')[-1].split('.')[2].replace('_', '')
     pdb_url = "http://www.rcsb.org/structure/" + pdb_name[:-1]
     pfam_url = "https://pfam.xfam.org/family/" + pfam_id.split('.')[0]
@@ -79,10 +79,16 @@ def details(request, pfam_id):
             pfam_id, f)
         ls_list.append((f, os.path.join(settings.STATIC_URL, 'data/29.0/',
             pfam_id, f)))
+
+    #FIX FOR STRUCTURE FROM PDB
+    org_pdb_file = "https://files.rcsb.org/view/{}.pdb".format(pdb_url.split("/")[-1]) if len(pdb_url.split("/")[-1])==4 else ""
+    
+    modelURLs = [org_pdb_file] + model_list
+
     return render(request, 'web_pconsfold/details.html', {'pfam_id': pfam_id,
                                                           'pfam_url': pfam_url,
                                                           'modelURL': modelURL,
-                                                          'modelURLs': model_list,
+                                                          'modelURLs': modelURLs,
                                                           'dmapURL': dmapURL,
                                                           # 'dmapURLs': dmapURLs,
                                                           'DIs': di_list,
