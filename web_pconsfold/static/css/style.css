@@ -90,18 +90,6 @@ width: 460px;
 position: absolute;
 margin: auto 60px;
 }
-#seq_canvas_div{
-/* display: block;
-position: absolute;
-margin: 550px 40px;
-width: 50%; */
-overflow: hidden;
-}
-#seq_canvas_div:hover{
-overflow: auto;
-}
-#sequence_canvas{
-}
 .structure{
 width: 550px;
 display: inline;
