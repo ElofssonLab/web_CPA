@@ -81,6 +81,7 @@ def details(request, pfam_id):
             pfam_id, f)))
 
     #FIX FOR STRUCTURE FROM PDB
+    pdb_chain = pdb_name[-1] if len(pdb_url.split("/")[-1])==4 else ""
     org_pdb_file = "https://files.rcsb.org/view/{}.pdb".format(pdb_url.split("/")[-1]) if len(pdb_url.split("/")[-1])==4 else ""
     model_list = sorted(model_list, key=lambda x: "".join(x.split(".")[:-1]))
     modelURLs = [org_pdb_file] + model_list
@@ -97,6 +98,7 @@ def details(request, pfam_id):
                                                           'fasta_url': fasta_url,
                                                           'prot_len': protein_len,
                                                           'pdb_url': pdb_url,
+                                                          'pdb_chain': pdb_chain,
                                                           'pfam_name': pfam_name,
                                                           'pfam_title': pfam_title,
                                                           'desc': desc,
