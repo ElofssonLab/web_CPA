@@ -283,7 +283,8 @@ function activate_original_model(){
 	    /*MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
 	        DMAP_DISTANCE_RAINBOW = new Rainbow();
 	            if (MAX_DMAP_DISTANCE<100){
-	                    rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
+	            ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
+	                    ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;                rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
 	                        }else{
 	                             //   one_color_step = Math.floor(PROTEIN_LEN/100);    
 	                                  1;
@@ -1482,7 +1483,7 @@ CANVAS.addEventListener('mousewheel',handleScroll,false);
 
 read_in_di(DI_FILENAME);
 read_in_sequence(FASTA_FILENAME);
-read_in_dmap(DMAP_FILENAME);
+read_in_dmap();
 
 draw();
 
