@@ -58,7 +58,7 @@ var PFAM_MODEL = "{{ pfam_id }}";
         </div>
   </div>
   <div class="row">
-    <div id="seq_canvas_div">
+    <div id="seq_canvas_div" style="z-index: 999">
     <canvas id="sequence_canvas" ></canvas>
     </div>
   </div>
@@ -81,6 +81,14 @@ var PFAM_MODEL = "{{ pfam_id }}";
       <span class="slider"></span>
     </label>
     Rainbow<br/>
+      <div id="patyczek_div">
+    Colouring contact bonds by selection
+    <label class="switch">
+      <input id="patyczek_mode" type="checkbox" onchange="change_patyczek_mode()">
+      <span class="slider"></span>
+    </label>
+    by distance (Rainbow)<br/>
+    </div>
     Structure colouring: Rainbow 
     <label id="structure_color_slider" class="switch">
       <input id="structure_color_mode" type="checkbox" onchange="change_structure_colouring_mode()">
@@ -114,6 +122,11 @@ var PFAM_MODEL = "{{ pfam_id }}";
      <div class="radio-group" id="model_radios" style="position: absolute; margin-left: 400px">
       Model file:<br/>
       <input type="radio" id="model1" name="mselector" onchange="change_model_file(0)" checked><label for="model1">model1</label>
+     </div>
+        <div class="radio-group" id="original_file_boxes" style="position: absolute; margin-left: 600px; display: none">
+      Original file controls:<br/>
+           <input type="checkbox" id="org_model" name="oselector" onchange="activate_original_model()"><label for="org_model">Switch to PDB structure</label>
+           <input type="checkbox" id="org_model_hide" name="oselector" onchange="hide_background_model()"><label for="org_model_hide">Hide grayed out structure</label>
      </div>
       </div>
     </div>

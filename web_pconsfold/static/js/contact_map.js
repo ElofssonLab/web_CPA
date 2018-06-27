@@ -9,7 +9,7 @@
 // var PROTEIN_LEN = 230;
 var PX_MAP_SIZE = 460; //Q: in relation to window size?
 var TIME_SKIP = 5; //distance between valid index pair
-
+var VIEWER_FINISHED = 0;
 
 //
 var CANVAS = document.getElementById('plot_canvas');
@@ -26,9 +26,14 @@ var CURRENT_MAP_MODE = 0;
 //2 - overlay
 //3 - just CMAP?
 var DMAP_DISTANCE = 8.0;
+var MIN_DMAP_DISTANCE = 1.0;
+var MAX_DMAP_DISTANCE = 8.0;
+var DMAP_DISTANCE_RAINBOW = 0;
 var DI_LOWER_BOUND = 0.5;
 var TOP_DI_CNT = 0;
 var DI_RESTRICT_MODE = 0;
+var ORG_DISTANCE_MAP = 0;
+var ACTIVE_DISTANCE_MAP = 0;
 //0-restricted by score - above lower_bound
 //1-show top cnt contacts
 //var CURRENT_COLORMAP = 0;
@@ -37,14 +42,29 @@ var DI_RESTRICT_MODE = 0;
 var COLORING_MODE = 0;
 //0 - simple
 //1 - rainbow
+var PATYCZKI_MODE = 0;
+//0 - simple
+//1 - rainbow
 
 AXIS_CANVAS_WIDTH = 40;
 // var POINT_SIZE = Math.max(1,Math.floor(PX_MAP_SIZE/PROTEIN_LEN)); //at least one px per dot?
-var POINT_SIZE = Math.max(1,PX_MAP_SIZE/PROTEIN_LEN); //at least one px per dot?
+var POINT_SIZE = PX_MAP_SIZE/PROTEIN_LEN//Math.max(1,PX_MAP_SIZE/PROTEIN_LEN); //at least one px per dot?
 CANVAS.height = POINT_SIZE*PROTEIN_LEN;
 CANVAS_LA.height = POINT_SIZE*PROTEIN_LEN;
 CANVAS.width = POINT_SIZE*PROTEIN_LEN;
 CANVAS_BA.width = POINT_SIZE*PROTEIN_LEN;
+var SFAC = 1;
+
+//console.log("Protein length is",PROTEIN_LEN)
+
+if (0 && PROTEIN_LEN>PX_MAP_SIZE){
+	SFAC = Math.ceil((PX_MAP_SIZE/PROTEIN_LEN)*100)/100;
+	console.log("scaling by",SFAC)
+	CANVAS.getContext('2d').scale(SFAC,SFAC);
+	CANVAS_LA.getContext('2d').scale(1,SFAC);
+	CANVAS_BA.getContext('2d').scale(SFAC,1);
+
+}
 
 CANVAS_BA.height = AXIS_CANVAS_WIDTH;
 CANVAS_LA.width = AXIS_CANVAS_WIDTH;
@@ -74,7 +94,11 @@ var BOND_TUBE_RADIUS = 0.3;
 var LMBPressedOnCanvas = 0;
 var RMBPressedOnCanvas = 0;
 
-for(var i=1; i<PROTEIN_STRUCTURE_FILES.length; i++){
+if(PROTEIN_STRUCTURE_FILES[0]){
+	document.getElementById("original_file_boxes").style.display ="block";
+}
+
+for(var i=2; i<PROTEIN_STRUCTURE_FILES.length; i++){
 	string = '<input type="radio" id="model' + (i+1) + '" name="mselector" onchange="change_model_file('+i+')"><label for="model'+(i+1)+'">Model'+(i+1)+"</label>";
 	document.getElementById("model_radios").insertAdjacentHTML('beforeend',string)
 	
@@ -105,8 +129,22 @@ function change_map_mode(mode){
 function change_colouring_mode(){
 	cform = document.getElementById('cmap_mode').checked;
 	COLORING_MODE = +cform;
+	if(COLORING_MODE){
+    	document.getElementById('patyczek_div').style.display ="none";
+    	document.getElementById('patyczek_mode').checked = 0;
+        PATYCZKI_MODE = 0;
+	}else{
+       	document.getElementById('patyczek_div').style.display = "block";
+	}
 	addBonds();
 }
+
+function change_patyczek_mode(){
+	cform = document.getElementById('patyczek_mode').checked;
+	PATYCZKI_MODE = +cform;
+	addBonds();
+}
+
 function change_structure_colouring_mode(){
 	cform = document.getElementById('structure_color_mode').checked;
 //	COLORING_MODE = +cform;
@@ -117,21 +155,66 @@ function change_structure_colouring_mode(){
 		recolorBFactor();
 	}
 }
-function recolorRainbow(){
+/*function recolorRainbow_pch(){
         VIEWER.clear();
         VIEWER.cartoon('structure.protein',STRUCTURE,{ boundingSpheres: false , color: pv.color.rainbow()});
 	addSelectionToStructure(STRUCTURE_SELECTED);
 //      VIEWER.autoZoom();
 }
-function recolorBFactor(){
+function recolorBFactor_pch(){
         VIEWER.clear();
         VIEWER.cartoon('structure.protein',STRUCTURE,{ boundingSpheres: false , color: pv.color.byResidueProp('tempFactor')});
 	addSelectionToStructure(STRUCTURE_SELECTED);
 //      VIEWER.autoZoom();
 
+}*/
+
+function getCB(res){
+    var aname = "CB";
+//    if(res._name === "GLY"){
+//        aname = "CA";
+//    }
+    for(var i=0; i<res._atoms.length; i++){
+        if(res._atoms[i]._name == aname){
+            return res._atoms[i];
+        }
+    }
+    aname = "CA";
+    for(var i=0; i<res._atoms.length; i++){
+        if(res._atoms[i]._name == aname){
+            return res._atoms[i];
+        }
+    }
+    return 0;
 }
 
-
+function calculate_dmap(structure){
+//TODO fix alignement between PDB structure and model - may not be same
+    residues = structure._chains[0]._residues;
+    dmap = createArray(residues.length,residues.length);
+    console.log("dlugosc to",residues.length)
+    for(var i=0; i<residues.length-1; i++){
+        dmap[i][i]=0;
+        var a1 = getCB(residues[i]);
+        if(!residues[i]._isAminoacid){
+            continue;
+        }
+        for(var j=i+1; j<residues.length; j++){
+            if(!residues[j]._isAminoacid){
+                continue;
+            }
+            var a2 = getCB(residues[j]);
+            if(a2==0){
+                console.log(a2);
+                console.log(residues[j]);
+            }
+            var d = pv.vec3.distance(a1.pos(),a2.pos());
+            dmap[i][j] = d;
+            dmap[j][i] = d;
+        }
+    }
+    return dmap;
+}
 
 function change_dmap_cutoff(){
 	cform = document.getElementById('dmap_cutoff');
@@ -162,11 +245,40 @@ function change_di_file(file_idx){
 
 
 function change_model_file(file_idx){
+    //TODO should I clear the viewer?
 	read_in_dmap(DMAP_FILENAMES[file_idx]);
 	loadServerPDB(file_idx);
+	if (PROTEIN_STRUCTURE_FILES[0]){
+    loadServerPDB(0,1);
+	}
 	addBonds();
 }
 
+function activate_original_model(){
+	act = document.getElementById('org_model').checked;
+	if (act){
+		var to_original = 1;
+
+		//STRUCTURE.colorBy(pv.color.uniform("grey");
+		//preset(STRUCTURE,1);
+		//preset(ORG_STRUCTURE,0);
+	}else{
+		var to_original = 0;
+		//preset(STRUCTURE,0);
+		//preset(ORG_STRUCTURE,1);
+	}
+	change_active_model(to_original);
+	    MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+	        DMAP_DISTANCE_RAINBOW = new Rainbow();
+	            if (MAX_DMAP_DISTANCE<100){
+	                    rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
+	                        }else{
+	                             //   one_color_step = Math.floor(PROTEIN_LEN/100);    
+	                                  1;
+	                                      }
+	addSelectionToStructure(STRUCTURE_SELECTED);
+	document.getElementById('org_model_hide').checked = 0;
+}
 
 function read_in_array_old(filename,array_var){
     var rawFile = new XMLHttpRequest();
@@ -298,6 +410,17 @@ function read_in_dmap(filename){
 //Q: just one distance criterion?
     DISTANCE_MAP = createArray(PROTEIN_LEN,PROTEIN_LEN);
     read_in_array(filename,DISTANCE_MAP,0);
+    ACTIVE_DISTANCE_MAP = DISTANCE_MAP;
+    //DISTANCE_MAP = calculate_dmap(STRUCTURE);
+    
+    MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+    DMAP_DISTANCE_RAINBOW = new Rainbow();
+    if (MAX_DMAP_DISTANCE<100){
+        rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
+    }else{
+     //   one_color_step = Math.floor(PROTEIN_LEN/100);    
+     1;
+    }
 }
 
 function sort_di_scores(){
@@ -357,18 +480,23 @@ function addBonds(){
 				if (x!=y){
 //					console.log(ix,ax,x,iy,ay,y,validPoint(x,y))
 					if (validPoint(x,y)){
-						switch(COLORING_MODE){
-							case 0:
-								color = RAINBOW_DASH[j];
-								break;
-							case 1:
-								color = "#"+pointColor(x,y);
-								break;
-							default:
-								color = "black";
-								break;
-						}
-						CM.addTube(STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,BOND_TUBE_RADIUS,{cap: true, color: color});
+                        if(PATYCZKI_MODE){
+                            color = "#"+DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(ACTIVE_DISTANCE_MAP[x][y]));
+                            // /console.log(Math.ceil(DISTANCE_MAP[x][y])," ",DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(DISTANCE_MAP[x][y])))
+                        }else{
+    						switch(COLORING_MODE){
+	    						case 0:
+		    						color = RAINBOW_DASH[j];
+			    					break;
+				    			case 1:
+					    			color = "#"+pointColor(x,y);
+						    		break;
+	    						default:
+		    						color = "black";
+			    					break;
+    						}
+                        }
+						CM.addTube(ACTIVE_STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, ACTIVE_STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,BOND_TUBE_RADIUS,{cap: true, color: color});
 					}
 				}
 			}
@@ -382,18 +510,23 @@ function addBonds(){
 		x = b[0];
 		y = b[1];
 		if (validPoint(x,y)){
-			switch(COLORING_MODE){
-				case 0:
-					color = FREE_RAINBOW_DASH[b[2]];//%RAINBOW_DASH.length];
-					break;
-				case 1:
-					color = "#"+pointColor(x,y);
-					break;
-				default:
-					color = "black";
-					break;
-			}
-			CM.addTube(STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,BOND_TUBE_RADIUS,{cap: true, color: color});
+			if(PATYCZKI_MODE){
+                            color = "#"+DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(ACTIVE_DISTANCE_MAP[x][y]));
+                            // /console.log(Math.ceil(DISTANCE_MAP[x][y])," ",DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(DISTANCE_MAP[x][y])))
+			}else{
+				switch(COLORING_MODE){
+                    case 0:
+                        color = FREE_RAINBOW_DASH[b[2]];//%RAINBOW_DASH.length];
+                        break;
+                    case 1:
+                        color = "#"+pointColor(x,y);
+                        break;
+                    default:
+                        color = "black";
+                        break;
+                }
+            }
+			CM.addTube(ACTIVE_STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, ACTIVE_STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,BOND_TUBE_RADIUS,{cap: true, color: color});
 		}
         }
 
@@ -454,7 +587,7 @@ function addBond(x,y){
 			sel = SELECTED[i];
 			
 			if (sel[0] <= x*POINT_SIZE && x*POINT_SIZE <= sel[2] && i[1] <= y*POINT_SIZE && y*POINT_SIZE <= sel[3]){
-				CM.addTube(STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,0.1,{cap: true, color: RAINBOW_DASH[j]}) ;
+				CM.addTube(ACTIVE_STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, ACTIVE_STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,0.1,{cap: true, color: RAINBOW_DASH[j]}) ;
 				break ;
 			}
 		}
@@ -471,6 +604,7 @@ var AA_HEIGHT = 30;
 
 var POTENTIAL_SSELECTED = [];
 
+var read_map = 0;
 function drawAA(aa,idx){
 	SCTX.beginPath()
 	if(STRUCTURE_SELECTED.indexOf(idx)>=0){
@@ -488,15 +622,17 @@ function drawAA(aa,idx){
 		font_color = "black";
 	}
 	SCTX.fillStyle = color;
-	SCTX.fillRect(idx*AA_WIDTH,0,AA_WIDTH,AA_HEIGHT);
+	SCTX.fillRect((idx%50)*AA_WIDTH,AA_HEIGHT*(Math.floor(idx/50)),AA_WIDTH,AA_HEIGHT);
+	//console.log(idx, (idx%50)*AA_WIDTH,AA_HEIGHT*(Math.floor(idx/50)),AA_WIDTH,AA_HEIGHT,aa)
+
 	SCTX.font = FONT_SIZE + "px Arial";
 	SCTX.fillStyle = font_color;
-	SCTX.fillText(aa,idx*AA_WIDTH+5,7+FONT_SIZE);
+	SCTX.fillText(aa,(idx%50)*AA_WIDTH+5,AA_HEIGHT*(Math.floor(idx/50))+7+FONT_SIZE);
 }
 
 function drawSequence(){
-	CANVAS_SEQ.width = AA_WIDTH*SEQUENCE.length;
-	CANVAS_SEQ.height = AA_HEIGHT;
+	CANVAS_SEQ.width = AA_WIDTH*50;//SEQUENCE.length;
+	CANVAS_SEQ.height = AA_HEIGHT*(Math.ceil(SEQUENCE.length/50));
 	for(var s=0; s<SEQUENCE.length; s++){
 		aa = SEQUENCE[s];
 		drawAA(aa,s);
@@ -689,7 +825,7 @@ function pointColor(x,y){
 //			}
                 case 2:
             		val1 = DI_SCORES[x][y];
-            		val2 = DISTANCE_MAP[x][y];
+            		val2 = ACTIVE_DISTANCE_MAP[x][y];
             		if (val2<DMAP_DISTANCE && val1>DI_LOWER_BOUND){ //TODO odpowiednie przeliczanie TOP scores? Uwzglednic ten mod odciecia?
                 		color = "0000ff";
             		}else if(val2<DMAP_DISTANCE){
@@ -721,7 +857,7 @@ function validPoint(x,y){
 			return x<y && DI_SCORES[x][y]>DI_LOWER_BOUND;
 		case 2:
 			val1 = DI_SCORES[x][y];
-	                val2 = DISTANCE_MAP[x][y];
+	                val2 = ACTIVE_DISTANCE_MAP[x][y];
   	                return val1>DI_LOWER_BOUND;// val2<DMAP_DISTANCE && 
 		default:
 			return 0;
@@ -746,13 +882,13 @@ function drawPoint(x,y,mode){
 		}else if(COLORING_MODE == 1){
 			color = "#"+pointColor(x,y);
 		}
-		ppvi = (DISTANCE_MAP[x][y]<DMAP_DISTANCE);
+		ppvi = (ACTIVE_DISTANCE_MAP[x][y]<DMAP_DISTANCE);
 	    }else{
 		return ppvi;
 		}
  		break;
         case 1:
-            val = DISTANCE_MAP[x][y];
+            val = ACTIVE_DISTANCE_MAP[x][y];
             if (val<DMAP_DISTANCE){
 //		if(COLORING_MODE == 0 ){
 	                color = "black";
@@ -765,7 +901,7 @@ function drawPoint(x,y,mode){
             break;
         case 2:
             val1 = DI_SCORES[x][y];
-            val2 = DISTANCE_MAP[x][y];
+            val2 = ACTIVE_DISTANCE_MAP[x][y];
 //	   if (COLORING_MODE == 0){
             		if (val2<DMAP_DISTANCE && val1>DI_LOWER_BOUND){ //TODO odpowiednie przeliczanie TOP scores? Uwzglednic ten mod odciecia?
                 		color = "blue";
@@ -1066,6 +1202,13 @@ function mouseMoveHandler(e){
 //MAINLOOP
 
 function draw(){
+    //if(!read_map){
+    //    if(VIEWER_FINISHED && STRUCTURE){
+    //        read_in_dmap(0);
+    //        read_map = 1;
+    //    }
+    //    requestAnimationFrame(draw);
+    //}
     CTX.clearRect(0,0,CANVAS.width,CANVAS.height);
     drawAxes();
     drawMap();
@@ -1180,13 +1323,18 @@ function seqMousePos(evt){
 }
 function seqMouseDown(evt){
 	seqPressed =1;
-	SEQ_SEL_START=pointedAtAA(seqMousePos(evt)[0]);
+	SEQ_SEL_START=pointedAtAA(seqMousePos(evt));
 	console.log("start",SEQ_SEL_START);
 }
-function pointedAtAA(x){
+function pointedAtAA(xy){
+    x = xy[0];
+    y = xy[1];
 	for(var s=0; s<SEQUENCE.length; s++){
-		if(s*AA_WIDTH <= x && x <= (s+1)*AA_WIDTH){
-			return s;
+		if((s%50)*AA_WIDTH <= x && x <= ((s%50)+1)*AA_WIDTH){
+		    if(Math.floor(s/50)*AA_HEIGHT<=y && y <= (Math.floor(s/50)+1)*AA_HEIGHT ){
+		    	//console.log("pointed at",s,SEQUENCE[s])
+    			return s;
+    	    }
 		}
 	}
 
@@ -1197,7 +1345,7 @@ function seqMouseMove(evt){
 	}
 	end = seqMousePos(evt);
 	s = SEQ_SEL_START;
-	e = pointedAtAA(end[0]);
+	e = pointedAtAA(end);
 	POTENTIAL_SSELECTED = [];
 //	sel = (POTENTIAL_SELECTED.indexOf(s)<0)
 //	console.log("end",end,s,e,sel);
@@ -1217,7 +1365,7 @@ function seqMouseUp(evt){
 	POTENTIAL_SSELECTED = []
 	end = seqMousePos(evt);
 	s = SEQ_SEL_START;
-	e = pointedAtAA(end[0]);
+	e = pointedAtAA(end);
 	sel = (STRUCTURE_SELECTED.indexOf(s)<0)
 //	console.log("end",end,s,e,sel,POTENTIAL_SELECTED);
 	if(e<s){
@@ -1225,6 +1373,7 @@ function seqMouseUp(evt){
 		s= e;
 		e = t;
 	}
+	console.log("seqmouseup",s,e)
 	if(sel){
 		add2arr(STRUCTURE_SELECTED,s,e);
 	}else{
@@ -1251,10 +1400,19 @@ function del4arr(array,s,e){
 }
 
 function addSelectionToStructure(array){
-//                console.log(STRUCTURE.select({rnum : 0}));
-    var sel = STRUCTURE.createEmptyView();
-    var residues = STRUCTURE.select({rnums : array});
-    VIEWER.get('structure.protein').setSelection(residues);
+     //           console.log(STRUCTURE.select({rnum : 0}));
+    //var sel = ACTIVE_STRUCTURE.createEmptyView();
+    var residues = ACTIVE_STRUCTURE.select({rnums : array});
+    //console.log(residues)
+	if(ACTIVE_STRUCTURE===ORG_STRUCTURE) {
+        VIEWER.get('org_structure.protein').setSelection(residues);
+        VIEWER.get('structure.protein').setSelection(STRUCTURE.select({rnums:[]}));
+
+    }else {
+        VIEWER.get('structure.protein').setSelection(residues);
+                VIEWER.get('org_structure.protein').setSelection(ORG_STRUCTURE.select({rnums:[]}));
+
+    }
 //        for(var i=0; i<array.length; i++){
 //            STRUCTURE.select({rnum : array[i]});
 //        }
