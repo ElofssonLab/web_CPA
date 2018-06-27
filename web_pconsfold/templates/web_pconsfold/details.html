@@ -5,6 +5,7 @@
 <script>
 var PROTEIN_STRUCTURE_FILE = "{{ modelURL }}";// to be filled by Django
 var PROTEIN_STRUCTURE_FILES = {{ modelURLs|safe }};// to be filled by Django
+var PDB_CHAIN = "{{pdb_chain}}";
 var DI_FILENAMES = {{ DIs|safe }};//
 var DI_FILENAME = "{{ DI }}";//
 var DMAP_FILENAME =  "{{ dmapURL }}";//
@@ -157,4 +158,5 @@ var PFAM_MODEL = "{{ pfam_id }}";
 </div>
 <script src="{{STATIC_URL}}js/rainbowvis.js"></script>
 <script src="{{STATIC_URL}}js/contact_map.js"></script> 
+<script src="{{STATIC_URL}}js/needle.js"></script> 
 {% endblock %}
