@@ -74,9 +74,11 @@ function preset(structure,original=0) {
       ORG_STRUCTURE_OBJ = x;
   }else{
       var x = viewer.cartoon('structure.protein', structure, { boundingSpheres: false , color: col});
+      console.log("preset",x);
       STRUCTURE_OBJ = x;
       ACTIVE_STRUCTURE_OBJ = STRUCTURE_OBJ;
   }
+  addSelectionToStructure(STRUCTURE_SELECTED);
 //  getIndices();
 
 //  var residues = structure.select({rnums : [1,3,8,9,10,13]});
@@ -162,11 +164,34 @@ function loadServerPDB(idx,original=0) {
         if(original){
         ORG_STRUCTURE =s;
         ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
+               ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+            ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
+            if (ORG_MAX_DMAP_DISTANCE<100){
+               rainbow.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
+            }else{
+                                 //   one_color_step = Math.floor(PROTEIN_LEN/100);    
+               1;
+            }
+     
         }else{
           STRUCTURE = s;
           ACTIVE_STRUCTURE = STRUCTURE;
+//          console.log(STRUCTURE)
+//          console.log(PROTEIN_LEN, STRUCTURE._chains[0]._residues.length);
+          DISTANCE_MAP = calculate_dmap(STRUCTURE);
           ACTIVE_DISTANCE_MAP = DISTANCE_MAP;
 //        console.log(STRUCTURE);
+            MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+            DMAP_DISTANCE_RAINBOW = new Rainbow();
+            if (MAX_DMAP_DISTANCE<100){
+               rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
+            }else{
+                                 //   one_color_step = Math.floor(PROTEIN_LEN/100);    
+               1;
+            }
+            ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
+            ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
+                                      
         }
 //      START_RESIDS[row] = s.chains()[0].residues()[0].num();
       preset(s,original);
@@ -232,7 +257,7 @@ VIEWER.on('click', function(picked, ev) {
   picked.node().setSelection(sel);
   VIEWER.requestRedraw();
 });
-function addSelectionToStructure(arr){
+function addSelectionToStructure_old(arr){
     picked = ACTIVE_STRUCTURE.select({rnum : 0});
 	console.log("adding to structute",STRUCTURE.select({rnum : 10}));
 

@@ -28,7 +28,11 @@ var CURRENT_MAP_MODE = 0;
 var DMAP_DISTANCE = 8.0;
 var MIN_DMAP_DISTANCE = 1.0;
 var MAX_DMAP_DISTANCE = 8.0;
+var ORG_MAX_DMAP_DISTANCE = 8.0;
+var ACTIVE_MAX_DMAP_DISTANCE = 8.0;
 var DMAP_DISTANCE_RAINBOW = 0;
+var ORG_DMAP_DISTANCE_RAINBOW = 0;
+var ACTIVE_DMAP_DISTANCE_RAINBOW = 0;
 var DI_LOWER_BOUND = 0.5;
 var TOP_DI_CNT = 0;
 var DI_RESTRICT_MODE = 0;
@@ -99,7 +103,7 @@ if(PROTEIN_STRUCTURE_FILES[0]){
 }
 
 for(var i=2; i<PROTEIN_STRUCTURE_FILES.length; i++){
-	string = '<input type="radio" id="model' + (i+1) + '" name="mselector" onchange="change_model_file('+i+')"><label for="model'+(i+1)+'">Model'+(i+1)+"</label>";
+	string = '<input type="radio" id="model' + i + '" name="mselector" onchange="change_model_file('+i+')"><label for="model'+i+'">Model'+(i+1)+"</label>";
 	document.getElementById("model_radios").insertAdjacentHTML('beforeend',string)
 	
 	console.log(PROTEIN_STRUCTURE_FILES[i]);
@@ -246,12 +250,16 @@ function change_di_file(file_idx){
 
 function change_model_file(file_idx){
     //TODO should I clear the viewer?
-	read_in_dmap(DMAP_FILENAMES[file_idx]);
+//    console.log("changing",PROTEIN_STRUCTURE_FILES[file_idx]);
+//console.log(STRUCTURE)
+    VIEWER.clear();
 	loadServerPDB(file_idx);
-	if (PROTEIN_STRUCTURE_FILES[0]){
-    loadServerPDB(0,1);
+	if (PROTEIN_STRUCTURE_FILES[0] !== ""){
+        loadServerPDB(0,1);
 	}
 	addBonds();
+	//addSelectionToStructure(STRUCTURE_SELECTED);
+//	read_in_dmap(DMAP_FILENAMES[file_idx]);
 }
 
 function activate_original_model(){
@@ -262,20 +270,25 @@ function activate_original_model(){
 		//STRUCTURE.colorBy(pv.color.uniform("grey");
 		//preset(STRUCTURE,1);
 		//preset(ORG_STRUCTURE,0);
+	    ACTIVE_MAX_DMAP_DISTANCE = ORG_MAX_DMAP_DISTANCE;
+    	ACTIVE_DMAP_DISTANCE_RAINBOW = ORG_DMAP_DISTANCE_RAINBOW;
 	}else{
 		var to_original = 0;
 		//preset(STRUCTURE,0);
 		//preset(ORG_STRUCTURE,1);
+	    ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
+    	ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
 	}
 	change_active_model(to_original);
-	    MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+	    /*MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
 	        DMAP_DISTANCE_RAINBOW = new Rainbow();
 	            if (MAX_DMAP_DISTANCE<100){
-	                    rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
+	            ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
+	                    ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;                rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
 	                        }else{
 	                             //   one_color_step = Math.floor(PROTEIN_LEN/100);    
 	                                  1;
-	                                      }
+	                                      }*/
 	addSelectionToStructure(STRUCTURE_SELECTED);
 	document.getElementById('org_model_hide').checked = 0;
 }
@@ -409,18 +422,18 @@ function read_in_di(filename){
 function read_in_dmap(filename){
 //Q: just one distance criterion?
     DISTANCE_MAP = createArray(PROTEIN_LEN,PROTEIN_LEN);
-    read_in_array(filename,DISTANCE_MAP,0);
+//    read_in_array(filename,DISTANCE_MAP,0);  ///to check if I need a dmap
     ACTIVE_DISTANCE_MAP = DISTANCE_MAP;
     //DISTANCE_MAP = calculate_dmap(STRUCTURE);
     
-    MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+/*    MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
     DMAP_DISTANCE_RAINBOW = new Rainbow();
     if (MAX_DMAP_DISTANCE<100){
         rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
     }else{
      //   one_color_step = Math.floor(PROTEIN_LEN/100);    
      1;
-    }
+    }*/
 }
 
 function sort_di_scores(){
@@ -481,7 +494,7 @@ function addBonds(){
 //					console.log(ix,ax,x,iy,ay,y,validPoint(x,y))
 					if (validPoint(x,y)){
                         if(PATYCZKI_MODE){
-                            color = "#"+DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(ACTIVE_DISTANCE_MAP[x][y]));
+                            color = "#"+ACTIVE_DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(ACTIVE_DISTANCE_MAP[x][y]));
                             // /console.log(Math.ceil(DISTANCE_MAP[x][y])," ",DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(DISTANCE_MAP[x][y])))
                         }else{
     						switch(COLORING_MODE){
@@ -511,7 +524,7 @@ function addBonds(){
 		y = b[1];
 		if (validPoint(x,y)){
 			if(PATYCZKI_MODE){
-                            color = "#"+DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(ACTIVE_DISTANCE_MAP[x][y]));
+                            color = "#"+ACTIVE_DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(ACTIVE_DISTANCE_MAP[x][y]));
                             // /console.log(Math.ceil(DISTANCE_MAP[x][y])," ",DMAP_DISTANCE_RAINBOW.colourAt(Math.ceil(DISTANCE_MAP[x][y])))
 			}else{
 				switch(COLORING_MODE){
@@ -817,7 +830,7 @@ function pointColor(x,y){
                         return rainbow.colourAt(val);
                 case 1:
 //                        if(x<y){
-				val = DI_SCORES[x][y]; //TODO - assumes always 0-1
+    				val = DI_SCORES[x][y]; //TODO - assumes always 0-1
 	                        val = parseInt(val*100);
         	                return rainbow.colourAt(val);
 //			}else{
@@ -854,7 +867,7 @@ function validPoint(x,y){
 			val = DI_SCORES[x][y];
 			return val > DI_LOWER_BOUND;
 		case 1:
-			return x<y && DI_SCORES[x][y]>DI_LOWER_BOUND;
+			return  DI_SCORES[x][y]>DI_LOWER_BOUND;
 		case 2:
 			val1 = DI_SCORES[x][y];
 	                val2 = ACTIVE_DISTANCE_MAP[x][y];
@@ -1405,12 +1418,18 @@ function addSelectionToStructure(array){
     var residues = ACTIVE_STRUCTURE.select({rnums : array});
     //console.log(residues)
 	if(ACTIVE_STRUCTURE===ORG_STRUCTURE) {
-        VIEWER.get('org_structure.protein').setSelection(residues);
-        VIEWER.get('structure.protein').setSelection(STRUCTURE.select({rnums:[]}));
+//        VIEWER.get('org_structure.protein')
+        ACTIVE_STRUCTURE_OBJ.setSelection(residues);
+//        VIEWER.get('structure.protein')
+        STRUCTURE_OBJ.setSelection(STRUCTURE.select({rnums:[]}));
 
     }else {
-        VIEWER.get('structure.protein').setSelection(residues);
-                VIEWER.get('org_structure.protein').setSelection(ORG_STRUCTURE.select({rnums:[]}));
+//        VIEWER.get('structure.protein')
+        ACTIVE_STRUCTURE_OBJ.setSelection(residues);
+                if(ORG_STRUCTURE){
+                   // VIEWER.get('org_structure.protein')
+                   ORG_STRUCTURE_OBJ.setSelection(ORG_STRUCTURE.select({rnums:[]}));
+                }
 
     }
 //        for(var i=0; i<array.length; i++){
@@ -1464,7 +1483,7 @@ CANVAS.addEventListener('mousewheel',handleScroll,false);
 
 read_in_di(DI_FILENAME);
 read_in_sequence(FASTA_FILENAME);
-read_in_dmap(DMAP_FILENAME);
+read_in_dmap();
 
 draw();
 

@@ -82,7 +82,7 @@ def details(request, pfam_id):
 
     #FIX FOR STRUCTURE FROM PDB
     org_pdb_file = "https://files.rcsb.org/view/{}.pdb".format(pdb_url.split("/")[-1]) if len(pdb_url.split("/")[-1])==4 else ""
-    
+    model_list = sorted(model_list, key=lambda x: "".join(x.split(".")[:-1]))
     modelURLs = [org_pdb_file] + model_list
 
     return render(request, 'web_pconsfold/details.html', {'pfam_id': pfam_id,
