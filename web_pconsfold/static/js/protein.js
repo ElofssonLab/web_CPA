@@ -155,6 +155,40 @@ var SHORT_NAMES = {'ALA':'A','ARG':'R','ASN':'N','ASP':'D','CYS':'C','GLU':'E','
 //Foundation.global.namespace = '';
 //$(document).foundation();
 
+function deleteOtherChains(structure,chain=""){//,start_resid,end_resid){
+    chain = chain || PDB_CHAIN;
+    if(!chain){return;}
+    chain = chain.replace(/^\s+|\s+$/g, '');
+    if(!structure.chain(chain)){
+        console.log("No such structure/no such chain!");
+        return;
+    }
+    var tmp_chain = structure.chain(chain);
+/*    if (start_resid && end_resid){
+        var ress = [];
+        var residues = tmp_chain.residues();
+        for(r=0; r<residues.length; r++){
+            if(residues[r].num()>=start_resid && residues[r].num()<=end_resid){
+                ress.push(residues[r]);
+            }
+        }
+        tmp_chain._residues = ress;
+    }*/
+    structure._chains = [tmp_chain];
+//    START_RESIDS[row] = STRUCTURES[row].chains()[0].residues()[0].num();
+/*    VIEWERS[row].clear();
+    for(h=0; h<highlighted.length; h++){
+        if(highlighted[h].row == row){
+            highlighted.splice(h,1);
+        }
+    }
+    loadPDBSeq(row);
+    getIndices();    
+    VIEWERS[row].autoZoom();*/
+}
+
+
+
 function loadServerPDB(idx,original=0) {
  //TODO needs some fixes for multichain structures
   var url = PROTEIN_STRUCTURE_FILES[idx];
@@ -163,6 +197,8 @@ function loadServerPDB(idx,original=0) {
   io.fetchPdb(url, function(s) {
         if(original){
         ORG_STRUCTURE =s;
+        deleteOtherChains(ORG_STRUCTURE);
+        getAlignedIndices(SEQUENCE,ORG_STRUCTURE);
         ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
                ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
             ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
@@ -172,7 +208,6 @@ function loadServerPDB(idx,original=0) {
                                  //   one_color_step = Math.floor(PROTEIN_LEN/100);    
                1;
             }
-     
         }else{
           STRUCTURE = s;
           ACTIVE_STRUCTURE = STRUCTURE;
