@@ -5,6 +5,9 @@
 <script>
 var PROTEIN_STRUCTURE_FILE = "{{ modelURL }}";// to be filled by Django
 var PROTEIN_STRUCTURE_FILES = {{ modelURLs|safe }};// to be filled by Django
+var topo_other_imgs = {{ topo_data.1|safe }};
+var topo_other_descs = {{ topo_data.0|safe }};
+var topo_other_comms = {{ topo_data.2|safe }};
 var PDB_CHAIN = "{{pdb_chain}}";
 var DI_FILENAMES = {{ DIs|safe }};//
 var DI_FILENAME = "{{ DI }}";//
@@ -17,7 +20,225 @@ var PFAM_MODEL = "{{ pfam_id }}";
 <script data-main='{{STATIC_URL}}js/protein' src='{{STATIC_URL}}js/require.js'></script>
 <script src="{{STATIC_URL}}js/main.js"></script>
 <link rel="stylesheet" href="{{STATIC_URL}}css/style.css">
-<div class="container" style="padding-top: 25px">
+
+<div class="container" id="general_container">
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#visualization">Visualization</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#information">Information</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#usage">Usage instructions</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+<div class="container tab-pane active" id="visualization" style="padding-top: 25px; padding-bottom: 150px">
+  <div class ="row" style="margin-bottom: 10px">
+      <div class="col-3"><h1>{{ pfam_id }}</h1></div>
+      {%  if modelURLs.0 %}
+      <div class="col-3">
+          <button title="Select active structure" type="button" id="org_model_0" class="btn btn-primary btn-sm" onclick="activate_original_model(0)">Our model</button>
+          <button title="Select active structure" type="button" id="org_model_1" class="btn btn-outline-primary btn-sm" onclick="activate_original_model(1)">PDB structure</button>
+          <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary btn-sm">
+                <input type="checkbox" id="org_model_hide" onchange="hide_background_model()" autocomplete="off"> Hide gray model
+            </label>
+          </div>
+      </div>
+      {% endif %}
+        {% if modelURLs|length > 2 %}
+            <div class="col-3">
+            Switch model<br/>
+            <div class="btn-group btn-group-toggle " data-toggle="buttons" id="model_radios">
+              <label class="btn btn-secondary  btn-sm active">
+                <input type="radio" name="models" id="model1" onchange="change_model_file(1)" autocomplete="off" checked> Model 1
+              </label>
+              {% for url in modelURLs|slice:"2:" %}
+              <label class="btn btn-secondary  btn-sm">
+                <input type="radio" name="models" id="model{{ forloop.counter0|add:"2" }}" onchange="change_model_file({{ forloop.counter0|add:"2" }})" autocomplete="off"> Model {{ forloop.counter0|add:"2" }}
+              </label>
+              {%  endfor %}
+            </div>
+            </div>
+        {%  endif %}
+        <div class="col-3">
+            Switch DI file
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="model_radios">
+              <label class="btn btn-secondary active btn-sm">
+                <input type="radio" name="di_files" id="di_hh0" onchange="change_di_file(0)" autocomplete="off" checked> HH0
+              </label>
+              <label class="btn btn-secondary btn-sm">
+                <input type="radio" name="di_files" id="di_hh4" onchange="change_di_file(1)" autocomplete="off"> HH4
+              </label>
+              <label class="btn btn-secondary btn-sm">
+                <input type="radio" name="di_files" id="di_jh0" onchange="change_di_file(2)" autocomplete="off"> JH0
+              </label>
+              <label class="btn btn-secondary btn-sm">
+                <input type="radio" name="di_files" id="di_jh4" onchange="change_di_file(3)" autocomplete="off"> JH4
+              </label>
+            </div>
+        </div>
+  </div>
+  <div class="row">
+        <div class="col-6">
+            <div class="viewer_div" id="viewer1" ></div>       
+        </div>
+        <div class="col-6">
+          <div class="viewer_div" id="viewer2" >
+            <canvas id="plot_canvas" ></canvas>
+            <canvas id="plot_canvas_LA" ></canvas>
+            <canvas id="plot_canvas_BA" ></canvas>
+          </div>
+        </div>
+  </div>
+  <div class="row">
+      <div class="col-12">
+    <div id="seq_canvas_div" style="z-index: 999">
+    <canvas id="sequence_canvas" ></canvas>
+    </div></div>
+  </div>
+
+
+
+  <div class="row" style="margin-top: 5px">
+    <div class="col-8 text-left">
+          <div class="row ">
+        <div class="col-12 center-block" style="float:none">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="change_map">
+              <label class="btn btn-outline-secondary active btn-sm">
+                <input type="radio" name="di_files" id="change_map_0" onchange="change_map_mode(0)" autocomplete="off" checked> Show only DI scores
+              </label>
+              <label class="btn btn-outline-secondary btn-sm">
+                <input type="radio" name="di_files" id="change_map_1" onchange="change_map_mode(1)" autocomplete="off"> Show DI scores and distances side-by-side
+              </label>
+              <label class="btn btn-outline-secondary btn-sm">
+                <input type="radio" name="di_files" id="change_map_2" onchange="change_map_mode(2)" autocomplete="off"> Overlay DI scores and distances
+              </label>
+            </div>
+        </div>
+
+    <!--<button id="change_map_0" onclick="change_map_mode(0)" class="primary_btn bigbutton">Show only DI scores</button>
+    <button id="change_map_1" onclick="change_map_mode(1)" class="primary_btn bigbutton">Show DI scores and distances side-by-side</button>
+    <button id="change_map_2" onclick="change_map_mode(2)" class="primary_btn bigbutton">Overlay DI scores and distances</button>-->
+
+  </div>
+        <div class="row">
+            <div class="col-6 text-left">Cut-off distance for contact map: </div>
+            <div class="col-2 text-left">
+            <input type="number" name="dmap_cutoff" id="dmap_cutoff" oninput="change_dmap_cutoff()" min="3" max="50" step="0.1" > <br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 text-left">Lower bound for DI scores:</div>
+            <div class="col-2 text-left">
+                <input type="number" name="di_lower_bound" id="di_lower_bound" oninput="change_di_lower_bound()" min="0" max="1" step="0.01">
+            </div>
+        </div>
+    </div>
+    <div class="col-4 text-left">
+        <div class="row">
+            <div class="col-5 text-left">Colouring of the plot</div>
+            <div class="col-3">
+            <label class="switch">
+              <input id="cmap_mode" type="checkbox" onchange="change_colouring_mode()">
+              <span class="slider" id="slider_plot_color"></span>
+            </label></div>
+        <div class="col-4"></div>
+    </div>
+<div class="row" id="patyczek_div">
+    <div class="col-5 text-left">Colouring of the contact bonds</div>
+    <div class="col-3"><label class="switch">
+      <input id="patyczek_mode" type="checkbox" onchange="change_patyczek_mode()">
+      <span class="slider" id="slider_contact_color"></span>
+    </label></div>
+    <div class="col-4 text-left"></div>
+    </div>
+
+    <div class="row" >
+        <div class="col-5 text-left">Structure colouring</div>
+    <div class="col-3"><label id="structure_color_slider" class="switch">
+      <input id="structure_color_mode" type="checkbox" onchange="change_structure_colouring_mode()">
+      <span  class="slider" id="slider_structure_color" ></span>
+    </label></div>
+        <div class="col-4 text-left"></div>
+    </div>
+        </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="slidecontainer"> <input type="range" min="1" max="100" value="50" class="range_slider" id="di_scores_cnt"> Number of top interactions shown: 
+      <input type="number" name="di_scores_cnt_num" id="di_scores_cnt_num" oninput="change_dsc_num()" min="1" max="50" step="1">
+      <span id="di_scores_cnt_display"></span> PPV : <span id="ppv_display"></span>
+      </div>
+    </div>
+  </div>
+
+    <div class="row">
+      <!--<div class="col-md-4">
+         <div class="radio-group" style="">
+          DI scores file:<br/>
+          <input type="radio" id="difile_hh0" name="selector" onchange="change_di_file(0)">
+          <label for="difile_hh0">HH0</label>
+          <input type="radio" id="difile_hh4" name="selector" onchange="change_di_file(1)">
+          <label for="difile_hh4">HH4</label>
+          <input type="radio" id="difile_jh0" name="selector" onchange="change_di_file(2)">
+          <label for="difile_jh0">JH0</label>
+          <input type="radio" id="difile_jh4" name="selector" onchange="change_di_file(3)" checked>
+          <label for="difile_jh4">JH4</label>
+         </div>
+      </div>
+      <div class="col-md-4">
+         <div class="radio-group" id="model_radios" style="">
+          Model file:<br/>
+            <input type="radio" id="model1" name="mselector" onchange="change_model_file(1)" checked><label for="model1">Model1</label>
+         </div>
+      </div>
+      <div class="col-md-4">
+        <div class="radio-group" id="original_file_boxes" style="display: none">
+      Original file controls:<br/>
+           <input type="checkbox" id="org_model" name="oselector" onchange="activate_original_model()"><label for="org_model">Switch to PDB structure</label><br/>
+           <input type="checkbox" id="org_model_hide" name="oselector" onchange="hide_background_model()"><label for="org_model_hide">Hide grayed out structure</label>
+        </div>
+      </div>-->
+
+    </div>
+<hr >
+    {% if topology_calculated %}
+    <div class="col-12" id="topology" ><!--style="display:none"-->
+          <div class ="row"><h2>TOPOLOGY</h2></div>
+        <div class ="row">
+            <div class="col-md-4">
+                <div class ="row"><h4>OUR MODEL</h4></div>
+                <img class="obrazek_topologiczny" id="our_model_topology_img" im_src="{{STATIC_URL}}images/" src="{{STATIC_URL}}images/{{ topo_data.1.0 }}.png" />
+                <div class="topology_desc" id="our_model_topology">{{ topo_data.0.0 }}</div>
+            </div>
+            <div class="col-md-4">
+                <div class ="row"><h4>PDB STRUCTURE</h4></div>
+                <img class="obrazek_topologiczny" src="{{STATIC_URL}}images/{{ topo_data.4 }}.png" />
+                <div class="topology_desc" id="pdb_model_topology">
+                {%  if topo_data.3 %}
+                    {{ topo_data.3 }}<a href="http://knotprot.cent.uw.edu.pl/view/{{ pdb_id }}/{{ pdb_chain }}" target="_blank"> (view in KnotProt)</a>
+                 {% else %}
+                    No data
+                {%  endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class ="row"><h4>EXPERT SAYS</h4></div>
+                <img class="spinacz img_thumbnail" src="http://www.arturgrabias.com/blog/wp-content/uploads/clippy.png" />
+                <div id="expert_says">It looks like you're looking at the results. Want some help?<ul style="color:blue"><li ><span id="expert_thinks" text="{{ topo_data.2.0 }}" onclick="expert_says()">Tell me</span> </li><li>I know what I'm doing.</li></ul></div>
+            </div>
+        </div>
+
+    </div>
+    {%  endif %}
+
+
+ </div>
+<div class="container tab-pane fade" id="information" style="padding-top: 25px">
   <div class ="row">
     <h1>
       {{ pfam_id }}
@@ -37,103 +258,22 @@ var PFAM_MODEL = "{{ pfam_id }}";
     {{ desc }}
     </p>
     Belongs to clan: {{ clan_id }}/{{ clan_name }}
-    </br> 
+    </br>
   </div>
 
   <div class="row">
     <a href="{{ pfam_url }}">PFAM link</a>
   </div>
   <div class="row">
-    <a href="{{ pdb_url }}">PDB link</a> 
+    <a href="{{ pdb_url }}">PDB link</a>
   </div>
-  <div class="row">
-        <div class="col-6">
-            <div class="viewer_div" id="viewer1" ></div>       
-        </div>
-        <div class="col-6">
-          <div class="viewer_div" id="viewer2" >
-            <canvas id="plot_canvas" ></canvas>
-            <canvas id="plot_canvas_LA" ></canvas>
-            <canvas id="plot_canvas_BA" ></canvas>
-          </div>
-        </div>
-  </div>
-  <div class="row">
-    <div id="seq_canvas_div" style="z-index: 999">
-    <canvas id="sequence_canvas" ></canvas>
-    </div>
-  </div>
+</div>
 
-  <div class="row">
-    <button id="change_map_0" onclick="change_map_mode(0)" class="primary_btn bigbutton">Show only DI scores</button>
-    <button id="change_map_1" onclick="change_map_mode(1)" class="primary_btn bigbutton">Show DI scores and distances side-by-side</button>
-    <button id="change_map_2" onclick="change_map_mode(2)" class="primary_btn bigbutton">Overlay DI scores and distances</button>
-  </div>
+    <div class="container tab-pane fade" id="usage" style="padding-top: 25px">
+            <div class="row" >
+                <div class="col-12">
 
-  <div class="row" style="margin-top: 5px">
-    <div class="col-6 text-center">
-    Cut-off distance for contact map: <input type="number" name="dmap_cutoff" id="dmap_cutoff" oninput="change_dmap_cutoff()" min="3" max="50" step="0.1" style="margin: 5px"> <br/>
-    Lower bound for DI scores: <input type="number" name="di_lower_bound" id="di_lower_bound" oninput="change_di_lower_bound()" min="0" max="1" step="0.01"> 
-    </div>
-    <div class="col-6 text-center">
-    Simple colouring of the plot 
-    <label class="switch">
-      <input id="cmap_mode" type="checkbox" onchange="change_colouring_mode()">
-      <span class="slider"></span>
-    </label>
-    Rainbow<br/>
-      <div id="patyczek_div">
-    Colouring contact bonds by selection
-    <label class="switch">
-      <input id="patyczek_mode" type="checkbox" onchange="change_patyczek_mode()">
-      <span class="slider"></span>
-    </label>
-    by distance (Rainbow)<br/>
-    </div>
-    Structure colouring: Rainbow 
-    <label id="structure_color_slider" class="switch">
-      <input id="structure_color_mode" type="checkbox" onchange="change_structure_colouring_mode()">
-      <span  class="slider"></span>
-    </label>
-    B-factor<br/><br/>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <div class="slidecontainer"> <input type="range" min="1" max="100" value="50" class="range_slider" id="di_scores_cnt"> Number of top interactions shown: 
-      <input type="number" name="di_scores_cnt_num" id="di_scores_cnt_num" oninput="change_dsc_num()" min="1" max="50" step="1">
-      <span id="di_scores_cnt_display"></span> PPV : <span id="ppv_display"></span>
-      </div>
-    </div>
-  </div>
 
-    <div class="row">
-      <div>
-     <div class="radio-group" style="position: absolute">
-      DI scores file:<br/>
-      <input type="radio" id="difile_hh0" name="selector" onchange="change_di_file(0)">
-      <label for="difile_hh0">HH0</label>
-      <input type="radio" id="difile_hh4" name="selector" onchange="change_di_file(1)">
-      <label for="difile_hh4">HH4</label>
-      <input type="radio" id="difile_jh0" name="selector" onchange="change_di_file(2)">
-      <label for="difile_jh0">JH0</label>
-      <input type="radio" id="difile_jh4" name="selector" onchange="change_di_file(3)" checked>
-      <label for="difile_jh4">JH4</label>
-     </div>
-     <div class="radio-group" id="model_radios" style="position: absolute; margin-left: 400px">
-      Model file:<br/>
-      <input type="radio" id="model1" name="mselector" onchange="change_model_file(1)" checked><label for="model1">Model1</label>
-     </div>
-        <div class="radio-group" id="original_file_boxes" style="position: absolute; margin-left: 600px; display: none">
-      Original file controls:<br/>
-           <input type="checkbox" id="org_model" name="oselector" onchange="activate_original_model()"><label for="org_model">Switch to PDB structure</label>
-           <input type="checkbox" id="org_model_hide" name="oselector" onchange="hide_background_model()"><label for="org_model_hide">Hide grayed out structure</label>
-     </div>
-      </div>
-    </div>
-    <div class="row" style="margin-top: 100px">
-     
-     
      <ol><b>USAGE:</b>
     <li>Click&drag on the plot to select a region and display valid bonds (over DI cutoff)</li>
     <li>Single click clears selection</li>
@@ -149,13 +289,18 @@ var PFAM_MODEL = "{{ pfam_id }}";
     <li>Selection on sequence (clicking and dragging, select/deselect mode depends on status of the first clicked residue) marks given region on plot (WITHOUT SELECTING) and on the structure</li>
     </ol>
 
-    </div>
+    </div></div>
 
 
 
 
   </div>
+
+
+
 </div>
+</div>
+<!--</div>-->
 <script src="{{STATIC_URL}}js/rainbowvis.js"></script>
 <script src="{{STATIC_URL}}js/contact_map.js"></script> 
 <script src="{{STATIC_URL}}js/needle.js"></script> 
