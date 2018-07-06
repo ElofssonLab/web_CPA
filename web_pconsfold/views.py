@@ -37,6 +37,21 @@ def details(request, pfam_id):
     raw_DIs = glob.glob(base_url + "/*.l3")
     fasta_url = glob.glob(base_url + "/*.fa")[0]
     desc_file = glob.glob(base_url + "/description.txt")[0]
+
+    # topology
+    topology_calculated = 0
+    topo_data = [[],[],[],"",""]
+    topo_file = glob.glob(base_url + "/topology.txt")
+    if topo_file:
+        topology_calculated = 1
+        topo_file = topo_file[0]
+        with open(topo_file) as topo_in:
+            topo_data = topo_in.readlines()
+        topo_data[0] = topo_data[0].strip().split(";")
+        topo_data[1] = topo_data[1].strip().split(";")
+        topo_data[2] = topo_data[2].strip().split(";")
+    # end topology
+
     with open(desc_file, 'r') as desc_handle:
         desc_list = desc_handle.readlines()
         if len(desc_list) > 1:
@@ -91,12 +106,16 @@ def details(request, pfam_id):
                                                           'modelURL': modelURL,
                                                           'modelURLs': modelURLs,
                                                           'dmapURL': dmapURL,
+                                                          'topology_calculated' : topology_calculated,
+                                                          'topo_data': topo_data,
                                                           # 'dmapURLs': dmapURLs,
                                                           'DIs': di_list,
                                                           'DI': DI,
                                                           'base_url': base_url,
                                                           'fasta_url': fasta_url,
                                                           'prot_len': protein_len,
+                                                          'pdb_id': pdb_name[:4],
+                                                          'pdb_chain' : pdb_name[4:],
                                                           'pdb_url': pdb_url,
                                                           'pdb_chain': pdb_chain,
                                                           'pfam_name': pfam_name,
