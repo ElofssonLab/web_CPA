@@ -98,16 +98,16 @@ var BOND_TUBE_RADIUS = 0.3;
 var LMBPressedOnCanvas = 0;
 var RMBPressedOnCanvas = 0;
 
-if(PROTEIN_STRUCTURE_FILES[0]){
+/*if(PROTEIN_STRUCTURE_FILES[0]){
 	document.getElementById("original_file_boxes").style.display ="block";
-}
+}*/
 
-for(var i=2; i<PROTEIN_STRUCTURE_FILES.length; i++){
-	string = '<input type="radio" id="model' + i + '" name="mselector" onchange="change_model_file('+i+')"><label for="model'+i+'">Model'+(i+1)+"</label>";
+/*for(var i=2; i<PROTEIN_STRUCTURE_FILES.length; i++){
+	string = '<input type="radio" id="model' + i + '" name="mselector" onchange="change_model_file('+i+')"><label for="model'+i+'">Model'+(i)+"</label>";
 	document.getElementById("model_radios").insertAdjacentHTML('beforeend',string)
 	
 	console.log(PROTEIN_STRUCTURE_FILES[i]);
-}
+}*/
 
 
 function createArray(length) {
@@ -124,6 +124,7 @@ function createArray(length) {
 }
 
 function change_map_mode(mode){
+
 	if ([0,1,2].indexOf(mode)>=0){
 		CURRENT_MAP_MODE = mode;
 	}
@@ -138,7 +139,7 @@ function change_colouring_mode(){
     	document.getElementById('patyczek_mode').checked = 0;
         PATYCZKI_MODE = 0;
 	}else{
-       	document.getElementById('patyczek_div').style.display = "block";
+       	document.getElementById('patyczek_div').style.display = "flex";
 	}
 	addBonds();
 }
@@ -252,18 +253,32 @@ function change_model_file(file_idx){
     //TODO should I clear the viewer?
 //    console.log("changing",PROTEIN_STRUCTURE_FILES[file_idx]);
 //console.log(STRUCTURE)
+	document.getElementById('org_model_hide').checked = 0;
     VIEWER.clear();
+    //console.log("pre",VIEWER)
+    //VIEWER.rm("structure.protein");
+    //console.log("post",VIEWER)
+    //VIEWER.rm("structure.protein");
 	loadServerPDB(file_idx);
-	if (PROTEIN_STRUCTURE_FILES[0] !== ""){
-        loadServerPDB(0,1);
-	}
+	//if (PROTEIN_STRUCTURE_FILES[0] !== ""){
+     //   loadServerPDB(0,1);
+	//}
+    //console.log("poster",VIEWER)
+
 	addBonds();
+	document.getElementById('our_model_topology').innerHTML = topo_other_descs[file_idx-1];
+	document.getElementById('our_model_topology_img').src = document.getElementById('our_model_topology_img').getAttribute('im_src') + topo_other_imgs[file_idx-1] + ".png";
+	try {
+        document.getElementById('expert_thinks').setAttribute('text',topo_other_comms[file_idx - 1]);
+    }catch (e) {
+		document.getElementById('expert_says').innerHTML = topo_other_comms[file_idx - 1];
+    }
 	//addSelectionToStructure(STRUCTURE_SELECTED);
 //	read_in_dmap(DMAP_FILENAMES[file_idx]);
 }
 
-function activate_original_model(){
-	act = document.getElementById('org_model').checked;
+function activate_original_model(act){
+	//act = document.getElementById('org_model').checked;
 	if (act){
 		var to_original = 1;
 
@@ -272,12 +287,20 @@ function activate_original_model(){
 		//preset(ORG_STRUCTURE,0);
 	    ACTIVE_MAX_DMAP_DISTANCE = ORG_MAX_DMAP_DISTANCE;
     	ACTIVE_DMAP_DISTANCE_RAINBOW = ORG_DMAP_DISTANCE_RAINBOW;
+    	document.getElementById("org_model_1").classList.add("btn-primary");
+    	document.getElementById("org_model_1").classList.remove("btn-outline-primary");
+    	document.getElementById("org_model_0").classList.remove("btn-primary");
+    	document.getElementById("org_model_0").classList.add("btn-outline-primary");
 	}else{
 		var to_original = 0;
 		//preset(STRUCTURE,0);
 		//preset(ORG_STRUCTURE,1);
 	    ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
     	ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
+    	    	document.getElementById("org_model_0").classList.add("btn-primary");
+    	document.getElementById("org_model_0").classList.remove("btn-outline-primary");
+    	document.getElementById("org_model_1").classList.remove("btn-primary");
+    	document.getElementById("org_model_1").classList.add("btn-outline-primary");
 	}
 	change_active_model(to_original);
 	    /*MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
@@ -290,7 +313,7 @@ function activate_original_model(){
 	                                  1;
 	                                      }*/
 	addSelectionToStructure(STRUCTURE_SELECTED);
-	document.getElementById('org_model_hide').checked = 0;
+	//document.getElementById('org_model_hide').checked = 0;
 }
 
 function read_in_array_old(filename,array_var){
@@ -412,10 +435,19 @@ function change_dsc_num(){
 //    slider.oninput()
 }
 
+function expert_says(){
+	//expert_says
+	//alert("dasd")
+	var ours = document.getElementById("expert_thinks").getAttribute("text");
+	var expert = document.getElementById("expert_says").innerHTML = ours;
+}
+
 
 function read_in_di(filename){
     DI_SCORES = createArray(PROTEIN_LEN,PROTEIN_LEN);
     read_in_array(filename,DI_SCORES,1);
+
+    refresh_info()
 //    sort_di_scores();
 
 }
@@ -449,8 +481,11 @@ function sort_di_scores(){
 	var slider = document.getElementById("di_scores_cnt");
 	slider.max = DI_SCORES_SORTED.length;
         document.getElementById('di_scores_cnt_num').max = DI_SCORES_SORTED.length;
-	slider.value = 300;
-
+	slider.value = PROTEIN_LEN;
+    TOP_DI_CNT = PROTEIN_LEN;
+    //console.log("dwasda",DI_SCORES_SORTED)
+    DI_LOWER_BOUND = DI_SCORES_SORTED[TOP_DI_CNT];
+	refresh_info()
 }
 
 
@@ -615,6 +650,8 @@ var FONT_SIZE = 15;
 var AA_WIDTH = 20;
 var AA_HEIGHT = 30;
 
+var NUM_AAS_IN_LINE = 50;
+
 var POTENTIAL_SSELECTED = [];
 
 var read_map = 0;
@@ -635,17 +672,22 @@ function drawAA(aa,idx){
 		font_color = "black";
 	}
 	SCTX.fillStyle = color;
-	SCTX.fillRect((idx%50)*AA_WIDTH,AA_HEIGHT*(Math.floor(idx/50)),AA_WIDTH,AA_HEIGHT);
+	SCTX.fillRect((idx%NUM_AAS_IN_LINE)*AA_WIDTH,AA_HEIGHT*(Math.floor(idx/NUM_AAS_IN_LINE)),AA_WIDTH,AA_HEIGHT);
 	//console.log(idx, (idx%50)*AA_WIDTH,AA_HEIGHT*(Math.floor(idx/50)),AA_WIDTH,AA_HEIGHT,aa)
 
 	SCTX.font = FONT_SIZE + "px Arial";
 	SCTX.fillStyle = font_color;
-	SCTX.fillText(aa,(idx%50)*AA_WIDTH+5,AA_HEIGHT*(Math.floor(idx/50))+7+FONT_SIZE);
+	SCTX.fillText(aa,(idx%NUM_AAS_IN_LINE)*AA_WIDTH+5,AA_HEIGHT*(Math.floor(idx/NUM_AAS_IN_LINE))+7+FONT_SIZE);
 }
 
 function drawSequence(){
-	CANVAS_SEQ.width = AA_WIDTH*50;//SEQUENCE.length;
-	CANVAS_SEQ.height = AA_HEIGHT*(Math.ceil(SEQUENCE.length/50));
+	//console.log("szerokosc",document.getElementById("visualization").getBoundingClientRect().width)
+	NUM_AAS_IN_LINE = Math.floor(document.getElementById("di_scores_cnt").offsetWidth/AA_WIDTH);
+	//.clientWidth/AA_WIDTH);
+
+
+	CANVAS_SEQ.width = AA_WIDTH*NUM_AAS_IN_LINE;//SEQUENCE.length;
+	CANVAS_SEQ.height = AA_HEIGHT*(Math.ceil(SEQUENCE.length/NUM_AAS_IN_LINE));
 	for(var s=0; s<SEQUENCE.length; s++){
 		aa = SEQUENCE[s];
 		drawAA(aa,s);
@@ -895,7 +937,8 @@ function drawPoint(x,y,mode){
 		}else if(COLORING_MODE == 1){
 			color = "#"+pointColor(x,y);
 		}
-		ppvi = (ACTIVE_DISTANCE_MAP[x][y]<DMAP_DISTANCE);
+		//TODO: If the residues are missing, we assume wrong distance
+		ppvi = (ACTIVE_DISTANCE_MAP[x] && ACTIVE_DISTANCE_MAP[x][y] && ACTIVE_DISTANCE_MAP[x][y]<DMAP_DISTANCE);
 	    }else{
 		return ppvi;
 		}
@@ -1343,8 +1386,8 @@ function pointedAtAA(xy){
     x = xy[0];
     y = xy[1];
 	for(var s=0; s<SEQUENCE.length; s++){
-		if((s%50)*AA_WIDTH <= x && x <= ((s%50)+1)*AA_WIDTH){
-		    if(Math.floor(s/50)*AA_HEIGHT<=y && y <= (Math.floor(s/50)+1)*AA_HEIGHT ){
+		if((s%NUM_AAS_IN_LINE)*AA_WIDTH <= x && x <= ((s%NUM_AAS_IN_LINE)+1)*AA_WIDTH){
+		    if(Math.floor(s/NUM_AAS_IN_LINE)*AA_HEIGHT<=y && y <= (Math.floor(s/NUM_AAS_IN_LINE)+1)*AA_HEIGHT ){
 		    	//console.log("pointed at",s,SEQUENCE[s])
     			return s;
     	    }

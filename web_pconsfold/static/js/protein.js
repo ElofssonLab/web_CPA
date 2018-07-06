@@ -18,6 +18,9 @@ requirejs.config({
 var VIEWER = 0;
 var ORG_STRUCTURE = 0;
 var ORG_STRUCTURE_OBJ = 0;
+var ORG_STRUCTURE_FULL = 0;
+var ORG_STRUCTURE_FULL_OBJ = 0;
+var hadToCut = 0;
 var STRUCTURE = 0;
 var STRUCTUE_OBJ = 0;
 var ACTIVE_STRUCTURE = 0;
@@ -35,6 +38,187 @@ var color = pv.color;
 
 var structure;
 
+function dist(p1,p2){
+    return Math.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2+(p1[2]-p2[2])**2)
+}
+function vectorize(c,o){
+    d = dist(c,o);
+    s = d/0.976;
+//    console.log([(c[0]-o[0])/s,(c[1]-o[1])/2,(c[2]-o[2])/s]);
+    return [(c[0]-o[0])/s,(c[1]-o[1])/2,(c[2]-o[2])/s];
+}
+
+function add(a,b){
+    return [a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+}
+
+function calculateSS(structure){
+    var residues = structure._chains[0]._residues;
+    aas = [];
+    for(var r=0; r<residues.length; r++){
+        aas[r] = {};
+        atoms = residues[r]._atoms;
+        for(var a=0 ; a<atoms.length; a++){
+            if(atoms[a]._name === "N"){
+                aas[r]["N"] = atoms[a].pos();
+            }
+            if(atoms[a]._name === "C"){
+                aas[r]["C"] = atoms[a].pos();
+            }
+            if(atoms[a]._name === "O"){
+                aas[r]["O"] = atoms[a].pos();
+            }
+        }
+    }
+    for (var aa in aas) {
+//        if (aas.hasOwnProperty(aa)) {
+                aad = aas[aa];
+//        console.log(aad)
+                if(!aad.hasOwnProperty("N") || !aad.hasOwnProperty("C") || !aad.hasOwnProperty("O")){
+                    continue;
+                }
+                if(aas[aa-1]){
+                    var ndb = aas[aa-1];
+                }else{
+                    continue;
+                }
+                c = ndb["C"];
+                o = ndb["O"];
+                n = aad["N"];
+                H = add(n, vectorize(c,o));
+//                console.log(n)
+//                console.log(vectorize(c,o));
+//                console.log(H)
+                aad["H"] = H;
+//        }
+    }
+    var bonds = [];
+    for(var aa1=0; aa1<aas.length; aa1++){
+//        if(aas.hasOwnProperty(aa1)){
+            var aad1 = aas[aa1];
+            for(var aa2 =0; aa2<aas.length; aa2++){
+//                if(aas.hasOwnProperty(aa2)){
+                    var aad2 = aas[aa2];
+                    if(!aad2.hasOwnProperty("H") || Math.abs(aa1-aa2)<=1){
+                        continue;
+                    }
+//                    console.log(aad1,aad2);
+//                    console.log(1/dist(aad1["O"],aad2["N"]),1/dist(aad1["C"],aad2["H"]),1/dist(aad1["O"],aad2["H"]),1/dist(aad1["C"],aad2["N"]));
+                    var nawias= 1/dist(aad1["O"],aad2["N"]) + 1/dist(aad1["C"],aad2["H"]) - 1/dist(aad1["O"],aad2["H"]) - 1/dist(aad1["C"],aad2["N"]);
+                    E  = nawias * 27.888 // 332 * 0.084
+                    if(E < -.5){
+//                    console.log(E);
+                        if(!bonds[aa1]){
+                            bonds[aa1] = [];
+                        }
+                        if(!bonds[aa2]){
+                            bonds[aa2] = [];
+                        }
+                        bonds[aa1].push(aa2);
+                        bonds[aa2].push(aa1);
+                    }
+//                }
+            }
+//        }
+//    break
+    }
+//    return
+    var assign = new Array(aas.length);
+//    for(var i=0;i<Math.max(Object.keys(bonds)); i++){
+//        assign.push();
+//    }
+//    var bkeys = Object.keys(bonds).sort(function(a,b){return a-b});
+    for(var i =0; i<bonds.length; i++){
+//        i = bkeys[j]*1;
+        bonds_i = bonds[i];
+        if(!bonds_i){continue;}
+        for(var j =0; j<bonds_i.length;j++){
+            b=bonds_i[j];
+//            console.log("within",i,b,bonds_i);
+//            return
+//            b *=1;
+            if(Math.abs(b-i)>5){
+                //parallel
+                cnt =2;
+                l = i+cnt;
+                p = b;
+                k = 1;
+                while(bonds[l] && bonds[l].indexOf(p)>=0){
+                    if(k%2){
+                        p+=cnt;
+                    }else{
+                        l+=cnt;
+                    }
+                    k+=1;
+                }
+                if(k>=3){
+                    for(var tmp=0;tmp<k;tmp++){
+                        assign[i+tmp] = "E";
+                        assign[b+tmp] = "E";
+                    }
+                }
+            
+            }
+            //antiparallel
+            cnt = 2;
+            l = i;
+            p = b;
+            k=1;
+            while(Math.abs(l-p)>=3 && bonds[p-cnt] && bonds[p-cnt].indexOf(l+cnt)>=0){
+                if(!(bonds[p-1]) || bonds[p-1].indexOf(l+1)<0){
+                    l+=cnt;
+                    p-=cnt;
+                    k+=cnt;
+                }else{
+                    break;
+                }
+
+            }
+            if(k>=3){
+//                            console.log("A",i,l,b,p,k);
+                   for(var tmp=0;tmp<k;tmp++){
+                        assign[i+tmp] = "A";
+                        assign[b-tmp] = "A";
+                   }
+            }
+            //pi helix
+            if (Math.abs(b-i) == 3){
+                if(bonds[i+1] && bonds[i+1].indexOf(i+4)>=0){
+                    for(var x=1;x<4;x++){
+                        assign[i+x] = "P";
+                    }
+                }
+            }
+            if (Math.abs(b-i) == 5){
+                if(bonds[i+1] && bonds[i+1].indexOf(i+6)>=0){
+                    for(var x=1;x<6;x++){
+                        assign[i+x] = "L";
+                    }
+                }
+            }
+            if (Math.abs(b-i) == 4){
+                if(bonds[i+1] && bonds[i+1].indexOf(i+5)>=0){
+                    for(var x=1;x<5;x++){
+                        assign[i+x] = "H";
+                    }
+                }
+            }
+            
+            
+        }
+    
+    }
+    for(var a=0;a<assign.length; a++){
+        if(assign[a] === "H" || assign[a] === "L" || assign[a] === "P"){
+            structure._chains[0]._residues[a]._ss = "H";
+        }
+        if(assign[a] === "E" || assign[a] === "A"){
+            structure._chains[0]._residues[a]._ss = "E";
+        }
+    }
+//    console.log("atomy",assign);
+
+}
 
 function recolorRainbow(){
 	//VIEWER.clear();
@@ -71,6 +255,7 @@ function preset(structure,original=0) {
 
   if(original){
       var x = viewer.cartoon('org_structure.protein', structure, { boundingSpheres: false , color: col});
+
       ORG_STRUCTURE_OBJ = x;
   }else{
       var x = viewer.cartoon('structure.protein', structure, { boundingSpheres: false , color: col});
@@ -86,29 +271,38 @@ function preset(structure,original=0) {
 //  var chainA = structure.select({cname : 'A'});
 //  viewer.spheres('structure.selected_chain', chainA, {});
     if(!original) {
+        showSS(STRUCTURE);
+    }else{
+        x.setOpacity(0.5);
+        //console.log("asd")
+    }
+   // superposition()
+}
+
+function showSS(structure){
+    HELICES = [];
+    SHEETS = [];
         try {
-            var _H = Object.keys(STRUCTURE.select({rtype: "H"})._chains[0]._residueMap);
+            var _H = Object.keys(structure.select({rtype: "H"})._chains[0]._residueMap);
             for (var i = 0; i < _H.length; i++) {
-                HELICES[HELICES.length] = parseInt(_H[i]);
+                HELICES.push(parseInt(_H[i]));
             }
         } catch (err) {
             console.log("No Alpha helices");
         }
 
         try {
-            var _E = Object.keys(STRUCTURE.select({rtype: "E"})._chains[0]._residueMap);
+            var _E = Object.keys(structure.select({rtype: "E"})._chains[0]._residueMap);
             for (var i = 0; i < _E.length; i++) {
-                SHEETS[SHEETS.length] = parseInt(_E[i]);
+                SHEETS.push(parseInt(_E[i]));
             }
         } catch (err) {
             console.log("No Beta sheets");
         }
-    }else{
-        x.setOpacity(0.5);
-        //console.log("asd")
+        addSSToAxes()
 
-    }
 }
+
 
 function change_active_model(to_original){
     if(to_original){
@@ -128,18 +322,29 @@ function change_active_model(to_original){
             ORG_STRUCTURE_OBJ.setOpacity(0.5);
         ACTIVE_DISTANCE_MAP = DISTANCE_MAP;
     }
+    showSS(ACTIVE_STRUCTURE);
 
 }
 function hide_background_model(){
     if(ACTIVE_STRUCTURE === ORG_STRUCTURE){
         var na = STRUCTURE_OBJ;
+        //var na2 = STRUCTURE_OBJ;
     }else{
         var na = ORG_STRUCTURE_OBJ;
+        //if(ORG_STRUCTURE_FULL_OBJ) {
+        //    var na2 = ORG_STRUCTURE_FULL_OBJ;
+        //}
+        //else{
+        //    var na2 = ORG_STRUCTURE_OBJ;
+        //}
+
 
     }
     if(document.getElementById('org_model_hide').checked){
         na.setOpacity(0);
+        //na2.setOpacity(0);
     }else{
+        //na2.setOpacity(0.3)
         na.setOpacity(0.5);
     }
 }
@@ -187,7 +392,89 @@ function deleteOtherChains(structure,chain=""){//,start_resid,end_resid){
     VIEWERS[row].autoZoom();*/
 }
 
+function clone_structure(struct){
+        new_struct = new pv.mol.Mol()
+        var chain = new_struct.addChain(struct._chains[0].name());
+        var resids = struct._chains[0]._residues;
+        for (var i = 0; i < resids.length; ++i) {
+              var r = resids[i];
+              var residue = chain.addResidue(r.name(), i);
+              residue._ss = r._ss;
+              for (var j=0 ; j<r.atoms().length; ++j){
+                  var at = r.atoms()[j]
+                  residue.addAtom(at.name(), at._pos, at._element);
+              }
+        }
+        return new_struct
 
+
+}
+
+function superposition(url){
+    if(!ORG_STRUCTURE){
+        return
+    }
+    console.log("spsadd",ORG_STRUCTURE._chains[0]._residues.length,SEQUENCE.length,)
+    if(ORG_STRUCTURE._chains[0]._residues.length > SEQUENCE.length){
+        hadToCut =1;
+        //console.log(ORG_STRUCTURE)
+
+        //ORG_STRUCTURE_FULL._chains = ORG_STRUCTURE._chains
+    }
+
+        if(hadToCut){
+            new_struct = clone_structure(ORG_STRUCTURE);
+            //console.log("rendering")
+            //console.log(new_struct)
+            //ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('lightblue')});
+            //ORG_STRUCTURE_FULL_OBJ.setOpacity(0.1)
+            //ORG_STRUCTURE_OBJ.colorBy(color.uniform('yellow'))
+            //console.log("rendering")
+
+         //ORG_STRUCTURE_FULL_OBJ = VIEWER.add('org_structure_full.protein', ORG_STRUCTURE_OBJ)
+1
+            //ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',ORG_STRUCTURE_FULL,{ boundingSpheres: false , color: color.rainbow()});
+            //ORG_STRUCTURE_FULL_OBJ.setOpacity(0.5)
+            //ORG_STRUCTURE_FULL_OBJ.colorBy(color.uniform("blue"))
+
+         /*io.fetchPdb(url, function(t) {
+          console.log("fetching again")
+          ORG_STRUCTURE_FULL = t;
+          console.log(ORG_STRUCTURE)
+          console.log(ORG_STRUCTURE_FULL)
+          deleteOtherChains(ORG_STRUCTURE_FULL);
+          if (ORG_STRUCTURE_FULL._chains[0]._residues.length !== SEQUENCE.length) {
+              console.log('kartoning',ORG_STRUCTURE_FULL == ORG_STRUCTURE)
+              ORG_STRUCTURE_FULL_OBJ = VIEWER.spheres('org_structure_full.protein', ORG_STRUCTURE_FULL, {
+                  boundingSpheres: false,
+                  color: color.uniform("blue")
+              });
+              VIEWER.requestRedraw()
+              ORG_STRUCTURE_FULL_OBJ.setOpacity(1);
+          }
+      });*/
+    }
+
+    var relevantIndices = getAlignedIndices(SEQUENCE,ORG_STRUCTURE);
+    //console.log(relevantIndices)
+    var sView = STRUCTURE.select({rindices:relevantIndices,aname:"CA"});
+    var osView = ORG_STRUCTURE.select({aname:"CA"});
+    pv.mol.superpose(sView,osView);
+    STRUCTURE_OBJ.hide()
+    ORG_STRUCTURE_OBJ.hide()
+    //VIEWER.rm(osView.name())
+    preset(ORG_STRUCTURE,1)
+    preset(STRUCTURE)
+    //VIEWER.centerOn(STRUCTURE)
+    VIEWER.autoZoom()
+    //x = VIEWER.tube("costam",STRUCTURE)
+    //STRUCTURE_OBJ = x
+    //console.log(STRUCTURE)
+
+    //VIEWER.clear()
+    //VIEWER.requestRedraw()
+
+}
 
 function loadServerPDB(idx,original=0) {
  //TODO needs some fixes for multichain structures
@@ -196,11 +483,12 @@ function loadServerPDB(idx,original=0) {
   var iviewer = VIEWER;
   io.fetchPdb(url, function(s) {
         if(original){
-        ORG_STRUCTURE =s;
-        deleteOtherChains(ORG_STRUCTURE);
-        getAlignedIndices(SEQUENCE,ORG_STRUCTURE);
-        ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
-               ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+            ORG_STRUCTURE =s;
+            deleteOtherChains(ORG_STRUCTURE);
+
+            //STRUCTURE_OBJ.setOpacity(1);
+            ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
+            ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP));
             ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
             if (ORG_MAX_DMAP_DISTANCE<100){
                rainbow.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
@@ -208,8 +496,10 @@ function loadServerPDB(idx,original=0) {
                                  //   one_color_step = Math.floor(PROTEIN_LEN/100);    
                1;
             }
+
         }else{
           STRUCTURE = s;
+          //console.log(STRUCTURE)
           ACTIVE_STRUCTURE = STRUCTURE;
 //          console.log(STRUCTURE)
 //          console.log(PROTEIN_LEN, STRUCTURE._chains[0]._residues.length);
@@ -226,12 +516,16 @@ function loadServerPDB(idx,original=0) {
             }
             ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
             ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
-                                      
+            calculateSS(STRUCTURE);
         }
 //      START_RESIDS[row] = s.chains()[0].residues()[0].num();
       preset(s,original);
       iviewer.autoZoom();
+      superposition(url)
+
+
   });
+
 };
 
 window.loadServerPDB = loadServerPDB;
