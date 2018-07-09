@@ -118,7 +118,7 @@ function extractIndices(seqs,plen){
     for(var i=0; i<s1.length;i++){
         zipped[zipped.length] = [s1[i],s2[i]];
       };
-    var startid = null;
+    /*var startid = null;
     var endid = null;
     var gaps = [];
     for(var i =0; i<zipped.length; i++){
@@ -141,15 +141,45 @@ function extractIndices(seqs,plen){
             gaps[gaps.length] = [s,e];
 //            console.log("last",zipped[e]);
         }
-    }
-    return [startid,endid,gaps];
+    }*/
+    var orgFilledIndices = [];
+    var curIndices = [];
+    var sind = -1;
+    var osind = -1;
+    for(var i=0; i<zipped.length; i++){
+	if(zipped[i][0]!="-"){
+		sind+=1;
+	}
+	if(zipped[i][1]!="-"){
+		osind+=1;
+		if(zipped[i][0]!="-"){
+			orgFilledIndices[orgFilledIndices.length] = osind;
+			curIndices[curIndices.length] = sind;
+		}
+	}
 
+    }
+//    return [startid,endid,gaps];
+	return [orgFilledIndices,curIndices];
+}
+function fix_structure_new(structure,findices,cindices){
+    var tmp_chain = structure.chains()[0];
+        var ress = [];
+        var residues = tmp_chain.residues();
+	for(var i=0; i<findices.length; i++){
+                residues[findices[i]]._num=cindices[i]+1;
+                residues[findices[i]]._index=i;
+		ress.push(residues[findices[i]]);
+	}
+        structure.chains()[0]._residues = ress;
 }
 
 function fix_structure(structure,params){
     var sid = params[0];
     var eid = params[1];
     var gaps = params[2];
+
+    var relInd = [];
 
     var tmp_chain = structure.chains()[0];
     if (sid>=0){
@@ -164,7 +194,8 @@ function fix_structure(structure,params){
             for(var t=0; t<tmp.length; t++){
                 tmp[t]._num=c_num+t;
                 tmp[t]._index=c_num+t-1;
-                ress.push(tmp[t]);
+                relInd[relInd.length] = c_num+t-1;
+		ress.push(tmp[t]);
             }
             c_num+=t+(gaps[g][1]-gs);
 //        console.log(c_num)
@@ -175,12 +206,14 @@ function fix_structure(structure,params){
         for(var t=0; t<tmp.length; t++){
                 tmp[t]._num=c_num+t;
                 tmp[t]._index=c_num+t-1;
+                relInd[relInd.length] = c_num+t-1;
                 ress.push(tmp[t]);
         }
 //        ress+=tmp;
         tmp_chain._residues = ress;
     }
 //    console.log(structure);
+	return relInd;
 }
 function getAlignedIndices(seq,pstruct){
     var sseq = [];
@@ -196,6 +229,6 @@ function getAlignedIndices(seq,pstruct){
     console.log(out);
     out2 = extractIndices(out,seq.length);
 //    console.log(out2);
-    fix_structure(pstruct,out2)
-    return out2[2];
+    fix_structure_new(pstruct,out2[0],out2[1])
+    return out2[1];
 }

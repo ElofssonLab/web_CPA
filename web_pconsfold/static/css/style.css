@@ -29,7 +29,7 @@ input[type=radio] {
   display: inline-block;
   cursor: pointer;
   font-weight: bold;
-  padding: 5px 20px;
+  padding: 5px 10px;
 }
 .radio-group label:hover {
     background: lightgrey;
@@ -47,11 +47,12 @@ label + input[type=radio] + label {
   border-left: solid 3px grey;
 }
 .radio-group {
-  border: solid 3px black;
-  display: inline-block;
-  margin: 20px;
+  /*border: solid 3px black;
+  display: inline-block;*/
+  /*margin: 20px;*/
   border-radius: 10px;
   overflow: hidden;
+    padding: 20px;
 }
 /*
 canvas { 
@@ -141,12 +142,14 @@ display: inline;
 .belka{
 //    display:inline;
 }
-
+.spinacz{
+    width: 150px;
+}
 
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
+  width: 120px;
   height: 34px;
   margin-bottom: 0rem;
 }
@@ -171,13 +174,27 @@ display: inline;
   position: absolute;
   content: "";
   height: 26px;
-  width: 26px;
+  width: 70px;
   left: 4px;
   bottom: 4px;
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
 }
+#slider_plot_color:before{
+    text-align: center;
+    content: "Simple";
+}
+#slider_contact_color:before{
+    text-align: center;
+    content: "Selection";
+}
+#slider_structure_color:before{
+    text-align: center;
+    content: "Rainbow";
+}
+
+
 #structure_color_slider:before {
   background-color: pink;
 }
@@ -190,11 +207,24 @@ input[type=checkbox]:focus + .slider {
   box-shadow: 0 0 1px #2196F3;
 }
 
-input[type=checkbox]:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+input[type=checkbox]:checked + #slider_plot_color:before {
+    text-align: center;
+    content: "Rainbow";
 }
+input[type=checkbox]:checked + #slider_contact_color:before {
+    text-align: center;
+    content: "Distance";
+}
+input[type=checkbox]:checked + #slider_structure_color:before {
+    text-align: center;
+    content: "B-factor";
+}
+input[type=checkbox]:checked + .slider:before {
+  -webkit-transform: translateX(42px);
+  -ms-transform: translateX(42px);
+  transform: translateX(42px);
+}
+
 
 ol{
 list-style-type: upper-roman;}
