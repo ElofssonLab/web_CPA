@@ -215,6 +215,7 @@ var PFAM_MODEL = "{{ pfam_id }}";
                 <img class="obrazek_topologiczny" id="our_model_topology_img" im_src="{{STATIC_URL}}images/" src="{{STATIC_URL}}images/{{ topo_data.1.0 }}.png" />
                 <div class="topology_desc" id="our_model_topology">{{ topo_data.0.0 }}</div>
             </div>
+            {% if topo_data.3.strip|stringformat:"s" != "?"|stringformat:"s" %}
             <div class="col-md-4">
                 <div class ="row"><h4>PDB STRUCTURE</h4></div>
                 <img class="obrazek_topologiczny" src="{{STATIC_URL}}images/{{ topo_data.4 }}.png" />
@@ -231,6 +232,13 @@ var PFAM_MODEL = "{{ pfam_id }}";
                 <img class="spinacz img_thumbnail" src="http://www.arturgrabias.com/blog/wp-content/uploads/clippy.png" />
                 <div id="expert_says">It looks like you're looking at the results. Want some help?<ul style="color:blue"><li ><span id="expert_thinks" text="{{ topo_data.2.0 }}" onclick="expert_says()">Tell me</span> </li><li>I know what I'm doing.</li></ul></div>
             </div>
+            {% else %}
+            <div class="col-md-4">
+                <div class ="row"><h4>EXPERT SAYS</h4></div>
+                <div><p>There is no reference structure, so we cannot say whether this result is sensible. To get more info
+                about the topology of this structure you can submit it to <a href="http://knotprot.cent.uw.edu.pl/submit" target="_blank">KnotProt</a>.</p></div>
+            </div>
+            {% endif %}
         </div>
 
     </div>
