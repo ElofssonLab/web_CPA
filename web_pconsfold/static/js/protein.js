@@ -313,6 +313,8 @@ function change_active_model(to_original){
         STRUCTURE_OBJ.colorBy(color.uniform("grey"))
             STRUCTURE_OBJ.setOpacity(0.5);
         ACTIVE_DISTANCE_MAP = ORG_DISTANCE_MAP;
+        ACTIVE_MAX_DMAP_DISTANCE = ORG_MAX_DMAP_DISTANCE;
+        ACTIVE_DMAP_DISTANCE_RAINBOW = ORG_DMAP_DISTANCE_RAINBOW;
     }else{
         ACTIVE_STRUCTURE = STRUCTURE;
         ACTIVE_STRUCTURE_OBJ = STRUCTURE_OBJ;
@@ -321,7 +323,10 @@ function change_active_model(to_original){
         ORG_STRUCTURE_OBJ.colorBy(color.uniform("grey"))
             ORG_STRUCTURE_OBJ.setOpacity(0.5);
         ACTIVE_DISTANCE_MAP = DISTANCE_MAP;
+        ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
+        ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
     }
+    document.getElementById('max_distance').innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
     showSS(ACTIVE_STRUCTURE);
 
 }
@@ -488,10 +493,12 @@ function loadServerPDB(idx,original=0) {
 
             //STRUCTURE_OBJ.setOpacity(1);
             ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
-            ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP));
+//            ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP));
+            var maxRow = ORG_DISTANCE_MAP.map(function(row){ return Math.max.apply(Math, row.filter(Boolean)); });//.filter(Boolean);
+            ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max( ...maxRow));
             ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
             if (ORG_MAX_DMAP_DISTANCE<100){
-               rainbow.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
+               ORG_DMAP_DISTANCE_RAINBOW.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
             }else{
                                  //   one_color_step = Math.floor(PROTEIN_LEN/100);    
                1;
@@ -506,15 +513,20 @@ function loadServerPDB(idx,original=0) {
           DISTANCE_MAP = calculate_dmap(STRUCTURE);
           ACTIVE_DISTANCE_MAP = DISTANCE_MAP;
 //        console.log(STRUCTURE);
-            MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+//            MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
+            var maxRow = ACTIVE_DISTANCE_MAP.map(function(row){ return Math.max.apply(Math, row); }).filter(Boolean);
+//            console.log(...maxRow)
+            MAX_DMAP_DISTANCE = Math.ceil(Math.max( ...maxRow));
+//            console.log("maxrow",MAX_DMAP_DISTANCE)
             DMAP_DISTANCE_RAINBOW = new Rainbow();
             if (MAX_DMAP_DISTANCE<100){
-               rainbow.setNumberRange(0,MAX_DMAP_DISTANCE+1);
+               DMAP_DISTANCE_RAINBOW.setNumberRange(0,MAX_DMAP_DISTANCE+1);
             }else{
                                  //   one_color_step = Math.floor(PROTEIN_LEN/100);    
                1;
             }
             ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
+            document.getElementById('max_distance').innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
             ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
             calculateSS(STRUCTURE);
         }
