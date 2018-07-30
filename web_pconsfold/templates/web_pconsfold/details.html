@@ -91,8 +91,64 @@ var PFAM_MODEL = "{{ pfam_id }}";
             <canvas id="plot_canvas" ></canvas>
             <canvas id="plot_canvas_LA" ></canvas>
             <canvas id="plot_canvas_BA" ></canvas>
+            <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary btn-sm show_plot_legend">
+                <input type="checkbox" id="show_plot_legend" onchange="show_plot_legend()" autocomplete="off"> Show legend
+            </label>
+          </div>
           </div>
         </div>
+  <div class="legend_div" id="plot_help" style="display:none">
+    <div class="row legend_row">
+        <h5>Secondary structure:</h5>
+        <ul>
+        <li class="legend_list_magenta"> Alpha helices </li>
+        <li class="legend_list_cyan"> Beta sheets </li>
+        </ul>
+    </div>
+    <div class="row legend_row">
+        <h5>Plot colouring</h5>
+        <div class="legend_plot" id="simple_just_di">
+            DI scores simple:
+            <ul>
+                <li class="legend_list_blue"> DI over <span id="di_cutoff_value"></span> </li>
+                <li class="legend_list_white">DI below cutoff</li>
+            </ul> 
+        </div>
+        <div class="legend_plot" id="complex_just_di">
+            DI scores rainbow:
+            <div class="row">
+                0 <div id="legend_plot_gradient"></div> <span id="max_di_score"></span> <br/>
+            </div>
+        </div>
+        <div class="legend_plot" id="overlay_di">
+            DI/structural contact overlay:
+            <ul>
+                <li class="legend_list_b">True positives</li>
+                <li class="legend_list_a">False positives (not close enough in structure)</li>
+                <li class="legend_list_gray">False negatives (too low DI score)</li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="row legend_row">
+        <div class="legend_plot" id="legend_contact_map">
+            Contact map:
+            <ul>
+                <li class="legend_list_black">Distance below <span id="distance_cutoff_value"></span>A </li>
+                <li class="legend_list_white">Larger distance</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row legend_row">
+        <div class="legend_plot" id="bonds_complex">
+        <h5>Distance-based contact bonds:</h5>
+        <div class="row">
+            0A <div id="legend_plot_gradient"></div> <span id="max_distance"></span>A <br/>
+        </div>
+        </div>
+    </div>
+    </div>
   </div>
   <div class="row">
       <div class="col-12">
@@ -281,8 +337,106 @@ var PFAM_MODEL = "{{ pfam_id }}";
             <div class="row" >
                 <div class="col-12">
 
+                    <div id="instruction_pv">
+                        <h2>Protein Visualization</h2>
+                        <p>
+                            Visualization is provided by <a href="https://github.com/biasmv/pv" target="_blank">PV</a>.<br/>
+                            Model structure is coloured in a rainbow gradient (from N- (blue) to C-(red) terminus). It can
+                            be changed to B-factor colouring using a button below the sequence.<br/>
+                            If more than one model has been calculated you can change the currently displayed one using buttons
+                            above the visualization window.
+                        </p>
+                        <hr>
+                        <p>
+                            If a reference structure from RCSB PDB is available it is superposed and shown in a partially transparent gray.
 
-     <ol><b>USAGE:</b>
+                            By default only the model structure is <i>active</i>, so can be clicked, and will have contacts displayed.
+                            Distance map used for the plot are changed along with the active model.
+                            <br/>
+                            Currently inactive model can be hidden using a button above the visualization.
+                            <br/>
+                            When changing the active model to the PDB reference structure, only the parts which have been modeled,
+                            (so appear in the Multiple Sequence Alignment used for DCA) are activated.
+                        </p>
+                        <hr>
+                        <p>
+                            Clicking on the currently active model selects the residue under cursor in the visualization,
+                            on the plot, and on the sequence.
+                        </p>
+                    </div>
+                    <div id="instruction_dcaplot">
+                        <h2>Direct Information Plot</h2>
+                        <p>
+                            Plot displays a number of top scoring, in terms of Direct Information, contacts, between
+                            residues more than three amino acids apart. Axes are annotated with residue indices,
+                            and automatically detected secondary structure elements are displayed along (alpha helices in magenta,
+                            beta sheets in cyan).
+                            Default plot shows the <i>(protein length)</i> top scoring residue pairs. Dots on the plot can
+                            be coloured according to the relative DI using a button below the sequence.
+                            Number of currently displayed points can be changed using the slider, or a textbox below it,
+                            or by modifying the "Lower bound for DI scores".
+                            <br/>
+                            Below the slider, number of interactions shown is presented (including as a percentage), as well as
+                            the Positive Predictive Value (number of interactions with DI above the cutoff, with C-beta atoms
+                            closer than currently selected "Cutoff distance").
+                        </p>
+                        <p>
+                            There are multiple methods of calculating DI, which result in differing scores. Currently selected
+                            DI file can be changed with the buttons above the plot (if more than one is available).
+                        </p>
+                        <p>
+                            <b>Selecting</b>
+                            Selections can be made on the plot either using a traditional selection box (by clicking and dragging
+                            the mouse cursor on the plot), or by freehand drawing (by holding the <kbd>Shift</kbd> button while dragging).<br/>
+                            Clicking on the plot clears current selection.<br/>
+                            Holding the <kbd>Ctrl</kbd> button allows adding selections. To improve readability, consecutive selections are marked in a different colour.
+                        </p>
+                        <p>
+                            <b>Contact bonds</b>
+                            All plotted interactions which fall within one of the selections will be added as lines between
+                            given residues in the protein visualization (as long as both residues are present in the structure).
+                            By default they are coloured according to the selection colour, but this can be change to either
+                            plot-point-based colouring (when "Colouring of the plot" is set to "Rainbow"), or distance-based ("Colouring of the
+                            contact bonds" set to "Distance").
+                        </p>
+                        <p>
+                            <b>Alternative plot modes</b>
+                            By default only DI scores are shown, binary-coded - all interactions scoring above the given DI cut-off
+                            are displayed. Plot colouring can be changed to a rainbow gradient, according to DI, using "Colouring
+                            of the plot" button.<br/>
+                        </p>
+                        <p>Other plot modes can be selected using buttons immediately below the sequence:
+                            <ul>
+                                <li>Di scores and distance (side by side). This keeps the default plot in the lower triangle,
+                                    while changing the upper triangle of the plot to a binary-coded distance map (residues with C-betas closer
+                                    than the specified cut-off distance are shown).
+                                </li>
+                                <li>
+                                    DI scores and distance (overlayed). Gray points indicate pairs of residues closer than the distance threshold,
+                                    with low DI (False negatives). Red points are interactions with DI above the cut-off but further away in the structure
+                                    (False positives). Blue points are interactions close in the structure, with high DI scores (True positives).
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div id="instruction_seq">
+                        <h2>Sequence</h2>
+                        <p>Clicking on the sequence residues marks them also on the structure, and in the DI plot. To select consecutive residues, click and drag.
+                        To undo selection, click on the selected residue (or click and drag to deselect multiple residues).</p>
+                    </div>
+                    <div id="instruction_topo">
+                        <h2>Topology</h2>
+                        <p>For each model a full-chain topology is calculated - the most often appearing knot signature, when closing the protein chain
+                        in a 100 random directions (further details can be found in <a href="http://knotprot.cent.uw.edu.pl" target="_blank">KnotProt</a>).
+                        This is then visualized as a simplified knot icon, and corresponding numerical name.</p>
+                        <p>If a refererence structure from the RCSB PDB is known, same analysis is performed for this structure, for comparison.
+                        Additionally, we give a basic interpretation of the compared results, taking into account the presence of gaps in the reference
+                        structure - which can influence topology calculations.</p>
+                        <p>When changing the displayed model, both topology results and comparative interpretation (when available) change accordingly.</p>
+                    </div>
+
+
+ <!--    <ol><b>USAGE:</b>
     <li>Click&drag on the plot to select a region and display valid bonds (over DI cutoff)</li>
     <li>Single click clears selection</li>
     <li>Selecting while holding Ctrl buttons adds new selection</li>
@@ -295,7 +449,7 @@ var PFAM_MODEL = "{{ pfam_id }}";
     <hr width="50%"/>
     <li>Selection on structure (by clicking, holding "Shift" allows extension) marks given region on plot (WITHOUT SELECTING) and on the sequence</li>
     <li>Selection on sequence (clicking and dragging, select/deselect mode depends on status of the first clicked residue) marks given region on plot (WITHOUT SELECTING) and on the structure</li>
-    </ol>
+    </ol>-->
 
     </div></div>
 
