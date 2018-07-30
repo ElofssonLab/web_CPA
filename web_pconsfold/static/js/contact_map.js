@@ -25,6 +25,8 @@ var CURRENT_MAP_MODE = 0;
 //1 - top DI, bottm CMAP
 //2 - overlay
 //3 - just CMAP?
+var DI_SCORES_RAINBOW = new Rainbow();
+
 var DMAP_DISTANCE = 8.0;
 var MIN_DMAP_DISTANCE = 1.0;
 var MAX_DMAP_DISTANCE = 8.0;
@@ -74,6 +76,7 @@ CANVAS_BA.height = AXIS_CANVAS_WIDTH;
 CANVAS_LA.width = AXIS_CANVAS_WIDTH;
 
 document.getElementById('dmap_cutoff').value = DMAP_DISTANCE;
+document.getElementById('distance_cutoff_value').innerHTML = DMAP_DISTANCE;
 document.getElementById('di_lower_bound').value = DI_LOWER_BOUND;
 
 var DI_SCORES = [];
@@ -123,11 +126,44 @@ function createArray(length) {
     return arr;
 }
 
+function show_plot_legend(){
+    var show  = document.getElementById('show_plot_legend').checked;
+    if(show){
+        document.getElementById('plot_help').style.display = "block";
+    }else{
+        document.getElementById('plot_help').style.display = "none";
+    }
+}
+
 function change_map_mode(mode){
 
 	if ([0,1,2].indexOf(mode)>=0){
 		CURRENT_MAP_MODE = mode;
 	}
+    var x = document.getElementsByClassName("legend_plot");
+    for(var i =0; i<x.length; i++){
+       x[i].style.display = "none";
+    }
+    document.getElementById('legend_contact_map').style.display ="none";
+
+
+    if(mode==2){
+        document.getElementById('overlay_di').style.display ="block";
+    }else{ 
+        if(mode==1){
+            document.getElementById('legend_contact_map').style.display ="block";
+        }
+        if(COLORING_MODE){
+            document.getElementById('complex_just_di').style.display ="block";
+        }else{
+            document.getElementById('simple_just_di').style.display ="block";
+        }
+    }
+    if(PATYCZKI_MODE){
+            document.getElementById('bonds_complex').style.display ="block";
+        }
+    
+
 	addBonds();
 }
 
@@ -141,12 +177,27 @@ function change_colouring_mode(){
 	}else{
        	document.getElementById('patyczek_div').style.display = "flex";
 	}
+	if(CURRENT_MAP_MODE<2){
+	    if(COLORING_MODE){
+            document.getElementById('complex_just_di').style.display ="block";
+            document.getElementById('simple_just_di').style.display ="none";
+            document.getElementById('bonds_complex').style.display ="none";
+        }else{
+            document.getElementById('complex_just_di').style.display ="none";
+            document.getElementById('simple_just_di').style.display ="block";
+        }
+	}
 	addBonds();
 }
 
 function change_patyczek_mode(){
 	cform = document.getElementById('patyczek_mode').checked;
 	PATYCZKI_MODE = +cform;
+    if(PATYCZKI_MODE){
+            document.getElementById('bonds_complex').style.display ="block";
+        }else{
+            document.getElementById('bonds_complex').style.display ="none";
+    }
 	addBonds();
 }
 
@@ -223,6 +274,7 @@ function calculate_dmap(structure){
 
 function change_dmap_cutoff(){
 	cform = document.getElementById('dmap_cutoff');
+	document.getElementById('distance_cutoff_value').innerHTML = cform.value;
 	DMAP_DISTANCE = cform.value;
 	addBonds();
 
@@ -423,6 +475,7 @@ function refresh_info(){
     	ppv.innerHTML = PPV +"/" +TOP_DI_CNT;
     	document.getElementById('di_scores_cnt_num').value = TOP_DI_CNT;
 	slider.value = TOP_DI_CNT;
+	document.getElementById('di_cutoff_value').innerHTML = DI_LOWER_BOUND;
 }
 
 function change_dsc_num(){
@@ -485,6 +538,11 @@ function sort_di_scores(){
     TOP_DI_CNT = PROTEIN_LEN;
     //console.log("dwasda",DI_SCORES_SORTED)
     DI_LOWER_BOUND = DI_SCORES_SORTED[TOP_DI_CNT];
+//    console.log(DI_SCORES_SORTED[0])
+//    console.log("raaainbow",DI_SCORES_RAINBOW.colorAt(100*DI_SCORES_SORTED[0]+1))
+    DI_SCORES_RAINBOW.setNumberRange(0,100*DI_SCORES_SORTED[0]+1);
+    document.getElementById('max_di_score').innerHTML = DI_SCORES_SORTED[0];
+//    console.log("raaainbow",DI_SCORES_RAINBOW.colorAt(100*DI_SCORES_SORTED[0]+1))
 	refresh_info()
 }
 
@@ -492,6 +550,8 @@ function sort_di_scores(){
 //COLORMAPS
 //needs rainbowvis.js
 var rainbow = new Rainbow();
+//console.log("rainbow",rainbow.colorAt(100));
+//console.log("rainbow",rainbow.colorAt(0));
 if (PROTEIN_LEN<100){
         rainbow.setNumberRange(0,PROTEIN_LEN);
         one_color_step = 1;
@@ -790,7 +850,7 @@ function addSelToAxes(resnum){
 	ctx_ba.stroke();
 }
 
-var 	SS_COLORS = {"H": "red","E":"blue"}
+var 	SS_COLORS = {"H": "magenta","E":"cyan"}
 var HELICES = [];
 var SHEETS = [];
 
@@ -869,12 +929,12 @@ function pointColor(x,y){
                 case 0:
                         val = DI_SCORES[x][y]; //TODO - assumes always 0-1
 			val = parseInt(val*100);
-                        return rainbow.colourAt(val);
+                        return DI_SCORES_RAINBOW.colourAt(val);
                 case 1:
 //                        if(x<y){
     				val = DI_SCORES[x][y]; //TODO - assumes always 0-1
 	                        val = parseInt(val*100);
-        	                return rainbow.colourAt(val);
+        	                return DI_SCORES_RAINBOW.colourAt(val);
 //			}else{
 //				return "FFFFFF";
 //			}
@@ -1528,6 +1588,7 @@ read_in_di(DI_FILENAME);
 read_in_sequence(FASTA_FILENAME);
 read_in_dmap();
 
+change_map_mode(0);
 draw();
 
 
