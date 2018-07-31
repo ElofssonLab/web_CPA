@@ -333,15 +333,15 @@ function change_active_model(to_original){
 function hide_background_model(){
     if(ACTIVE_STRUCTURE === ORG_STRUCTURE){
         var na = STRUCTURE_OBJ;
-        //var na2 = STRUCTURE_OBJ;
+        var na2 = STRUCTURE_OBJ;
     }else{
         var na = ORG_STRUCTURE_OBJ;
-        //if(ORG_STRUCTURE_FULL_OBJ) {
-        //    var na2 = ORG_STRUCTURE_FULL_OBJ;
-        //}
-        //else{
-        //    var na2 = ORG_STRUCTURE_OBJ;
-        //}
+        if(ORG_STRUCTURE_FULL_OBJ) {
+            var na2 = ORG_STRUCTURE_FULL_OBJ;
+        }
+        else{
+            var na2 = ORG_STRUCTURE_OBJ;
+        }
 
 
     }
@@ -398,12 +398,17 @@ function deleteOtherChains(structure,chain=""){//,start_resid,end_resid){
 }
 
 function clone_structure(struct){
-        new_struct = new pv.mol.Mol()
+        var new_struct = new pv.mol.Mol()
         var chain = new_struct.addChain(struct._chains[0].name());
         var resids = struct._chains[0]._residues;
         for (var i = 0; i < resids.length; ++i) {
               var r = resids[i];
+              if(!r._isAminoacid){
+                continue;
+              }
               var residue = chain.addResidue(r.name(), i);
+              residue._isAminoacid = true;
+//              console.log(residue.isAminoacid(),residue)
               residue._ss = r._ss;
               for (var j=0 ; j<r.atoms().length; ++j){
                   var at = r.atoms()[j]
@@ -411,25 +416,29 @@ function clone_structure(struct){
               }
         }
         return new_struct
-
-
 }
 
 function superposition(url){
     if(!ORG_STRUCTURE){
         return
     }
-    console.log("spsadd",ORG_STRUCTURE._chains[0]._residues.length,SEQUENCE.length,)
-    if(ORG_STRUCTURE._chains[0]._residues.length > SEQUENCE.length){
-        hadToCut =1;
-        //console.log(ORG_STRUCTURE)
-
-        //ORG_STRUCTURE_FULL._chains = ORG_STRUCTURE._chains
+//    console.log("spsadd",ORG_STRUCTURE._chains[0]._residues.length,SEQUENCE.length,)
+    var org_length=0;
+    for(var i=0; i<ORG_STRUCTURE._chains[0]._residues.length; i++){
+                if(ORG_STRUCTURE._chains[0]._residues[i]._isAminoacid) org_length++;
     }
-
-        if(hadToCut){
-            new_struct = clone_structure(ORG_STRUCTURE);
-            //console.log("rendering")
+    if(org_length > SEQUENCE.length){
+            hadToCut =1;
+            var new_struct = clone_structure(ORG_STRUCTURE);
+//            new_struct._chains[0].eachBackboneTrace(console.log)
+//            console.log(new_struct)
+//            var new_struct_view = VIEWER.spheres('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('grey')});
+            ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('grey')});
+//            new_struct_view = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('gray')});
+            ORG_STRUCTURE_FULL_OBJ.setOpacity(0.3)
+//            new_struct_view.colorBy(color.uniform("magenta"))
+//            return
+//            console.log("rendering")
             //console.log(new_struct)
             //ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('lightblue')});
             //ORG_STRUCTURE_FULL_OBJ.setOpacity(0.1)
@@ -437,7 +446,6 @@ function superposition(url){
             //console.log("rendering")
 
          //ORG_STRUCTURE_FULL_OBJ = VIEWER.add('org_structure_full.protein', ORG_STRUCTURE_OBJ)
-1
             //ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',ORG_STRUCTURE_FULL,{ boundingSpheres: false , color: color.rainbow()});
             //ORG_STRUCTURE_FULL_OBJ.setOpacity(0.5)
             //ORG_STRUCTURE_FULL_OBJ.colorBy(color.uniform("blue"))
@@ -459,15 +467,17 @@ function superposition(url){
           }
       });*/
     }
-
+    VIEWER.rm(ORG_STRUCTURE_OBJ.name())
+    VIEWER.rm(STRUCTURE_OBJ.name())
+    console.log(ORG_STRUCTURE)
+    ORG_STRUCTURE._chains[0]._cachedTraces = [];
     var relevantIndices = getAlignedIndices(SEQUENCE,ORG_STRUCTURE);
     //console.log(relevantIndices)
     var sView = STRUCTURE.select({rindices:relevantIndices,aname:"CA"});
     var osView = ORG_STRUCTURE.select({aname:"CA"});
     pv.mol.superpose(sView,osView);
-    STRUCTURE_OBJ.hide()
-    ORG_STRUCTURE_OBJ.hide()
-    //VIEWER.rm(osView.name())
+//    STRUCTURE_OBJ.hide()
+//    ORG_STRUCTURE_OBJ.hide()
     preset(ORG_STRUCTURE,1)
     preset(STRUCTURE)
     //VIEWER.centerOn(STRUCTURE)
