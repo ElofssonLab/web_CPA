@@ -76,7 +76,10 @@ CANVAS_BA.height = AXIS_CANVAS_WIDTH;
 CANVAS_LA.width = AXIS_CANVAS_WIDTH;
 
 document.getElementById('dmap_cutoff').value = DMAP_DISTANCE;
-document.getElementById('distance_cutoff_value').innerHTML = DMAP_DISTANCE;
+//document.getElementById('distance_cutoff_value').innerHTML = DMAP_DISTANCE;
+document.getElementsByName('distance_cutoff_value').forEach(function(elem){
+	    elem.innerHTML = DMAP_DISTANCE;
+	});
 document.getElementById('di_lower_bound').value = DI_LOWER_BOUND;
 
 var DI_SCORES = [];
@@ -97,6 +100,7 @@ var FREE_RAINBOW_DASH = ["magenta","red","orange","#fdbb84"];
 
 var BOND_TUBE_RADIUS = 0.3;
 
+var mouseMoving=0
 
 var LMBPressedOnCanvas = 0;
 var RMBPressedOnCanvas = 0;
@@ -137,7 +141,7 @@ function show_plot_legend(){
 
 function change_map_mode(mode){
 
-	if ([0,1,2].indexOf(mode)>=0){
+	if ([0,1,2,3,4].indexOf(mode)>=0){
 		CURRENT_MAP_MODE = mode;
 	}
     var x = document.getElementsByClassName("legend_plot");
@@ -145,10 +149,29 @@ function change_map_mode(mode){
        x[i].style.display = "none";
     }
     document.getElementById('legend_contact_map').style.display ="none";
+    
+    if(mode>2){
+        document.getElementsByName("slider_elements").forEach(function(elem){
+            elem.style.display="none";
+        });
+        if(mode==3){
+            document.getElementById('ppv_div').style.display ="inline";
+        }
+    }else{
+            document.getElementsByName("slider_elements").forEach(function(elem){
+            elem.style.display="inline";
+        });
+
+    }
 
 
     if(mode==2){
         document.getElementById('overlay_di').style.display ="block";
+    }else if(mode==3){
+        
+        document.getElementById('overlay_cmap').style.display ="block";
+    }else if(mode==4){
+        document.getElementById('distance_cmap').style.display ="block";
     }else{ 
         if(mode==1){
             document.getElementById('legend_contact_map').style.display ="block";
@@ -274,7 +297,10 @@ function calculate_dmap(structure){
 
 function change_dmap_cutoff(){
 	cform = document.getElementById('dmap_cutoff');
-	document.getElementById('distance_cutoff_value').innerHTML = cform.value;
+//	document.getElementById('distance_cutoff_value').innerHTML = cform.value;
+	document.getElementsByName('distance_cutoff_value').forEach(function(elem){
+	    elem.innerHTML = cform.value;
+	});
 	DMAP_DISTANCE = cform.value;
 	addBonds();
 
@@ -355,6 +381,7 @@ function activate_original_model(act){
     	document.getElementById("org_model_1").classList.add("btn-outline-primary");
 	}
 	change_active_model(to_original);
+    fth_mode_plot()
 	    /*MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
 	        DMAP_DISTANCE_RAINBOW = new Rainbow();
 	            if (MAX_DMAP_DISTANCE<100){
@@ -475,7 +502,11 @@ function refresh_info(){
     	ppv.innerHTML = PPV +"/" +TOP_DI_CNT;
     	document.getElementById('di_scores_cnt_num').value = TOP_DI_CNT;
 	slider.value = TOP_DI_CNT;
-	document.getElementById('di_cutoff_value').innerHTML = DI_LOWER_BOUND;
+//	document.getElementById('di_cutoff_value').innerHTML = DI_LOWER_BOUND;
+    document.getElementsByName('di_cutoff_value').forEach(function(elem){
+	    elem.innerHTML = DI_LOWER_BOUND;
+	});
+	
 }
 
 function change_dsc_num(){
@@ -604,7 +635,11 @@ function addBonds(){
 			    					break;
     						}
                         }
-						CM.addTube(ACTIVE_STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, ACTIVE_STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,BOND_TUBE_RADIUS,{cap: true, color: color});
+                        try{
+    						CM.addTube(ACTIVE_STRUCTURE._chains[0]._residues[x-1]._atoms[0]._pos, ACTIVE_STRUCTURE._chains[0]._residues[y-1]._atoms[0]._pos,BOND_TUBE_RADIUS,{cap: true, color: color});
+                        }catch(err){
+                            console.log(err)
+                        }
 					}
 				}
 			}
@@ -923,7 +958,7 @@ function del4SS(r){
 }
 
 
-function pointColor(x,y){
+function pointColor(x,y,distance_map=0,distance_rainbow=0){
         mode = CURRENT_MAP_MODE;
         switch(mode){
                 case 0:
@@ -950,13 +985,30 @@ function pointColor(x,y){
             		}else{
                 		return;
             		}            
-			return color;
+			        return color;
             		break;
+                case 3:
+            		val1 = DISTANCE_MAP[x][y];
+            		val2 = ORG_DISTANCE_MAP[x][y];
+            		if (val2<DMAP_DISTANCE && val1<DMAP_DISTANCE){ //TODO odpowiednie przeliczanie TOP scores? Uwzglednic ten mod odciecia?
+                		color = "800080";
+            		}else if(val2<DMAP_DISTANCE){
+                		color = "B4DBE7" ;//"0000ff";
+            		}else if(val1<DMAP_DISTANCE){
+                		color = "ffbbc6";//"ff0000";
+            		}else{
+                		return;
+            		}            
+			        return color;
+            		break;
+                case 4:
+                    val = distance_map[x][y];
+                    return distance_rainbow.colourAt(val)
+                    break;
                 default:
                         return 0;
         }
 }
-
 function validPoint(x,y){
 //TODO - just checks if valid, no colour coding
 	mode = CURRENT_MAP_MODE;
@@ -974,6 +1026,12 @@ function validPoint(x,y){
 			val1 = DI_SCORES[x][y];
 	                val2 = ACTIVE_DISTANCE_MAP[x][y];
   	                return val1>DI_LOWER_BOUND;// val2<DMAP_DISTANCE && 
+		case 3:
+			val1 = DISTANCE_MAP[x][y];
+	        val2 = ORG_DISTANCE_MAP[x][y];
+  	                return (!isNaN(val1) && !isNaN(val2)) && (val2<DMAP_DISTANCE || val1<DMAP_DISTANCE);// val2<DMAP_DISTANCE &&   	    
+  	    case 4:
+  	        return 0;
 		default:
 			return 0;
 	}}
@@ -985,8 +1043,7 @@ function validPoint(x,y){
 
 }
 
-function drawPoint(x,y,mode){
-//    console.log("Drawing",x,y,"mode",mode);
+function drawPoint(x,y,mode,distance_map=0,distance_rainbow=0,count_shown=0){
     var ppvi = 0;
     switch(mode){
         case 0: 
@@ -1034,6 +1091,31 @@ function drawPoint(x,y,mode){
 //		}
 
             break;
+        case 3:
+            val1 = DISTANCE_MAP[x][y];
+            val2 = ORG_DISTANCE_MAP[x][y];
+//	   if (COLORING_MODE == 0){
+            		if (val2<DMAP_DISTANCE && val1<DMAP_DISTANCE){ //TODO odpowiednie przeliczanie TOP scores? Uwzglednic ten mod odciecia?
+                		color = "purple";
+				ppvi = 1;
+            		}else if(val2<DMAP_DISTANCE){
+                		color = "lightblue";
+            		}else if(val1<DMAP_DISTANCE){
+                		color = "lightpink";
+            		}else{
+                		return ppvi;
+            		}
+            if(count_shown){
+                SHOWN_CONTACTS_CNT +=1;
+            }
+            break;
+        case 4:
+//            console.log(distance_map)
+            val = distance_map[x][y];
+            color= "#"+distance_rainbow.colourAt(val)
+//            if(val>50)
+  //              console.log(x,y,val,color)
+            break;
         default:
             break;
     }
@@ -1047,7 +1129,11 @@ function drawPoint(x,y,mode){
     return ppvi;
 }
 
-function drawMap(){
+function drawMap(ctx=0){
+    if(ctx){
+        BKP = CTX;
+        CTX = ctx;
+    }
     if (CURRENT_MAP_MODE == 0){
         drawMapUT(0);
         drawMapLT(0);
@@ -1057,25 +1143,41 @@ function drawMap(){
     }else if (CURRENT_MAP_MODE == 2){
         drawMapUT(2);
         drawMapLT(2);
+    }else if (CURRENT_MAP_MODE == 3){
+        drawMapUT(3);
+        drawMapLT(3);
+    }else if (CURRENT_MAP_MODE == 4){
+        drawMapUT(4,ORG_DISTANCE_MAP,ACTIVE_DMAP_DISTANCE_RAINBOW);
+        drawMapLT(4,DISTANCE_MAP,ACTIVE_DMAP_DISTANCE_RAINBOW);
+//        drawMapUT(4,DISTANCE_MAP,DMAP_DISTANCE_RAINBOW);
     }
-var ppv = document.getElementById("ppv_display");
-ppv.innerHTML = PPV +"/" +TOP_DI_CNT;
+    if(ctx){
+        CTX=BKP;
+    }
+    var ppv = document.getElementById("ppv_display");
+    if(CURRENT_MAP_MODE==3){
+        ppv.innerHTML = PPV +"/" +SHOWN_CONTACTS_CNT;
+    }else{
+        ppv.innerHTML = PPV +"/" +TOP_DI_CNT;
+    }
 
 }
-function drawMapLT(mode){
+function drawMapLT(mode,distance_map=0,distance_rainbow=0){
     //mode: 0-di,1-dmap,2-overlay
+    SHOWN_CONTACTS_CNT = 0;
     PPV = 0;
     for (var x=0; x<PROTEIN_LEN; x++){
         for (var y=x+TIME_SKIP; y<PROTEIN_LEN; y++){
-            PPV += drawPoint(x,y,mode);
+            PPV += drawPoint(x,y,mode,distance_map,distance_rainbow,1);
         }
     }
+    if(distance_map){PPV="-";}
 }
-function drawMapUT(mode){
+function drawMapUT(mode,distance_map=0, distance_rainbow=0){
     //mode: 0-di,1-dmap,2-overlay
     for (var y=0; y<PROTEIN_LEN; y++){
         for (var x=y+TIME_SKIP; x<PROTEIN_LEN; x++){
-            drawPoint(x,y,mode);
+            drawPoint(x,y,mode,distance_map,distance_rainbow);
         }
     }
 }
@@ -1224,6 +1326,7 @@ function draw_freehand(){
 }
 
 function mouseDownHandler(e){
+    INTERACTED=1
     p = mousePosOnCanvas(e);
     console.log(e.clientX+" "+e.clientY,p.x,p.y);
     if(e.target == CANVAS && e.shiftKey){
@@ -1316,7 +1419,17 @@ function mouseMoveHandler(e){
 }
 
 //MAINLOOP
+var INTERACTED=0;
+var FTH_MODE_PLOT_CANVAS = 0;
 
+function fth_mode_plot(){
+    FTH_MODE_PLOT_CANVAS = document.createElement('canvas');
+    FTH_MODE_PLOT_CANVAS.width = CANVAS.width;
+    FTH_MODE_PLOT_CANVAS.height = CANVAS.height;
+    var FTH_MODE_PLOT_CTX = FTH_MODE_PLOT_CANVAS.getContext('2d');
+    drawMap(FTH_MODE_PLOT_CTX);
+
+}
 function draw(){
     //if(!read_map){
     //    if(VIEWER_FINISHED && STRUCTURE){
@@ -1325,9 +1438,21 @@ function draw(){
     //    }
     //    requestAnimationFrame(draw);
     //}
-    CTX.clearRect(0,0,CANVAS.width,CANVAS.height);
+    if(ORG_DISTANCE_MAP && CURRENT_MAP_MODE==4){
+        if(!FTH_MODE_PLOT_CANVAS){
+            fth_mode_plot();
+        }
+//        console.log("will redraw")
+//        CTX.putImageData(PLOT,0,0)
+//        requestAnimationFrame(draw);
+        CTX.clearRect(0,0,CANVAS.width,CANVAS.height);
+        CTX.drawImage(FTH_MODE_PLOT_CANVAS,0,0);
+    }else{
+        CTX.clearRect(0,0,CANVAS.width,CANVAS.height);
+        drawMap();
+    }
+    INTERACTED=mouseMoving
     drawAxes();
-    drawMap();
         draw_freehand();
     if(LMBPressedOnCanvas){
 	//console.log("LB pressed");
@@ -1343,6 +1468,7 @@ function draw(){
 
     //things happen
     //console.log(ZOOM);
+    PLOT = CTX.getImageData(0, 0, CANVAS.width, CANVAS.height);
     requestAnimationFrame(draw);
 //  setInterval(draw,10);
 }
@@ -1371,6 +1497,7 @@ function zoom(clicks){
 //          redraw();
       }
 var handleScroll_new = function(evt){
+    INTERACTED=1
           var delta = evt.wheelDelta ? evt.wheelDelta/40 : evt.detail ? -evt.detail : 0;
 //	if(delta<0 && ZOOM<=0){return evt.preventDefault() && false;}
           if (delta) zoom(delta);
@@ -1378,6 +1505,7 @@ var handleScroll_new = function(evt){
       };
 
 function handleScroll(e){
+    INTERACTED=1
         if(e.wheelDelta == 0)return;
 //		console.log(e.wheelDelta,ZOOM);
 	if(e.wheelDelta>0 && ZOOM<2){
@@ -1477,6 +1605,7 @@ function seqMouseMove(evt){
 //	}
 }
 function seqMouseUp(evt){
+    INTERACTED=1
 	seqPressed = 0;
 	POTENTIAL_SSELECTED = []
 	end = seqMousePos(evt);

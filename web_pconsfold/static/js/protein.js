@@ -326,7 +326,9 @@ function change_active_model(to_original){
         ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
         ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
     }
-    document.getElementById('max_distance').innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
+    document.getElementsByName('max_distance').forEach(function(elem){
+        elem.innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
+    });
     showSS(ACTIVE_STRUCTURE);
 
 }
@@ -347,9 +349,9 @@ function hide_background_model(){
     }
     if(document.getElementById('org_model_hide').checked){
         na.setOpacity(0);
-        //na2.setOpacity(0);
+        na2.setOpacity(0);
     }else{
-        //na2.setOpacity(0.3)
+        na2.setOpacity(0.3)
         na.setOpacity(0.5);
     }
 }
@@ -536,7 +538,11 @@ function loadServerPDB(idx,original=0) {
                1;
             }
             ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
-            document.getElementById('max_distance').innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
+    //        document.getElementById('max_distance').innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
+
+        document.getElementsByName('max_distance').forEach(function(elem){
+            elem.innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
+        });
             ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
             calculateSS(STRUCTURE);
         }
