@@ -339,6 +339,22 @@ kbd{ /*from meta.stack-overflow */
 .legend_list_black{
     list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2NkYGD4z0AEYBxViC+UqB88AKk6CgERnGWPAAAAAElFTkSuQmCC);
 }
+.legend_list_lightred{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGUlEQVQoU2P8v+/4fwYiAOOoQnyhRP3gAQCjICMpZ66NNQAAAABJRU5ErkJggg==);
+}
+.legend_list_lightblue{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGUlEQVQoU2Nce+PZfwYiAOOoQnyhRP3gAQDEZCIvdz0/pQAAAABJRU5ErkJggg==);
+}
+.legend_list_purple{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2NsYGj4z0AEYBxViC+UqB88AGTBFAHUOORJAAAAAElFTkSuQmCC);
+}
+.legend_list_lt{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAN0lEQVQoU2NkgID/UBonxYgkg1cxskK8JqMrxKkYm0KsinEpxFCMTyGKYkIK4YqJUQhWTKxCBgDRBAkCDBLOEwAAAABJRU5ErkJggg==);
+}
+.legend_list_ut{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAOUlEQVQoU43KSw4AIAjE0HL/Q2sw0fiBkW66eUYxAxrgl03oSOIdSnzDFEcwxBl8sIIH/sGFK3DgDhseCQvvDHh+AAAAAElFTkSuQmCC);
+}
+
 #legend_plot_gradient {
   width: 50%;
     height: 20px;
@@ -359,4 +375,7 @@ kbd{ /*from meta.stack-overflow */
 .show_plot_legend{
     margin-top: 500px;
     margin-left: 400px;
+}
+p{
+    text-align: justify;
 }
