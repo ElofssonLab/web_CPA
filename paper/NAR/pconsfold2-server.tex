@@ -1,0 +1,216 @@
+\documentclass[a4,center,fleqn]{NAR}
+
+% Enter dates of publication
+\copyrightyear{2018}
+\pubdate{31 July 2019}
+\pubyear{2019}
+\jvolume{00}
+\jissue{00}
+
+%\articlesubtype{This is the article type (optional)}
+
+\begin{document}
+
+\title{PconsFam: A regularly updated database of structure predictions of all Pfam families available at http://pconsfold.bioinfo.se/}
+
+\author{%
+John Lamb\,$^{1,*}$,
+Aleksandra Jarmolińska\,$^{2,*}$
+Mirco Michel\,$^{1,*}$,
+David Menéndez-Hurtado\,$^{1,*}$,
+Joanna Sułkowska,$^{2,\dagger}$
+Arne Elofsson\,$^{1,\dagger}$%
+\footnote{To whom correspondence should be addressed.
+Tel: +44 000 0000000; Fax: +44 000 0000000; Email: xxx@yyyy.ac.zz}}
+
+\address{%
+$^{1}$Science for Life Laboratory and Department of Biochemistry and
+biophysics, Stockholm Unviersity, Tomtebodav 23, 171 21 Solna, Sweden
+and
+$^{2}$ Warsaw, Poland }
+$^{*}$ contributed equally
+$^{\dagger}$=contributing authors
+% Affiliation must include:
+% Department name, institution name, full road and district address,
+% state, Zip or postal code, country
+
+
+history{%
+Received January 1, 2019;
+Revised February 1, 2019;
+Accepted March 1, 2019}
+
+\maketitle
+
+
+
+
+
+\begin{abstract}
+
+In recent years it has been shown that by the use of evolutionary
+information and direct coupling analysis~\cite{Weigt19116270} it is
+possible to obtain sufficiently accurate contact prediction of
+proteins from their sequence and multiple sequence alignment alone to
+predict accurate structures of many protein families
+\cite{Sulkowska2012}. Here we present PconsFam
+(https://pconsfam.bioinfo.se) a database with predicted structural
+information for all Pfam families using the PconsFold2
+pipeline~\cite{Michel28881974}. The PconsFold2 pipeline uses contact
+predictions from PconsC3~\cite{Michel28535189} the CONFOLD folding
+algorithm~\cite{Adhikari25974172} and multiple model quality estimations
+\cite{Uziela28052925,Lundstrom:2001} to predict the structure of proteins. All this is
+presented in the database. Before final submission we will update the
+database to use an update to the pipeline based of PconsC4, which is
+much faster enabling frequent updates as well as an improved model
+quality estimator, ProQ4.
+\end{abstract}
+
+\section{Introduction}
+When the PconsFold2 pipeline was applied to 6379 PFAM families of
+unknown structure of which 558 with a predicted specificity over
+90\%. Out of these, 415 have never been reported before.  With
+PconsFam we extend this pipeline to the full PFAM database to predict
+multiple contact maps and subsequently multiple structures of all
+representative sequences for all Pfam families. For each family in
+PFAM, multiple contact maps are generated and from these a set of
+models are predicted and ranked with quality assessment
+estimators. The model quality estimation gives an indication on the
+reliability of the model. The top ranked models for each predicted
+family can be visualised and are available for download. The full set
+of contact predictions for is available for visualisation together
+with the predicted model in an intuitive and powerful user-interface
+that allows interaction between the contact maps and the predicted
+structure. 
+
+\section{Material and methods}
+\subsection{PconsFold2}
+We have used 
+
+PconsC4
+CONFOLD
+
+\subsection{Model Quality assessment}
+Pcons
+ProQ4
+PPV
+Known PDB structures
+
+\subsection{Updates}
+
+With our pipeline the website will be updated with every PFAM release and the currently running update on PFAM 31.0 will introduce additional quality estimators such as PPV, Pcons score and ProQ4 scores.
+
+\section{Results}
+\subsection{Comparison with other resources}
+
+A similar resource is Baker Lab’s GREMLIN database~\cite{Kamisetty2013} which builds contact prediction based on
+PFAM 27.0~\cite{Sonnhammer:1997} . However, it has not been updated since
+2013. In contrast we plan to update PconsFam within a few month after
+each Pfam release. This is possible as the pipeline uses a much less
+computationally costly methodology. PconsC4 is at least one order of
+magnitude faster than comparative methods and by using CONFOLD the
+folding is much faster than Rosetta.
+
+
+GREMLIN shows predicted contact maps with an option to overlay with
+the pdb structure if one exists. We extend on this by using a tool
+that can visualize the predicted contacts on the models. In our
+database, both contact maps and predicted structure can be
+investigated in detail and downloaded.  We have also used a deep
+learning methodology (currently PconsC3 but will be updated to PconsC4
+before publication) for contact predictions. In general this provide
+the better coverage of small protein families.
+
+
+
+
+\begin{figure}[t]
+\begin{center}
+\end{center}
+\caption{PconsC3/4 vs DCA
+ProQ evaluations 
+The PconsFold pipeline.}
+\label{fig:Pipeline}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\end{center}
+\caption{Comparison of contact prediction methods and available resources
+Comparison of databases of structure predictions
+Gremlin
+EV-fold ?
+Zhang ?.}
+\label{fig:comparison}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\end{center}
+\caption{Overview of number of structures at different qualities - from PconsFold
+verview of the database.}
+\label{fig:overview}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\end{center}
+\caption{Links Knots - topology.}
+\label{fig:Interface}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\end{center}
+\caption{.}
+\label{fig:exampel PF0009.24}
+\end{figure}
+
+
+
+
+
+
+
+
+\section{Discussion}
+
+
+
+                
+In summary the novelties of PconsFam are:
+An informative user interface that enables examination of multiple models and contact maps.
+Novel tool to help investigate and interpret contact maps.
+Using the same pipeline for families with and without known structures.
+We use model quality estimation methods (ProQ and Pcons) to evaluate FDR 
+PconsFam is complementary to existing resources, i.e. high quality models exist for other families than in Gremlin.
+PconsFam will be updates at regular times to follow PFAM releases.
+Future directions
+Modularity of pipeline
+Conctacts
+SS prediciton
+Newer PFAM
+
+\section{Conclusions}
+
+
+
+
+
+\section{ACKNOWLEDGEMENTS}
+
+Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
+Text. Text. Text. Text.
+
+
+\subsubsection{Conflict of interest statement.} None declared.
+
+\bibliographystyle{science}
+\bibliography{refs}
+
+
+\end{document}
