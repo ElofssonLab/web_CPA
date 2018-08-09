@@ -48,25 +48,48 @@ Accepted March 1, 2019}
 
 \begin{abstract}
 
+
+\end{abstract}
+
+\section{Introduction}
+
 In recent years it has been shown that by the use of evolutionary
 information and direct coupling analysis~\cite{Weigt19116270} it is
 possible to obtain sufficiently accurate contact prediction of
 proteins from their sequence and multiple sequence alignment alone to
-predict accurate structures of many protein families
-\cite{Sulkowska2012}. Here we present PconsFam
-(https://pconsfam.bioinfo.se) a database with predicted structural
-information for all Pfam families using the PconsFold2
-pipeline~\cite{Michel28881974}. The PconsFold2 pipeline uses contact
-predictions from PconsC3~\cite{Michel28535189} the CONFOLD folding
-algorithm~\cite{Adhikari25974172} and multiple model quality estimations
-\cite{Uziela28052925,Lundstrom:2001} to predict the structure of proteins. All this is
-presented in the database. Before final submission we will update the
-database to use an update to the pipeline based of PconsC4, which is
-much faster enabling frequent updates as well as an improved model
-quality estimator, ProQ4.
-\end{abstract}
+predict accurate structures of many protein
+families~\cite{Sulkowska2012}. At first the DCA methods were limited
+to very large protein families, but with the use of deep learning
+methodologies to improve the contact predictions it is nowadays
+possible to accurately predict the contacts for families with only a
+few hundred members~\cite{Skwark25375897,Michel28535189,Wang28056090}
 
-\section{Introduction}
+Using these predicted contacts it is then possible to model the
+structure of a protein using a protein folding program. Here,
+initially CNS was used ~\cite{Morcos22106262} but Rosetta has also
+been used~\cite{Baker:1999}. Although it is possible that models
+created by Rosetta are of slighlty higher quality than models by
+CNS~\cite{Michel25161237} the advantagae of CNS is clear as it is much
+faster. 
+
+
+Recently we developed the PconsFold2 pipeline~\cite{Michel28881974}, which uses contact
+predictions from PconsC3~\cite{Michel28535189} the CNS based CONFOLD folding
+algorithm~\cite{Adhikari25974172} and most importantly multiple model quality estimations
+\cite{Uziela28052925,Lundstrom:2001} to predict the structure of
+proteins. Here we present the related web resource PconsFam
+(https://pconsfam.bioinfo.se) a database with predicted structural
+information for most Pfam families using the PconsFold2
+pipeline.
+
+
+
+
+
+
+
+
+
 When the PconsFold2 pipeline was applied to 6379 PFAM families of
 unknown structure of which 558 with a predicted specificity over
 90\%. Out of these, 415 have never been reported before.  With
@@ -98,9 +121,13 @@ Known PDB structures
 
 \subsection{Updates}
 
-With our pipeline the website will be updated with every PFAM release and the currently running update on PFAM 31.0 will introduce additional quality estimators such as PPV, Pcons score and ProQ4 scores.
+With our pipeline the website will be updated with every PFAM release
+and the currently running update on PFAM 31.0 will introduce
+additional quality estimators such as PPV, Pcons score and ProQ4
+scores. 
 
 \section{Results}
+
 \subsection{Comparison with other resources}
 
 A similar resource is Baker Lab’s GREMLIN database~\cite{Kamisetty2013} which builds contact prediction based on
@@ -190,10 +217,21 @@ We use model quality estimation methods (ProQ and Pcons) to evaluate FDR
 PconsFam is complementary to existing resources, i.e. high quality models exist for other families than in Gremlin.
 PconsFam will be updates at regular times to follow PFAM releases.
 Future directions
+
 Modularity of pipeline
+
+
 Conctacts
+
 SS prediciton
+
 Newer PFAM
+
+
+We are working un an  update of the 
+database to use an update to the pipeline based of PconsC4, which is
+much faster enabling frequent updates as well as an improved model
+quality estimator, ProQ4.2
 
 \section{Conclusions}
 
