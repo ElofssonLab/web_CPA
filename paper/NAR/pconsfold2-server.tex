@@ -83,19 +83,27 @@ information for most Pfam families using the PconsFold2
 pipeline.
 
 
+The PconsFold2 pipeline can predict accurate models (TM-score $>0.5$
+for 51\% of the large families ($>1000$ effective sequences). For
+smaller families the fraction of correct models decreases, bu they
+still exist. Therefore, a major challenge for large scale predictions
+is to distinguish between correct and incorrect models. Here, we have
+applied a set of model quality estimation methods~\cite{Kryshtafovych28833563}.
 
 
-
-
-
+\bf{(ADD MORE NUMBERS)}
 
 
 When the PconsFold2 pipeline was applied to 6379 PFAM families of
-unknown structure of which 558 with a predicted specificity over
-90\%. Out of these, 415 have never been reported before.  With
+unknown structure 558 modes with a predicted specificity over 90\% was
+created. Out of these, 415 had never been reported before.
+
+{\bf With
 PconsFam we extend this pipeline to the full PFAM database to predict
 multiple contact maps and subsequently multiple structures of all
-representative sequences for all Pfam families. For each family in
+representative sequences for all Pfam families. }
+
+For each family in
 PFAM, multiple contact maps are generated and from these a set of
 models are predicted and ranked with quality assessment
 estimators. The model quality estimation gives an indication on the
