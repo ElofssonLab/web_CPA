@@ -1,0 +1,19 @@
+{% extends "web_pconsfold/base_layout.html" %}
+
+{%block content_main %}
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+                    <h1 class="display-5">Search for PFAM ID...</h1>
+  <p class="lead">
+  You can search for any of PFAM ID, Meff, N...
+  </p>
+<form class="form-inline my-2 my-lg-0" action="/browse">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search"
+          aria-label="Search" name="search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        </div>
+      </div>
+
+{% endblock %}

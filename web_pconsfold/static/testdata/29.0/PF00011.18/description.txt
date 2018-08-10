@@ -1,0 +1,5 @@
+HSP20
+Hsp20/alpha crystallin family
+Not only do small heat-shock-proteins occur in eukaryotes and prokaryotes but they have also now been shown to occur in cyanobacterial phages as well as their bacterial hosts [2].
+CL0190
+HSP20

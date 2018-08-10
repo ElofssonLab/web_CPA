@@ -1,0 +1,5 @@
+ATP-synt_ab
+ATP synthase alpha/beta family, nucleotide-binding domain
+This entry includes the ATP synthase alpha and beta subunits, the ATP synthase associated with flagella and the termination factor Rho.
+CL0023
+P-loop_NTPase

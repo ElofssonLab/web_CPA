@@ -1,0 +1,5 @@
+Pkinase
+Protein kinase domain
+
+CL0016
+PKinase

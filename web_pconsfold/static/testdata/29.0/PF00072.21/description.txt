@@ -1,0 +1,5 @@
+Response_reg
+Response regulator receiver domain
+This domain receives the signal from the sensor partner in bacterial two-component systems. It is usually found N-terminal to a DNA binding effector domain.
+CL0304
+CheY

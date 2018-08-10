@@ -1,0 +1,5 @@
+zf-CCHC
+Zinc knuckle
+The zinc knuckle is a zinc binding motif composed of the the following CX2CX4HX4C where X can be any amino acid. The motifs are mostly from retroviral gag  proteins (nucleocapsid). Prototype structure is from HIV. Also contains members involved in eukaryotic gene regulation, such as C. elegans GLH-1. Structure is an 18-residue zinc finger.
+CL0511
+Retroviral_zf

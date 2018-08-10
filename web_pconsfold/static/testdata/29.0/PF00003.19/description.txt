@@ -1,0 +1,5 @@
+7tm_3
+7 transmembrane sweet-taste receptor of 3 GCPR
+This is a domain of seven transmembrane regions that forms the C-terminus of some subclass 3 G-coupled-protein receptors. It is often associated with a downstream cysteine-rich linker domain, NCD3G Pfam:PF07562, which is the human sweet-taste receptor, and the N-terminal domain, ANF_receptor Pfam:PF01094. The seven TM regions assemble in such a way as to produce a docking pocket into which such molecules as cyclamate and lactisole have been found to bind and consequently confer the taste of sweetness [1].
+CL0192
+GPCR_A

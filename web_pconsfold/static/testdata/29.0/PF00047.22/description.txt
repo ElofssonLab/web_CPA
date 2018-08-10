@@ -1,0 +1,5 @@
+ig
+Immunoglobulin domain
+Members of the immunoglobulin superfamily are found in hundreds of proteins of different functions. Examples include antibodies, the giant muscle kinase titin and receptor tyrosine kinases.  Immunoglobulin-like domains may be involved in protein-protein and protein-ligand interactions.
+CL0011
+Ig

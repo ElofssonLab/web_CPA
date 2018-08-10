@@ -1,0 +1,5 @@
+Pyr_redox
+Pyridine nucleotide-disulphide oxidoreductase
+This family includes both class I and class II oxidoreductases and also NADH oxidases and peroxidases.  This domain is actually  a small NADH binding domain within a larger FAD binding domain.
+CL0063
+NADP_Rossmann

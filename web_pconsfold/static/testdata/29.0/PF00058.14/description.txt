@@ -1,0 +1,5 @@
+Ldl_recept_b
+Low-density lipoprotein receptor repeat class B
+This domain is also known as the YWTD motif after the most conserved region of the repeat.  The YWTD repeat is found in multiple tandem repeats and has been predicted to form a beta-propeller structure [2].
+CL0186
+Beta_propeller

@@ -1,0 +1,4 @@
+RuBisCO_large
+Ribulose bisphosphate carboxylase large chain, catalytic domain
+The C-terminal domain of RuBisCO large chain is the catalytic domain adopting a TIM barrel fold.
+

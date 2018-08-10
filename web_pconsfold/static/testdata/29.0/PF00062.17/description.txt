@@ -1,0 +1,5 @@
+Lys
+C-type lysozyme/alpha-lactalbumin family
+Alpha-lactalbumin is the regulatory subunit of lactose synthase, changing the substrate specificity of galactosyltransferase from N-acetylglucosamine to glucose. C-type lysozymes are secreted bacteriolytic enzymes that cleave the peptidoglycan of bacterial cell walls. Structure is a multi-domain, mixed alpha and beta fold, containing four conserved disulfide bonds.
+CL0037
+Lysozyme

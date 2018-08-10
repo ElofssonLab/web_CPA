@@ -1,0 +1,5 @@
+RRM_1
+RNA recognition motif. (a.k.a. RRM, RBD, or RNP domain)
+The RRM motif is probably diagnostic of an RNA binding protein. RRMs are found in a variety of RNA binding proteins, including various hnRNP proteins, proteins implicated in regulation of alternative splicing, and protein components of snRNPs. The motif also appears in a few single stranded DNA binding proteins.  The RRM structure consists of four strands and two helices arranged in an alpha/beta sandwich, with a third helix present during RNA binding in some cases The C-terminal beta strand (4th strand) and final helix are hard to align and have been omitted in the SEED alignment The LA proteins (Swiss:P05455) have an N terminal rrm which is included in the seed. There is a second region towards the C terminus that has some features characteristic of a rrm but does not appear to have the important structural core of a rrm. The LA proteins (Swiss:P05455) are one of the main autoantigens in Systemic lupus erythematosus (SLE), an autoimmune disease.
+CL0221
+RRM

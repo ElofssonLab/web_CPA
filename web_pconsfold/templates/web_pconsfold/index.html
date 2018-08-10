@@ -1,0 +1,26 @@
+{% extends "web_pconsfold/base_layout.html" %}
+
+{%block content_main %}
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+<img id="logo_img" class="img-responsive" style="max-width:100%" src="{{STATIC_URL}}images/pconsfam_logo_trans.png" alt="PconsFam">
+  <a href="{% url 'web_pconsfold:search' %}" class="btn btn-lg btn-outline-success">Start searching</a>
+  <a href="{% url 'web_pconsfold:browse' %}" class="btn btn-lg
+      btn-outline-success">Start browsing</a>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col">
+            <h2>Welcome</h2>
+            <p>Welcome to the PconsFam modelling database. This website contains PFAM families modelled using the PconsFold2 pipeline</p>
+          </div>
+        </div>
+
+        <hr>
+
+      </div> <!-- /container -->
+{% endblock %}

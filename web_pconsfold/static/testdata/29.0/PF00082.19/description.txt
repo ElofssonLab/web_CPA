@@ -1,0 +1,4 @@
+Peptidase_S8
+Subtilase family
+Subtilases are a family of serine proteases. They appear to have independently and convergently evolved an Asp/Ser/His catalytic triad, like that found in the trypsin serine proteases (see Pfam:PF00089). Structure is an alpha/beta fold containing a 7-stranded parallel beta sheet, order 2314567.
+

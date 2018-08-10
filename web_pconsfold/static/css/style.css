@@ -1,0 +1,381 @@
+* { padding: 0; margin: 0; }
+
+
+$bg: #332f35;
+$fg: lighten($bg,20%);
+$borderWidth: 3px;
+
+
+body {
+padding:0px;
+margin:0px;
+height: 100%;
+text-align: center;
+
+}
+input{
+position: relative;
+z-index: 500;
+}
+
+input[type=radio] {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+}
+
+.radio-group label {
+  color: lighten($bg,40%);
+  display: inline-block;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 10px;
+}
+.radio-group label:hover {
+    background: lightgrey;
+    transition: all 0.3s ease;
+
+}
+input[type=radio]:checked + label{
+  color: #dddddd;
+  background: darkblue;
+    transition: all 0.3s ease;
+
+}
+
+label + input[type=radio] + label {
+  border-left: solid 3px grey;
+}
+.radio-group {
+  /*border: solid 3px black;
+  display: inline-block;*/
+  /*margin: 20px;*/
+  border-radius: 10px;
+  overflow: hidden;
+    padding: 20px;
+}
+/*
+canvas { 
+    background: #eee; 
+} */
+/*meta.foundation-data-attribute-namespace {
+  font-family: false; }*/
+
+/*
+  #viewer1 {
+position: absolute;
+height: 500px;
+width: 500px;
+margin: auto 0px;
+  }
+  #viewer2 {
+position: absolute;
+margin: auto 500px;
+height: 500px;
+width: 500px;
+  } 
+  */
+#plot_canvas_LA{
+position: absolute;
+margin: 0px 20px;
+height: 460px;
+width: 40px;
+}
+#plot_canvas_BA{
+position: absolute;
+margin: 460px 60px;
+height: 40px;
+width: 460px;
+}
+#plot_canvas{
+position: absolute;
+margin: auto 60px;
+}
+.structure{
+width: 550px;
+display: inline;
+}
+.viewer_div{
+    height: 550px;
+}
+.bigbutton {
+    font-size: 16px;
+    position:relative;
+    margin:0 auto;
+    overflow:hidden;
+    border-color: #2b669a;    
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+}
+.primary_btn {  
+  background-image: -webkit-linear-gradient(top, #428bca 0%, #2d6ca2 100%);
+  background-image:         linear-gradient(to bottom, #428bca 0%, #2d6ca2 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff428bca', endColorstr='#ff2d6ca2', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  background-repeat: repeat-x;
+}
+.panel{
+    position:relative;
+    width:35%;
+    margin:0 auto;
+    overflow:hidden;
+    border-style: groove;
+    padding: 15px;
+    text-align: center;
+}
+.panel2{
+    position:relative;
+    margin:0 auto;
+    height: 620px;
+    border-style: groove;
+    padding: 15px;
+ /*   text-align: center;
+    overflow:hidden;
+    outline: #000000 groove thick;*/
+}
+.klocek{
+    display: inline-block;
+}
+.belka{
+//    display:inline;
+}
+.spinacz{
+    width: 150px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 34px;
+  margin-bottom: 0rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input[type=checkbox] {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 70px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+#slider_plot_color:before{
+    text-align: center;
+    content: "Simple";
+}
+#slider_contact_color:before{
+    text-align: center;
+    content: "Selection";
+}
+#slider_structure_color:before{
+    text-align: center;
+    content: "Rainbow";
+}
+
+
+#structure_color_slider:before {
+  background-color: pink;
+}
+
+input[type=checkbox]:checked + .slider {
+  background-color: #2196F3;
+}
+
+input[type=checkbox]:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input[type=checkbox]:checked + #slider_plot_color:before {
+    text-align: center;
+    content: "Rainbow";
+}
+input[type=checkbox]:checked + #slider_contact_color:before {
+    text-align: center;
+    content: "Distance";
+}
+input[type=checkbox]:checked + #slider_structure_color:before {
+    text-align: center;
+    content: "B-factor";
+}
+input[type=checkbox]:checked + .slider:before {
+  -webkit-transform: translateX(42px);
+  -ms-transform: translateX(42px);
+  transform: translateX(42px);
+}
+
+
+ol{
+list-style-type: upper-roman;}
+
+
+ol > li:not(:last-child)::after {
+  content: ";";
+}
+ol >li:last-child::after{
+  content: ".";
+}
+
+.options{
+  width: 50%;
+  float: left;
+}
+.instructions{
+  width: 50%;
+  margin-left: 50%;
+/*  display:none;*/
+}
+
+
+/*
+.slidecontainer {
+    width: 50%; 
+}
+*/
+/* The slider itself */
+.range_slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.range_slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.range_slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+}
+
+.range_slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+}
+
+kbd{ /*from meta.stack-overflow */
+    display: inline-block;
+    margin: 0 .1em;
+    padding: .1em .6em;
+    font-family: Ubuntu,Arial,"libra sans",sans-serif;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #242729;
+    text-shadow: 0 1px 0 #FFF;
+    background-color: #e1e3e5;
+    border: 1px solid #adb3b9;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(12,13,14,0.2), 0 0 0 2px #FFF inset;
+    white-space: nowrap;
+}
+.legend_div{
+    background-color: rgba(255,255,255, 0.9);
+    background-color: rgba(255,255,255, 1);
+    padding: 20px;
+    width: 35%;
+/*    border: 1px solid black;
+    border-radius: 10px;*/
+}
+
+#plot_help{
+    position: absolute; 
+    right: 10%;
+        /*   height: 150px; */
+    width: 10%;
+/*    height: 0%;*/
+}
+
+.legend_list_magenta{
+/*    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAE0lEQVQYV2O8p6HxnwENMNJAEACS9wrn4gMWgAAAAABJRU5ErkJggg==);*/
+/*    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2P8L6Lwn4EIwDiqEF8oUT94ACrWFf8gtI7ZAAAAAElFTkSuQmCC);*/
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGUlEQVQoU2P8w3z/PwMRgHFUIb5Qon7wAAD4dhyt7ZzzwQAAAABJRU5ErkJggg==);
+}
+.legend_list_cyan{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGUlEQVQoU2OUu//sPwMRgHFUIb5Qon7wAAAbOhzfbDwtUQAAAABJRU5ErkJggg==);
+}
+.legend_list_blue{
+/*    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAE0lEQVQYV2PUcrr3nwENMNJAEACtQQtzVUV6XwAAAABJRU5ErkJggg==);*/
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2PUcrr3n4EIwDiqEF8oUT94AOPlFuXxC9P+AAAAAElFTkSuQmCC);
+}
+.legend_list_white{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJklEQVQoU2NkZmb+z0AEYAQp/Pv3LyM+tSA1owpxhhA8eIgIbwYAUWIqW2P86OQAAAAASUVORK5CYII=);
+}
+.legend_list_gray{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2NsaGj4z0AEYBxViC+UqB88AMJ9GQFYCQ0bAAAAAElFTkSuQmCC);
+}
+.legend_list_black{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2NkYGD4z0AEYBxViC+UqB88AKk6CgERnGWPAAAAAElFTkSuQmCC);
+}
+.legend_list_lightred{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGUlEQVQoU2P8v+/4fwYiAOOoQnyhRP3gAQCjICMpZ66NNQAAAABJRU5ErkJggg==);
+}
+.legend_list_lightblue{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGUlEQVQoU2Nce+PZfwYiAOOoQnyhRP3gAQDEZCIvdz0/pQAAAABJRU5ErkJggg==);
+}
+.legend_list_purple{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2NsYGj4z0AEYBxViC+UqB88AGTBFAHUOORJAAAAAElFTkSuQmCC);
+}
+.legend_list_lt{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAN0lEQVQoU2NkgID/UBonxYgkg1cxskK8JqMrxKkYm0KsinEpxFCMTyGKYkIK4YqJUQhWTKxCBgDRBAkCDBLOEwAAAABJRU5ErkJggg==);
+}
+.legend_list_ut{
+    list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAOUlEQVQoU43KSw4AIAjE0HL/Q2sw0fiBkW66eUYxAxrgl03oSOIdSnzDFEcwxBl8sIIH/sGFK3DgDhseCQvvDHh+AAAAAElFTkSuQmCC);
+}
+
+#legend_plot_gradient {
+  width: 50%;
+    height: 20px;
+    background: #ff0000; /* Old browsers */
+    background: -moz-linear-gradient(left, #ff0000 0%, #fcfc00 25%, #00d100 50%, #00fcfc 75%, #0000ff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ff0000), color-stop(25%,#fcfc00), color-stop(50%,#00d100), color-stop(75%,#00fcfc), color-stop(100%,#0000ff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, #ff0000 0%,#fcfc00 25%,#00d100 50%,#00fcfc 75%,#0000ff 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,, #ff0000 0%,#fcfc00 25%,#00d100 50%,#00fcfc 75%,#0000ff 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,, #ff0000 0%,#fcfc00 25%,#00d100 50%,#00fcfc 75%,#0000ff 100%); /* IE10+ */
+    background: linear-gradient(to right, #ff0000 0%,#fcfc00 25%,#00d100 50%,#00fcfc 75%,#0000ff 100%); /* W3C */
+    margin-left: 5px;
+     margin-right: 5px;
+    margin-bottom: 20px
+}    
+    
+    
+    
+.show_plot_legend{
+    margin-top: 500px;
+    margin-left: 400px;
+}
+p{
+    text-align: justify;
+}

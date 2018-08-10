@@ -1,0 +1,4 @@
+Kunitz_BPTI
+Kunitz/Bovine pancreatic trypsin inhibitor domain
+Indicative of a protease inhibitor, usually a serine protease inhibitor. Structure is a disulfide rich  alpha+beta fold. BPTI (bovine pancreatic trypsin  inhibitor) is an extensively studied model structure. Certain family members are similar to the tick  anticoagulant peptide (TAP, Swiss:P17726). This is a  highly selective inhibitor of factor Xa in the blood  coagulation pathways [1]. TAP molecules are highly  dipolar [2], and are arranged to form a twisted two- stranded antiparallel beta-sheet followed by an alpha  helix [1].
+

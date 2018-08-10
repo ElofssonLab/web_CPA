@@ -1,0 +1,5 @@
+PAN_1
+PAN domain
+The PAN domain [1] contains a conserved core of three disulphide bridges.  In some members of the family there is an additional fourth disulphide bridge the links the N and C termini of the domain. The domain is found in diverse proteins, in some they mediate protein-protein interactions, in others they mediate protein-carbohydrate interactions.
+CL0168
+PAN

@@ -1,0 +1,4 @@
+Thyroglobulin_1
+Thyroglobulin type-1 repeat
+Thyroglobulin type 1 repeats are thought to be involved in the control of proteolytic degradation [2]. The domain usually contains six conserved cysteines.  These form three disulphide bridges.  Cysteines 1 pairs with 2, 3 with 4 and 5 with 6.
+

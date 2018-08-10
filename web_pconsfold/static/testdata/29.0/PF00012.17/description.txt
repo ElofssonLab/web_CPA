@@ -1,0 +1,5 @@
+HSP70
+Hsp70 protein
+Hsp70 chaperones help to fold many proteins. Hsp70 assisted folding involves repeated cycles of substrate binding and release.  Hsp70 activity is ATP dependent. Hsp70 proteins are made up of two regions: the amino terminus is the ATPase domain and the carboxyl terminus is the substrate binding region.
+CL0108
+Actin_ATPase

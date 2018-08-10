@@ -1,0 +1,5 @@
+Myosin_head
+Myosin head (motor domain)
+
+CL0023
+P-loop_NTPase

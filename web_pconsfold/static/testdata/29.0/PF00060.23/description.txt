@@ -1,0 +1,5 @@
+Lig_chan
+Ligand-gated ion channel
+This family includes the four transmembrane regions of the ionotropic glutamate receptors and NMDA receptors.
+CL0030
+Ion_channel

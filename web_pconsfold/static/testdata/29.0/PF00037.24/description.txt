@@ -1,0 +1,5 @@
+Fer4
+4Fe-4S binding domain
+Superfamily includes proteins containing  domains which bind to iron-sulfur clusters. Members  include bacterial ferredoxins, various dehydrogenases, and various reductases.  Structure of the domain is an alpha-antiparallel beta sandwich.
+CL0344
+4Fe-4S

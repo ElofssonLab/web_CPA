@@ -1,0 +1,5 @@
+KH_1
+KH domain
+KH motifs bind RNA in vitro. Autoantibodies to Nova, a KH domain protein, cause paraneoplastic opsoclonus ataxia.
+CL0007
+KH

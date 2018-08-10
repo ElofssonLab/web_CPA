@@ -1,0 +1,5 @@
+cNMP_binding
+Cyclic nucleotide-binding domain
+
+CL0029
+Cupin

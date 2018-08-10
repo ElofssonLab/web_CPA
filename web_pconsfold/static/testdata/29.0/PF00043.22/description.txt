@@ -1,0 +1,5 @@
+GST_C
+Glutathione S-transferase, C-terminal domain
+GST conjugates reduced glutathione to a variety of targets including S-crystallin from squid, the eukaryotic elongation factor 1-gamma, the HSP26 family of stress-related proteins and auxin-regulated proteins in plants.  Stringent starvation proteins in E. coli are also included in the alignment but are not known to have GST activity.                                The glutathione molecule binds in a cleft between N and  C-terminal domains. The catalytically important residues are proposed  to reside in the N-terminal domain [1]. In plants, GSTs are encoded by  a large gene family (48 GST genes in Arabidopsis) and can be divided  into the phi, tau, theta, zeta, and lambda classes [2].
+CL0497
+GST_C

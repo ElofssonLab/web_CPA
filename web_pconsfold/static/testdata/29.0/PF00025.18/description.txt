@@ -1,0 +1,5 @@
+Arf
+ADP-ribosylation factor family
+Pfam combines a number of different Prosite families together
+CL0023
+P-loop_NTPase

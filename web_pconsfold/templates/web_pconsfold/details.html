@@ -1,0 +1,514 @@
+{% extends "web_pconsfold/base_layout.html" %}
+{%block content_main %}
+
+<script src="{{STATIC_URL}}js/modernizr-2.8.3.min.js"></script>
+<script>
+var PROTEIN_STRUCTURE_FILE = "{{ modelURL }}";// to be filled by Django
+var PROTEIN_STRUCTURE_FILES = {{ modelURLs|safe }};// to be filled by Django
+var topo_other_imgs = {{ topo_data.1|safe }};
+var topo_other_descs = {{ topo_data.0|safe }};
+var topo_other_comms = {{ topo_data.2|safe }};
+var PDB_CHAIN = "{{pdb_chain}}";
+var DI_FILENAMES = {{ DIs|safe }};//
+var DI_FILENAME = "{{ DI }}";//
+var DMAP_FILENAME =  "{{ dmapURL }}";//
+var DMAP_FILENAMES = ["{{ dmapURL }}"];//
+var FASTA_FILENAME = "{{ fasta_url }}";//
+var PROTEIN_LEN = {{ prot_len }};
+var PFAM_MODEL = "{{ pfam_id }}";
+</script>
+<script data-main='{{STATIC_URL}}js/protein' src='{{STATIC_URL}}js/require.js'></script>
+<script src="{{STATIC_URL}}js/main.js"></script>
+<link rel="stylesheet" href="{{STATIC_URL}}css/style.css">
+
+<div class="container" id="general_container">
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#visualization">Visualization</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#information">Information</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#usage">Usage instructions</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+<div class="container tab-pane active" id="visualization" style="padding-top: 25px; padding-bottom: 150px">
+  <div class ="row" style="margin-bottom: 10px">
+      <div class="col-3"><h1>{{ pfam_id }}</h1></div>
+      {%  if modelURLs.0 %}
+      <div class="col-3">
+          <button title="Select active structure" type="button" id="org_model_0" class="btn btn-primary btn-sm" onclick="activate_original_model(0)">Our model</button>
+          <button title="Select active structure" type="button" id="org_model_1" class="btn btn-outline-primary btn-sm" onclick="activate_original_model(1)">PDB structure</button>
+          <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary btn-sm">
+                <input type="checkbox" id="org_model_hide" onchange="hide_background_model()" autocomplete="off"> Hide gray model
+            </label>
+          </div>
+      </div>
+      {% endif %}
+        {% if modelURLs|length > 2 %}
+            <div class="col-3">
+            Switch model<br/>
+            <div class="btn-group btn-group-toggle " data-toggle="buttons" id="model_radios">
+              <label class="btn btn-secondary  btn-sm active">
+                <input type="radio" name="models" id="model1" onchange="change_model_file(1)" autocomplete="off" checked> Model 1
+              </label>
+              {% for url in modelURLs|slice:"2:" %}
+              <label class="btn btn-secondary  btn-sm">
+                <input type="radio" name="models" id="model{{ forloop.counter0|add:"2" }}" onchange="change_model_file({{ forloop.counter0|add:"2" }})" autocomplete="off"> Model {{ forloop.counter0|add:"2" }}
+              </label>
+              {%  endfor %}
+            </div>
+            </div>
+        {%  endif %}
+        <div class="col-3">
+            Switch DI file
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="model_radios">
+              <label class="btn btn-secondary active btn-sm">
+                <input type="radio" name="di_files" id="di_hh0" onchange="change_di_file(0)" autocomplete="off" checked> HH0
+              </label>
+              <label class="btn btn-secondary btn-sm">
+                <input type="radio" name="di_files" id="di_hh4" onchange="change_di_file(1)" autocomplete="off"> HH4
+              </label>
+              <label class="btn btn-secondary btn-sm">
+                <input type="radio" name="di_files" id="di_jh0" onchange="change_di_file(2)" autocomplete="off"> JH0
+              </label>
+              <label class="btn btn-secondary btn-sm">
+                <input type="radio" name="di_files" id="di_jh4" onchange="change_di_file(3)" autocomplete="off"> JH4
+              </label>
+            </div>
+        </div>
+  </div>
+  <div class="row">
+        <div class="col-6">
+            <div class="viewer_div" id="viewer1" ></div>       
+        </div>
+        <div class="col-6">
+          <div class="viewer_div" id="viewer2" >
+            <canvas id="plot_canvas" ></canvas>
+            <canvas id="plot_canvas_LA" ></canvas>
+            <canvas id="plot_canvas_BA" ></canvas>
+            <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary btn-sm show_plot_legend">
+                <input type="checkbox" id="show_plot_legend" onchange="show_plot_legend()" autocomplete="off"> Show legend
+            </label>
+          </div>
+          </div>
+        </div>
+  <div class="legend_div" id="plot_help" style="display:none">
+    <div class="row legend_row">
+        <h5>Secondary structure:</h5>
+        <ul>
+        <li class="legend_list_magenta"> Alpha helices </li>
+        <li class="legend_list_cyan"> Beta sheets </li>
+        </ul>
+    </div>
+    <div class="row legend_row">
+        <h5>Plot colouring</h5>
+        <div class="legend_plot" id="simple_just_di">
+            DI scores simple:
+            <ul>
+                <li class="legend_list_blue"> DI over <span id="dicv1" name="di_cutoff_value"></span> </li>
+                <li class="legend_list_white">DI below cutoff</li>
+            </ul> 
+        </div>
+        <div class="legend_plot" id="complex_just_di">
+            DI scores rainbow:
+            <div class="row">
+                0 <div id="legend_plot_gradient"></div> <span id="max_di_score"></span> <br/>
+            </div>
+        </div>
+        <div class="legend_plot" id="overlay_di">
+            DI/structural contact overlay:
+            <ul>
+                <li class="legend_list_blue">True positives</li>
+                <li class="legend_list_red">False positives (distance > <span id="dcv1" name="distance_cutoff_value"></span>A)</li>
+                <li class="legend_list_gray">False negatives (DI < <span id="dicv2" name="di_cutoff_value"></span>)</li>
+
+            </ul>
+        </div>
+        <div class="legend_plot" id="overlay_cmap">
+            Model/reference structural contact overlay:
+            <ul>
+                <li class="legend_list_purple">True positives</li>
+                <li class="legend_list_lightred">Model distance <= <span id="dcv2" name="distance_cutoff_value"></span>A < Reference</li>
+                <li class="legend_list_lightblue">Reference distance <= <span id="dcv3" name="distance_cutoff_value"></span>A < Model</li>
+
+            </ul>
+        </div>
+        <div class="legend_plot" id="distance_cmap">
+            Structural distance map:
+                <ul>
+                    <li class="legend_list_lt">Model(lower triangle)</li>
+                    <li class="legend_list_ut">Reference(upper triangle)</li>
+                </ul>
+                <div class="row">
+                0 <div id="legend_plot_gradient"></div> <span id="md2" name="max_distance"></span>A<br/>
+                </div>
+        </div>
+    </div>
+    <div class="row legend_row">
+        <div class="legend_plot" id="legend_contact_map">
+            Contact map:
+            <ul>
+                <li class="legend_list_black">Distance below <span id="dcv3" name="distance_cutoff_value"></span>A </li>
+                <li class="legend_list_white">Larger distance</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row legend_row">
+        <div class="legend_plot" id="bonds_complex">
+        <h5>Distance-based contact bonds:</h5>
+        <div class="row">
+            0A <div id="legend_plot_gradient"></div> <span id="md1" name="max_distance"></span>A <br/>
+        </div>
+        </div>
+    </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-12">
+    <div id="seq_canvas_div" style="z-index: 999">
+    <canvas id="sequence_canvas" ></canvas>
+    </div></div>
+  </div>
+
+
+
+  <div class="row" style="margin-top: 5px">
+      <div class="row ">
+        <div class="col-12 center-block" style="float:none">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="change_map">
+              <label class="btn btn-outline-secondary active btn-sm">
+                <input type="radio" name="di_files" id="change_map_0" onchange="change_map_mode(0)" autocomplete="off" checked> Only DI scores
+              </label>
+              <label class="btn btn-outline-secondary btn-sm">
+                <input type="radio" name="di_files" id="change_map_1" onchange="change_map_mode(1)" autocomplete="off"> DI scores and distances side-by-side
+              </label>
+              <label class="btn btn-outline-secondary btn-sm">
+                <input type="radio" name="di_files" id="change_map_2" onchange="change_map_mode(2)" autocomplete="off"> Overlayed DI scores and distances
+              </label>
+              {%  if modelURLs.0 %}
+              <label class="btn btn-outline-secondary btn-sm">
+                <input type="radio" name="di_files" id="change_map_3" onchange="change_map_mode(3)" autocomplete="off"> Overlayed model/reference contact maps
+              </label>
+              <label class="btn btn-outline-secondary btn-sm">
+                <input type="radio" name="di_files" id="change_map_4" onchange="change_map_mode(4)" autocomplete="off"> Model/reference distances side-by-side
+              </label>
+              {% endif %}
+            </div>
+        </div>
+      </div>
+    <div class="col-8 text-left">
+
+    <!--<button id="change_map_0" onclick="change_map_mode(0)" class="primary_btn bigbutton">Show only DI scores</button>
+    <button id="change_map_1" onclick="change_map_mode(1)" class="primary_btn bigbutton">Show DI scores and distances side-by-side</button>
+    <button id="change_map_2" onclick="change_map_mode(2)" class="primary_btn bigbutton">Overlay DI scores and distances</button>-->
+
+        <div class="row">
+            <div class="col-6 text-left">Cut-off distance for contact map: </div>
+            <div class="col-2 text-left">
+            <input type="number" name="dmap_cutoff" id="dmap_cutoff" oninput="change_dmap_cutoff()" min="3" max="50" step="0.1" > <br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 text-left">Lower bound for DI scores:</div>
+            <div class="col-2 text-left">
+                <input type="number" name="di_lower_bound" id="di_lower_bound" oninput="change_di_lower_bound()" min="0" max="1" step="0.01">
+            </div>
+        </div>
+    </div>
+    <div class="col-4 text-left">
+        <div class="row">
+            <div class="col-5 text-left">Colouring of the plot</div>
+            <div class="col-3">
+            <label class="switch">
+              <input id="cmap_mode" type="checkbox" onchange="change_colouring_mode()">
+              <span class="slider" id="slider_plot_color"></span>
+            </label></div>
+        <div class="col-4"></div>
+    </div>
+<div class="row" id="patyczek_div">
+    <div class="col-5 text-left">Colouring of the contact bonds</div>
+    <div class="col-3"><label class="switch">
+      <input id="patyczek_mode" type="checkbox" onchange="change_patyczek_mode()">
+      <span class="slider" id="slider_contact_color"></span>
+    </label></div>
+    <div class="col-4 text-left"></div>
+    </div>
+
+    <div class="row" >
+        <div class="col-5 text-left">Structure colouring</div>
+    <div class="col-3"><label id="structure_color_slider" class="switch">
+      <input id="structure_color_mode" type="checkbox" onchange="change_structure_colouring_mode()">
+      <span  class="slider" id="slider_structure_color" ></span>
+    </label></div>
+        <div class="col-4 text-left"></div>
+    </div>
+        </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="slidecontainer"> 
+      <input name="slider_elements" type="range" min="1" max="100" value="50" class="range_slider" id="di_scores_cnt"> 
+      <div name="slider_elements">Number of top interactions shown: 
+      <input type="number" name="di_scores_cnt_num" id="di_scores_cnt_num" oninput="change_dsc_num()" min="1" max="50" step="1">
+      <span id="di_scores_cnt_display"></span> 
+      </div>
+      <div name="slider_elements" id="ppv_div">
+      PPV : <span id="ppv_display"></span>
+      </div></div>
+    </div>
+  </div>
+
+    <div class="row">
+      <!--<div class="col-md-4">
+         <div class="radio-group" style="">
+          DI scores file:<br/>
+          <input type="radio" id="difile_hh0" name="selector" onchange="change_di_file(0)">
+          <label for="difile_hh0">HH0</label>
+          <input type="radio" id="difile_hh4" name="selector" onchange="change_di_file(1)">
+          <label for="difile_hh4">HH4</label>
+          <input type="radio" id="difile_jh0" name="selector" onchange="change_di_file(2)">
+          <label for="difile_jh0">JH0</label>
+          <input type="radio" id="difile_jh4" name="selector" onchange="change_di_file(3)" checked>
+          <label for="difile_jh4">JH4</label>
+         </div>
+      </div>
+      <div class="col-md-4">
+         <div class="radio-group" id="model_radios" style="">
+          Model file:<br/>
+            <input type="radio" id="model1" name="mselector" onchange="change_model_file(1)" checked><label for="model1">Model1</label>
+         </div>
+      </div>
+      <div class="col-md-4">
+        <div class="radio-group" id="original_file_boxes" style="display: none">
+      Original file controls:<br/>
+           <input type="checkbox" id="org_model" name="oselector" onchange="activate_original_model()"><label for="org_model">Switch to PDB structure</label><br/>
+           <input type="checkbox" id="org_model_hide" name="oselector" onchange="hide_background_model()"><label for="org_model_hide">Hide grayed out structure</label>
+        </div>
+      </div>-->
+
+    </div>
+<hr >
+    {% if topology_calculated %}
+    <div class="col-12" id="topology" ><!--style="display:none"-->
+          <div class ="row"><h2>TOPOLOGY</h2></div>
+        <div class ="row">
+            <div class="col-md-4">
+                <div class ="row"><h4>OUR MODEL</h4></div>
+                <img class="obrazek_topologiczny" id="our_model_topology_img" im_src="{{STATIC_URL}}images/" src="{{STATIC_URL}}images/{{ topo_data.1.0 }}.png" />
+                <div class="topology_desc" id="our_model_topology">{{ topo_data.0.0 }}</div>
+            </div>
+            {% if topo_data.3.strip|stringformat:"s" != "?"|stringformat:"s" %}
+            <div class="col-md-4">
+                <div class ="row"><h4>PDB STRUCTURE</h4></div>
+                <img class="obrazek_topologiczny" src="{{STATIC_URL}}images/{{ topo_data.4 }}.png" />
+                <div class="topology_desc" id="pdb_model_topology">
+                {%  if topo_data.3 %}
+                    {{ topo_data.3 }}<a href="http://knotprot.cent.uw.edu.pl/view/{{ pdb_id }}/{{ pdb_chain }}" target="_blank"> (view in KnotProt)</a>
+                 {% else %}
+                    No data
+                {%  endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class ="row"><h4>EXPERT SAYS</h4></div>
+                <img class="spinacz img_thumbnail" src="http://www.arturgrabias.com/blog/wp-content/uploads/clippy.png" />
+                <div id="expert_says">It looks like you're looking at the results. Want some help?<ul style="color:blue"><li ><span id="expert_thinks" text="{{ topo_data.2.0 }}" onclick="expert_says()">Tell me</span> </li><li>I know what I'm doing.</li></ul></div>
+            </div>
+            {% else %}
+            <div class="col-md-4">
+                <div class ="row"><h4>EXPERT SAYS</h4></div>
+                <div><p>There is no reference structure, so we cannot say whether this result is sensible. To get more info
+                about the topology of this structure you can submit it to <a href="http://knotprot.cent.uw.edu.pl/submit" target="_blank">KnotProt</a>.</p></div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+    {%  endif %}
+
+
+ </div>
+<div class="container tab-pane fade" id="information" style="padding-top: 25px">
+  <div class ="row">
+    <h1>
+      {{ pfam_id }}
+    </h1>
+  </div>
+  <div class="row">
+    <h2>
+      {{ pfam_name }}
+    </h2>
+  </div>
+  <div class="row">
+    <h3>
+      {{ pfam_title }}
+    </h3>
+    </br>
+    <p>
+    {{ desc }}
+    </p>
+    Belongs to clan: {{ clan_id }}/{{ clan_name }}
+    </br>
+  </div>
+
+  <div class="row">
+    <a href="{{ pfam_url }}">PFAM link</a>
+  </div>
+  <div class="row">
+    <a href="{{ pdb_url }}">PDB link</a>
+  </div>
+</div>
+
+    <div class="container tab-pane fade" id="usage" style="padding-top: 25px">
+            <div class="row" >
+                <div class="col-12">
+
+                    <div id="instruction_pv">
+                        <h2>Protein Visualization</h2>
+                        <p>
+                            Visualization is provided by <a href="https://github.com/biasmv/pv" target="_blank">PV</a>.<br/>
+                            Model structure is coloured in a rainbow gradient (from N- (blue) to C-(red) terminus). It can
+                            be changed to B-factor colouring using a button below the sequence.<br/>
+                            If more than one model has been calculated you can change the currently displayed one using buttons
+                            above the visualization window.
+                        </p>
+                        <hr>
+                        <p>
+                            If a reference structure from RCSB PDB is available it is superposed and shown in a partially transparent gray.
+
+                            By default only the model structure is <i>active</i>, so can be clicked, and will have contacts displayed.
+                            Distance map used for the plot are changed along with the active model.
+                            <br/>
+                            Currently inactive model can be hidden using a button above the visualization.
+                            <br/>
+                            When changing the active model to the PDB reference structure, only the parts which have been modeled,
+                            (so appear in the Multiple Sequence Alignment used for DCA) are activated.
+                        </p>
+                        <hr>
+                        <p>
+                            Clicking on the currently active model selects the residue under cursor in the visualization,
+                            on the plot, and on the sequence.
+                        </p>
+                    </div>
+                    <div id="instruction_dcaplot">
+                        <h2>Direct Information Plot</h2>
+                        <p>
+                            Plot displays a number of top scoring, in terms of Direct Information, contacts, between
+                            residues more than three amino acids apart. Axes are annotated with residue indices,
+                            and automatically detected secondary structure elements are displayed along (alpha helices in magenta,
+                            beta sheets in cyan).
+                            Default plot shows the <i>(protein length)</i> top scoring residue pairs. Dots on the plot can
+                            be coloured according to the relative DI using a button below the sequence.
+                            Number of currently displayed points can be changed using the slider, or a textbox below it,
+                            or by modifying the "Lower bound for DI scores".
+                            <br/>
+                            Below the slider, number of interactions shown is presented (including as a percentage), as well as
+                            the Positive Predictive Value (number of interactions with DI above the cutoff, with C-beta atoms
+                            closer than currently selected "Cutoff distance").
+                        </p>
+                        <p>
+                            There are multiple methods of calculating DI, which result in differing scores. Currently selected
+                            DI file can be changed with the buttons above the plot (if more than one is available).
+                        </p>
+                        <p>
+                            <b>Selecting</b>
+                            Selections can be made on the plot either using a traditional selection box (by clicking and dragging
+                            the mouse cursor on the plot), or by freehand drawing (by holding the <kbd>Shift</kbd> button while dragging).<br/>
+                            Clicking on the plot clears current selection.<br/>
+                            Holding the <kbd>Ctrl</kbd> button allows adding selections. To improve readability, consecutive selections are marked in a different colour.
+                        </p>
+                        <p>
+                            <b>Contact bonds</b>
+                            All plotted interactions which fall within one of the selections will be added as lines between
+                            given residues in the protein visualization (as long as both residues are present in the structure).
+                            By default they are coloured according to the selection colour, but this can be change to either
+                            plot-point-based colouring (when "Colouring of the plot" is set to "Rainbow"), or distance-based ("Colouring of the
+                            contact bonds" set to "Distance").
+                        </p>
+                        <p>
+                            <b>Alternative plot modes</b>
+                            By default only DI scores are shown, binary-coded - all interactions scoring above the given DI cut-off
+                            are displayed. Plot colouring can be changed to a rainbow gradient, according to DI, using "Colouring
+                            of the plot" button.<br/>
+                        </p>
+                        <p>Other plot modes can be selected using buttons immediately below the sequence:
+                            <ul>
+                                <li>
+                                    <p>DI scores and distance (side by side). This keeps the default plot in the lower triangle,
+                                    while changing the upper triangle of the plot to a binary-coded distance map (residues with C-betas closer
+                                    than the specified cut-off distance are shown).</p>
+                                </li>
+                                <li><p>
+                                    DI scores and distance (overlayed). Gray points indicate pairs of residues closer than the distance threshold,
+                                    with low DI (False negatives). Red points are interactions with DI above the cut-off but further away in the structure
+                                    (False positives). Blue points are interactions close in the structure, with high DI scores (True positives).</p>
+                                </li>
+                                When reference structure is available:
+                                <li><p>
+                                Model and reference contact maps (overlayed). Purple points indicate pairs of residues which are in contact 
+                                (distance between C-beta atoms lower than the specified cut-off) both in the model and in the reference structure. 
+                                Red are contacts present only in the model, blue - those exclusive to the reference structure.
+                                </p></li>
+                                <li><p>
+                                Model and reference distance maps (side-by-side). Lower triangle of the plot shows rainbow coloured map
+                                of pairwise distances for the model, upper triangle displayes the same for the reference structure. Upper bound of the 
+                                distances used for colouring depends on the maximum value for the currently active model.
+                                
+                                </p></li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div id="instruction_seq">
+                        <h2>Sequence</h2>
+                        <p>Clicking on the sequence residues marks them also on the structure, and in the DI plot. To select consecutive residues, click and drag.
+                        To undo selection, click on the selected residue (or click and drag to deselect multiple residues).</p>
+                    </div>
+                    <div id="instruction_topo">
+                        <h2>Topology</h2>
+                        <p>For each model a full-chain topology is calculated - the most often appearing knot signature, when closing the protein chain
+                        in a 100 random directions (further details can be found in <a href="http://knotprot.cent.uw.edu.pl" target="_blank">KnotProt</a>).
+                        This is then visualized as a simplified knot icon, and corresponding numerical name.</p>
+                        <p>If a refererence structure from the RCSB PDB is known, same analysis is performed for this structure, for comparison.
+                        Additionally, we give a basic interpretation of the compared results, taking into account the presence of gaps in the reference
+                        structure - which can influence topology calculations.</p>
+                        <p>When changing the displayed model, both topology results and comparative interpretation (when available) change accordingly.</p>
+                    </div>
+
+
+ <!--    <ol><b>USAGE:</b>
+    <li>Click&drag on the plot to select a region and display valid bonds (over DI cutoff)</li>
+    <li>Single click clears selection</li>
+    <li>Selecting while holding Ctrl buttons adds new selection</li>
+    <li>Selection (and bonds) persist after changing plot mode and colouring mode</li>
+    <li>Bonds added in simple mode are coloured according to selection rectangle colour. Selecting in rainbow mode adds bonds coloured according to plot marker colour</li>
+    <li>Zoom in/zoom out in the canvas using Scroll</li>
+    <li><b>MY FAVOURITE FEATURE:</b> Try selecting while holding "Shift" button</li>
+    <li>Red on axes indicates Alpha helices, blue indicates Beta sheets</li>
+    <li>"DI scores file:" button group changes between differenct coupling files (bonds are changed accordingly)</li>
+    <hr width="50%"/>
+    <li>Selection on structure (by clicking, holding "Shift" allows extension) marks given region on plot (WITHOUT SELECTING) and on the sequence</li>
+    <li>Selection on sequence (clicking and dragging, select/deselect mode depends on status of the first clicked residue) marks given region on plot (WITHOUT SELECTING) and on the structure</li>
+    </ol>-->
+
+    </div></div>
+
+
+
+
+  </div>
+
+
+
+</div>
+</div>
+<!--</div>-->
+<script src="{{STATIC_URL}}js/rainbowvis.js"></script>
+<script src="{{STATIC_URL}}js/contact_map.js"></script> 
+<script src="{{STATIC_URL}}js/needle.js"></script> 
+{% endblock %}

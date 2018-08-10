@@ -1,0 +1,4 @@
+Notch
+LNR domain
+The LNR (Lin-12/Notch repeat) domain is found in three tandem copies in Notch related proteins. The structure of the domain has been determined by NMR [1] and was shown to contain three disulphide bonds and coordinate a calcium ion.  Three repeats are also found in the PAPP-A peptidase [2].
+

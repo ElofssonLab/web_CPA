@@ -1,0 +1,5 @@
+Phospholip_A2_1
+Phospholipase A2
+Phospholipase A2 releases fatty acids from the second carbon group of glycerol. Perhaps the best known members are secreted snake venoms, but also found in secreted pancreatic and membrane-associated forms. Structure is all-alpha, with two core disulfide-linked helices and a calcium-binding loop. This alignment represents the major family of PLA2s. A second minor family, defined by the honeybee venom PLA2 PDB:1POC and related sequences from Gila monsters (Heloderma), is not recognised. This minor family conserves the core helix pair but is substantially different elsewhere. The PROSITE pattern PA2_HIS, specific to the first core helix, recognises both families.
+CL0629
+PLA2
