@@ -169,9 +169,11 @@ def get_browse(request):
             FDR = '{0:.3f}'.format(float(splitline[5]))
         else:
             FDR = ''
-        try:
+        if tm == 'NA':
+            tm = ''
+        elif len(tm) > 0:
             tm = '{0:.3f}'.format(float(tm))
-        except ValueError:
+        else:
             tm = ''
 
         # if tm == 'NA':
