@@ -169,12 +169,12 @@ def get_browse(request):
             FDR = '{0:.3f}'.format(float(splitline[5]))
         else:
             FDR = ''
-#         if tm.strip() == 'NA':
-#             fixed_tm = ''
-#         elif len(tm) > 0:
-#             fixed_tm = '{0:.3f}'.format(float(tm))
-#         else:
-#             fixed_tm = ''
+        if tm.strip() == 'NA':
+            fixed_tm = ''
+        elif len(tm) > 0:
+            fixed_tm = '{0:.3f}'.format(float(tm))
+        else:
+            fixed_tm = ''
 
         # if tm == 'NA':
         #     tm = ''
@@ -184,7 +184,7 @@ def get_browse(request):
         
         clan_acc = splitline[6]
         if has_model == "Yes":
-            processed_lines = [pfam_link, clan_acc, N, Meff, str(FDR), '{0:.3f}'.format(float(pcons)), '{0:.3f}'.format(float(proq3)), str(tm), has_pdb_structure]
+            processed_lines = [pfam_link, clan_acc, N, Meff, str(FDR), '{0:.3f}'.format(float(pcons)), '{0:.3f}'.format(float(proq3)), str(fixed_tm), has_pdb_structure]
             tableData.append(processed_lines)
         # temp_string += "</td><td>".join(splitline[1:]) + "</td></tr>"
         # tableData.append(temp_string)
