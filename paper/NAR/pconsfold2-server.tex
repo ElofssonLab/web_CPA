@@ -125,7 +125,34 @@ CONFOLD
 Pcons
 ProQ4
 PPV
-Known PDB structures
+\subsubsection{Comparison with Direct Information}
+Direct Information plot available on the Details page for every protein family allows
+comparison between Direct Information (which can be filtered to only highest values)
+and distance-based contacts in the model. For an "at a glance" comparison Positive 
+Predictive Value is dynamically calculated between DI scores above currently selected 
+cutoff and residue pairs within a given distance of each other.
+For better identification of highly correlated regions, points on the plot can be
+visualized on the structure.
+\subsubsection{Known PDB structures}
+Whenever a structure from a given family is available in PFam it is automatically
+used as a reference for the model on the Details page.
+In this case additional quality assessment options become available:
+\begin{itemize}
+\item Parts of the reference structure corresponding to the model residues are superposed and
+visualized in gray alongside the model.
+\item C-$\alpha$-based RMSD between model and corresponding reference residues is calculated.
+%I'm currently adding this
+\item Contact maps (of residues within a given cutoff) of model and reference can be overlayed,
+with the PPV now indicating portion on model contacts overlapping with the residue.
+\item Distance maps of the corresponding residues can be shown side by side.
+\end{itemize}
+
+\subsubsection{Topology}
+Topology of the full model chain is calculated to identify any knot-like structures within.
+If a reference structure is known, it is also topologically verified for comparison,
+as topology is expected to be conserved within families.
+%Definitely something missing here
+
 
 \subsection{Updates}
 
