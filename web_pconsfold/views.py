@@ -172,6 +172,7 @@ def get_browse(request):
         if tm == 'NA':
             tm = ''
         elif len(tm) > 0:
+            testvar = tm
             tm = '{0:.3f}'.format(float(tm))
         else:
             tm = ''
