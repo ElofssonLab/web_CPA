@@ -169,7 +169,7 @@ def get_browse(request):
             FDR = '{0:.3f}'.format(float(splitline[5]))
         else:
             FDR = ''
-        if tm == 'NA':
+        if tm.strip() == 'NA':
             fixed_tm = ''
         elif len(tm) > 0:
             fixed_tm = '{0:.3f}'.format(float(tm))
