@@ -169,10 +169,12 @@ def get_browse(request):
             FDR = '{0:.3f}'.format(float(splitline[5]))
         else:
             FDR = ''
-        if tm == "NA":
+        if tm == 'NA':
             tm = ''
         elif len(tm) > 0:
             tm = '{0:.3f}'.format(float(tm))
+        else:
+            tm = ''
         
         clan_acc = splitline[6]
         if has_model == "Yes":
