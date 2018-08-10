@@ -1,5 +1,0 @@
-RVP
-Retroviral aspartyl protease
-Single domain aspartyl proteases from retroviruses, retrotransposons, and badnaviruses (plant dsDNA viruses). These proteases are generally part of a larger polyprotein; usually pol, more rarely gag. Retroviral proteases appear to be homologous to a single domain of the two-domain eukaryotic aspartyl proteases such as pepsins, cathepsins, and renins (Pfam:PF00026).
-CL0129
-Peptidase_AA

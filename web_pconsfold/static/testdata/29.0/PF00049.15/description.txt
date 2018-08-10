@@ -1,5 +1,0 @@
-Insulin
-Insulin/IGF/Relaxin family
-Superfamily includes insulins; relaxins; insulin-like growth factor; and bombyxin. All are secreted regulatory hormones. Disulfide rich, all-alpha fold. Alignment includes B chain, linker (which is processed out of the final product), and A chain.
-CL0239
-Insulin

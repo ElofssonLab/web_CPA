@@ -1,5 +1,0 @@
-fn2
-Fibronectin type II domain
-
-CL0602
-Kringle

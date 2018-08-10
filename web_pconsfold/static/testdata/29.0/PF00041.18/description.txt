@@ -1,5 +1,0 @@
-fn3
-Fibronectin type III domain
-
-CL0159
-E-set

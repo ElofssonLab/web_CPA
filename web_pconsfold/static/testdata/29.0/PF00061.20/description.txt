@@ -1,5 +1,0 @@
-Lipocalin
-Lipocalin / cytosolic fatty-acid binding protein family
-Lipocalins are transporters for small hydrophobic molecules, such as lipids, steroid hormones, bilins, and retinoids. The family also encompasses the enzyme prostaglandin D synthase (EC:5.3.99.2). Alignment subsumes both the lipocalin and fatty acid binding protein signatures from PROSITE. This is supported on structural and functional grounds. The structure is an eight-stranded beta barrel.
-CL0116
-Calycin

@@ -1,5 +1,0 @@
-fn1
-Fibronectin type I domain
-
-CL0451
-FnI-like

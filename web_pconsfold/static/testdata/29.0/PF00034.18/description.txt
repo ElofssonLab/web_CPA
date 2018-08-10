@@ -1,5 +1,0 @@
-Cytochrom_C
-Cytochrome c
-The Pfam entry does not include all Prosite members.  The cytochrome 556 and cytochrome c' families are not included. All these are now in a new clan together. The C-terminus of DUF989, Pfam:PF06181, has now been merged into this family.
-CL0318
-Cytochrome-c

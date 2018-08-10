@@ -1,4 +1,0 @@
-HLH
-Helix-loop-helix DNA-binding domain
-
-

@@ -1,5 +1,0 @@
-Sugar_tr
-Sugar (and other) transporter
-
-CL0015
-MFS

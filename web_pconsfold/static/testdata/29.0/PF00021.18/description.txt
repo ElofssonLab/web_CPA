@@ -1,5 +1,0 @@
-UPAR_LY6
-u-PAR/Ly-6 domain
-This extracellular disulphide bond rich domain is related to Pfam:PF00087.
-CL0117
-uPAR_Ly6_toxin

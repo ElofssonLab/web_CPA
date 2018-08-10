@@ -1,5 +1,0 @@
-VWC
-von Willebrand factor type C domain
-The high cutoff was used to prevent overlap with Pfam:PF00094.
-CL0451
-FnI-like

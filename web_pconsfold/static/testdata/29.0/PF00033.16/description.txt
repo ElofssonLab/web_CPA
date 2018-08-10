@@ -1,5 +1,0 @@
-Cytochrome_B
-Cytochrome b/b6/petB
-
-CL0328
-2heme_cytochrom

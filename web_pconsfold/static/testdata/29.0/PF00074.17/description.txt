@@ -1,4 +1,0 @@
-RnaseA
-Pancreatic ribonuclease
-Ribonucleases. Members include pancreatic RNAase A and angiogenins. Structure is an alpha+beta fold -- long curved beta sheet and three helices.
-

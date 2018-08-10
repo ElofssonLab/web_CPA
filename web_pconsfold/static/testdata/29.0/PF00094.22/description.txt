@@ -1,4 +1,0 @@
-VWD
-von Willebrand factor type D domain
-Swiss:P17554 contains a vwd domain. Its function is unrelated but the similarity is very strong by several methods.
-

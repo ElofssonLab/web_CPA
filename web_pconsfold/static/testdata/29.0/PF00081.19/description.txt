@@ -1,4 +1,0 @@
-Sod_Fe_N
-Iron/manganese superoxide dismutases, alpha-hairpin domain
-superoxide dismutases (SODs) catalyse the conversion of superoxide radicals to hydrogen peroxide and molecular oxygen.  Three evolutionarily distinct families of SODs are known, of which the Mn/Fe-binding  family is one. In humans, there is a cytoplasmic Cu/Zn SOD, and a mitochondrial Mn/Fe SOD. N-terminal domain is a long alpha antiparallel hairpin.  A small fragment of YTRE_LEPBI matches well - sequencing error?
-

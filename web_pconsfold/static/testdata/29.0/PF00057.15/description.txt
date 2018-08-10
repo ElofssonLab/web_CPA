@@ -1,4 +1,0 @@
-Ldl_recept_a
-Low-density lipoprotein receptor domain class A
-
-

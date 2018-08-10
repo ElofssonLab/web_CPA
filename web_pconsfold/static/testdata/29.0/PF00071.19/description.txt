@@ -1,5 +1,0 @@
-Ras
-Ras family
-Includes sub-families Ras, Rab, Rac, Ral, Ran, Rap Ypt1 and more. Shares P-loop motif with GTP_EFTU, arf and myosin_head.  See Pfam:PF00009 Pfam:PF00025, Pfam:PF00063. As regards Rab GTPases, these are important regulators of vesicle formation, motility and fusion. They share a fold in common with all Ras GTPases: this is a six-stranded beta-sheet surrounded by five alpha-helices [1].
-CL0023
-P-loop_NTPase

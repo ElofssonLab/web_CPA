@@ -1,5 +1,0 @@
-Laminin_N
-Laminin N-terminal (Domain VI)
-
-CL0202
-GBD

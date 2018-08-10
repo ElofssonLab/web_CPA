@@ -1,5 +1,0 @@
-SH2
-SH2 domain
-
-CL0541
-SH2-like

@@ -1,4 +1,0 @@
-Sod_Cu
-Copper/zinc superoxide dismutase (SODC)
-superoxide dismutases (SODs) catalyse the conversion of superoxide radicals to hydrogen peroxide and molecular oxygen.  Three evolutionarily distinct families of SODs are known, of which the copper/zinc-binding  family is one. Defects in the human SOD1 gene cause familial amyotrophic lateral sclerosis (Lou Gehrig's disease). Structure is an eight-stranded beta sandwich, similar to the immunoglobulin fold.
-

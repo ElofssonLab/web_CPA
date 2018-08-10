@@ -1,5 +1,0 @@
-ABC_tran
-ABC transporter
-ABC transporters for a large family of proteins responsible for translocation of a variety of compounds across biological membranes.  ABC transporters are the largest family of proteins in many completely sequenced bacteria. ABC transporters are composed of two copies of this domain and two copies of a transmembrane domain Pfam:PF00664.  These four domains may belong to a single polypeptide as in Swiss:P13569, or belong in different polypeptide chains.
-CL0023
-P-loop_NTPase

@@ -1,4 +1,0 @@
-Serpin
-Serpin (serine protease inhibitor)
-Structure is a multi-domain fold containing a bundle of helices and a beta sandwich.
-

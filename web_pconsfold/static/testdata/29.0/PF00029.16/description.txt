@@ -1,5 +1,0 @@
-Connexin
-Connexin
-Connexin proteins form gap-junctions between cells. They carry four transmembrane regions, hence why this family now includes Connexin_CCC, which represented the second pair of TMs.
-CL0375
-Transporter

@@ -1,5 +1,0 @@
-Cys_knot
-Cystine-knot domain
-The family comprises glycoprotein hormones and the C-terminal domain of various extracellular proteins.  It is believed to be involved in disulfide-linked dimerisation.
-CL0079
-Cystine-knot

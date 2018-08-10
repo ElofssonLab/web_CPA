@@ -1,5 +1,0 @@
-AAA
-ATPase family associated with various cellular activities (AAA)
-AAA family proteins often perform chaperone-like functions that assist in the assembly, operation, or disassembly of protein complexes [2].
-CL0023
-P-loop_NTPase

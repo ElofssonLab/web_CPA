@@ -1,5 +1,0 @@
-TNFR_c6
-TNFR/NGFR cysteine-rich region
-
-CL0607
-TNF_receptor

@@ -1,5 +1,0 @@
-GTP_EFTU
-Elongation factor Tu GTP binding domain
-This domain contains a P-loop motif, also found in several other families such as Pfam:PF00071, Pfam:PF00025 and Pfam:PF00063. Elongation factor Tu consists of three structural domains, this plus two C-terminal beta barrel domains.
-CL0023
-P-loop_NTPase

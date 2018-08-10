@@ -1,5 +1,0 @@
-TGF_beta
-Transforming growth factor beta like domain
-
-CL0079
-Cystine-knot

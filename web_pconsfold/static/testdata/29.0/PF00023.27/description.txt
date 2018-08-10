@@ -1,5 +1,0 @@
-Ank
-Ankyrin repeat
-Ankyrins are multifunctional adaptors that link specific proteins to the membrane-associated, spectrin- actin cytoskeleton. This repeat-domain is a 'membrane-binding' domain of up to 24 repeated units, and it mediates most of the protein's binding activities. Repeats 13-24 are especially active, with known sites of interaction for the Na/K ATPase, Cl/HCO(3) anion exchanger, voltage-gated sodium channel, clathrin heavy chain and L1 family cell adhesion molecules. The ANK repeats are found to form a contiguous spiral stack such that ion transporters like the anion exchanger associate in a large central cavity formed by the ANK repeat spiral, while clathrin and cell adhesion molecules associate with specific regions outside this cavity [2][3].
-CL0465
-Ank

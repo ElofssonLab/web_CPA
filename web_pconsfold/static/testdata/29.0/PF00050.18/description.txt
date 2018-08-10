@@ -1,5 +1,0 @@
-Kazal_1
-Kazal-type serine protease inhibitor domain
-Usually indicative of serine protease inhibitors. However, kazal-like domains are also seen in the extracellular part of agrins, which are not known to be protease inhibitors. Kazal domains often occur in tandem arrays. Small alpha+beta fold containing three disulphides. Alignment also includes a single domain from transporters in the OATP/PGT family Swiss:P46721.
-CL0005
-Kazal
