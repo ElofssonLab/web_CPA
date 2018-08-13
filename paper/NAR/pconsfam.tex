@@ -15,10 +15,10 @@
 
 \author{%
 John Lamb\,$^{1,*}$,
-Aleksandra Jarmolińska\,$^{2,*}$
+Aleksandra I. Jarmolinska\,$^{2,*}$
 Mirco Michel\,$^{1,*}$,
 David Menéndez-Hurtado\,$^{1,*}$,
-Joanna Sułkowska,$^{2,\dagger}$
+Joanna I. Sulkowska,$^{2,\dagger}$
 Arne Elofsson\,$^{1,\dagger}$%
 \footnote{To whom correspondence should be addressed.
 Tel: +46 706951045; Email: arne@bioinfo.se}}
@@ -27,7 +27,8 @@ Tel: +46 706951045; Email: arne@bioinfo.se}}
 $^{1}$Science for Life Laboratory and Department of Biochemistry and
 biophysics, Stockholm Unviersity, Tomtebodav 23, 171 21 Solna, Sweden
 and
-$^{2}$ Warsaw, Poland 
+$^{2}$ Centre of New Technologies, University of Warsaw, Banacha 2c, 02-097 Warsaw,
+Poland
 $^{*}$ contributed equally
 $^{\dagger}$=contributing authors
 % Affiliation must include:
@@ -177,8 +178,11 @@ additional quality estimators such as PconsC4 and ProQ4
 scores. 
 
 \subsection{Topology}
-The knotted topology was established using an implementation
-of Alexander polynomial described in the KnotProt database \cite{jamroz2014knotprot}.
+The knotted topology was established using an implementation of Alexander polynomial described in the KnotProt database \cite{jamroz2014knotprot}. One hundred random closures are chosen in a way that the endpoints are connected to two randomly 
+chosen points on a sphere encompassing the whole protein. The two new endpoints are 
+connected on the surface of the sphere. The closed backbone is then reduced using a
+KMT algorithm and the Alexander polynomial is computed. The structure is called knotted if the same type of knot
+appear more than 40\% of cases. 
 
 \section{Results}
 
@@ -205,6 +209,21 @@ learning methodology for contact predictions. In general this provide
 the better coverage of small protein families.
 
 
+Topology plays an ever-increasing role in modern life sciences since
+the discovery and artificial creation of knots in proteins and DNA.
+Nowadays, at least 7\% of proteins are known to be knotted, linked or
+to contain lassos, even though for a long time it was believed that
+proteins should not be entangled \cite{sulkowska2018entangled}. Knotted proteins appear in all
+kingdoms of life, and tend to be preserved throughout evolution \cite{sulkowska2012conservation}. 
+Knots are believed to be functionally advantageous and to provide extra
+stability to protein chains \cite{christian2016methyl}.
+Thus the PconsFam reports also the information about the topology of
+modeled structures. This information should be used as an additional
+descriptor to validate structures \cite{khatib2006rapid}. The figure shows a
+predicted structure from PF01018 family with the so-called Gordian
+knot. It was shown that even though members of this family have very
+low sequence similarity (below 20\%), the topology of all known
+structures is the same \cite{sulkowska2012conservation}.
 
 
 \begin{figure}[t]
@@ -345,8 +364,7 @@ show updated and relevant data.
 
 \section{Acknowledgements}
 
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text.
+This work was supported by National Science Centre #2012/07/E/NZ1/01900 (to JIS).
 
 
 \subsubsection{Conflict of interest statement.} None declared.
@@ -369,3 +387,43 @@ Text. Text. Text. Text.
   publisher={Oxford University Press},
   note={10.1093/nar/gku1059}
 }
+@article{sulkowska2012conservation,
+  title={Conservation of complex knotting and slipknotting patterns in proteins},
+  author={Su{\l}kowska, Joanna I and Rawdon, Eric J and Millett, Kenneth C and Onuchic, Jose N and Stasiak, Andrzej},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={109},
+  number={26},
+  pages={E1715--E1723},
+  year={2012},
+  publisher={National Acad Sciences},
+  note={10.1073/pnas.1205918109}
+}
+@incollection{sulkowska2018entangled,
+  title={Entangled Proteins: Knots, Slipknots, Links, and Lassos},
+  author={Sulkowska, Joanna I and Su{\l}kowski, Piotr},
+  booktitle={The Role of Topology in Materials},
+  pages={201--226},
+  year={2018},
+  publisher={Springer}
+}
+@article{christian2016methyl,
+  title={Methyl transfer by substrate signaling from a knotted protein fold},
+  author={Christian, Thomas and Sakaguchi, Reiko and Perlinska, Agata P and Lahoud, Georges and Ito, Takuhiro and Taylor, Erika A and Yokoyama, Shigeyuki and Sulkowska, Joanna I and Hou, Ya-Ming},
+  journal={Nature structural \& molecular biology},
+  volume={23},
+  number={10},
+  pages={941},
+  year={2016},
+  publisher={Nature Publishing Group}
+}
+@article{khatib2006rapid,
+  title={Rapid knot detection and application to protein structure prediction},
+  author={Khatib, Firas and Weirauch, Matthew T and Rohl, Carol A},
+  journal={Bioinformatics},
+  volume={22},
+  number={14},
+  pages={e252--e259},
+  year={2006},
+  publisher={Oxford University Press}
+}
+
