@@ -15,10 +15,10 @@
 
 \author{%
 John Lamb\,$^{1,*}$,
-Aleksandra Jarmolińska\,$^{2,*}$
+Aleksandra I. Jarmolinska\,$^{2,*}$
 Mirco Michel\,$^{1,*}$,
 David Menéndez-Hurtado\,$^{1,*}$,
-Joanna Sułkowska,$^{2,\dagger}$
+Joanna I. Sulkowska,$^{2,\dagger}$
 Arne Elofsson\,$^{1,\dagger}$%
 \footnote{To whom correspondence should be addressed.
 Tel: +46 706951045; Email: arne@bioinfo.se}}
@@ -27,8 +27,13 @@ Tel: +46 706951045; Email: arne@bioinfo.se}}
 $^{1}$Science for Life Laboratory and Department of Biochemistry and
 biophysics, Stockholm Unviersity, Tomtebodav 23, 171 21 Solna, Sweden
 and
+<<<<<<< HEAD
 $^{2}$ Interdisciplinary Laboratory of Biological Systems Modelling
 ul. S. Banacha 2c, 02-097 Warsaw, Poland 
+=======
+$^{2}$ Centre of New Technologies, University of Warsaw, Banacha 2c, 02-097 Warsaw,
+Poland
+>>>>>>> edddcae0bb6a2db70da710e7fb992811feafc57e
 $^{*}$ contributed equally
 $^{\dagger}$=contributing authors
 % Affiliation must include:
@@ -46,9 +51,23 @@ Accepted March 1, 2019}
 
 
 
-
 \begin{abstract}
-
+Predicting contact maps and tertiary structure of proteins continues
+to be important as the progress of experimentally solved structures
+is slow. 
+Even though grouping by both sequence and structure homology can in many
+cases give an idea of the structure of protein there are still
+many groups of proteins that lack a representative structure.
+To help in this, we here present PconsFam which is an intuative and
+interactive webinterface for predicted contact maps and tertiary
+structure models of the entire PFAM-database.
+By modelling all families, both those with and those without a
+representative structure, using the PconsFold2 pipeline, and running
+quality assessment estimator on them we can give an estimation for how
+confident the contact maps and structures are. 
+PconsFam is planned to follow each PFAM release and present predicted
+structures for families both with and without representative structure
+and present them in an easily accessible format.
 
 \end{abstract}
 
@@ -73,7 +92,6 @@ created by Rosetta are of slighlty higher quality than models by
 CNS~\cite{Michel25161237} the advantagae of CNS is clear as it is much
 faster. 
 
-
 Recently we developed the PconsFold2 pipeline~\cite{Michel28881974}, which uses contact
 predictions from PconsC3~\cite{Michel28535189} the CNS based CONFOLD folding
 algorithm~\cite{Adhikari25974172} and most importantly multiple model quality estimations
@@ -83,20 +101,33 @@ proteins. Here we present the related web resource PconsFam
 information for most Pfam families using the PconsFold2
 pipeline.
 
-
 The PconsFold2 pipeline can predict accurate models (TM-score $>0.5$
 for 51\% of the large families ($>1000$ effective sequences). For
-smaller families the fraction of correct models decreases, bu they
+smaller families the fraction of correct models decreases, but they
 still exist. Therefore, a major challenge for large scale predictions
 is to distinguish between correct and incorrect models. Here, we have
 applied a set of model quality estimation methods~\cite{Kryshtafovych28833563}.
 
-
-\bf{(ADD MORE NUMBERS)}
-
-
+\begin{table}[]
+\centering
+\caption{Number of Pfam families with unknown structure that can be modeled at
+1\% and 10\% FPR.}
+\label{tab:nopdb1}
+    \begin{tabular}{lp{2cm}rp{2cm}rp{2cm}}
+  \hline
+ & 0.01 & 0.1 \\ 
+  \hline
+  ProQ3D & 36 & 225 \\ 
+  PcombC & 42 & 179 \\ 
+  Pcons & 18 & 218 \\ 
+  CNS-contact & 62 & 232 \\  \hline 
+  Union & 114 & 558 \\ 
+  All & 6379 &  6379 \\ 
+   \hline
+\end{tabular}
+\end{table}
 When the PconsFold2 pipeline was applied to 6379 PFAM families of
-unknown structure 558 modes with a predicted specificity over 90\% was
+unknown structure 558 models with a predicted specificity over 90\% was
 created. Out of these, 415 had never been reported before.
 
 {\bf With
@@ -108,7 +139,9 @@ For each family in
 PFAM, multiple contact maps are generated and from these a set of
 models are predicted and ranked with quality assessment
 estimators. The model quality estimation gives an indication on the
-reliability of the model. The top ranked models for each predicted
+reliability of the model. 
+\newpage
+The top ranked models for each predicted
 family can be visualised and are available for download. The full set
 of contact predictions for is available for visualisation together
 with the predicted model in an intuitive and powerful user-interface
@@ -117,23 +150,44 @@ structure.
 
 \section{Material and methods}
 \subsection{PconsFold2}
-We have used 
-
-PconsC4
-CONFOLD
+PconsFold2 works in three separate steps. Firstly, multiple alignments
+are generated using HHblits and Jackhmmer ~\cite{eddy22039361} at different 
+E-value cutoffs.
+Secondly, PConsC3 is used for contact predictions. All the alignments are used to 
+create one contact map for each alignment.
+Thirdly, these contact maps, together with predicted secondary structure, is used
+as input to CONFOLD to generate 50 models for each contact map, resulting in a total
+of 200 models.
 
 \subsection{Model Quality assessment}
-Pcons
-ProQ4
-PPV
-Known PDB structures
+The default ranking of models generated by CONFOLD is by the CNS contact energy (NOE) 
+which is the sum of all violations of all contact restraints used in the input.
+To make the score comparable between models it is normalized by protein length.
+To easily rank the top model, the three measures Pcons, ProQ3D and PPV was 
+combined to create the PcombC score as follows.
 
+$$
+S_{PcombC} = \frac{0.3}{1.9} \cdot S_{Pcons} + \frac{0.6}{1.9} \cdot S_{ProQ3D} + \frac{1.0}{1.9} \cdot PPV
+$$
+
+This was used on all families with a known structure to rank the best model.
+
+For families without a known structure the union of all quality assesment methods were used.
+A score cutoff at FPR 0.01 and 0.1 was used to estimate how many unknown structures
+could be predicted accurately (TM-score $\ge 0.5$). The result can be seen in table~\ref{tab:ss}.
 \subsection{Updates}
 
 With our pipeline the website will be updated with every PFAM release
 and the currently running update on PFAM 31.0 will introduce
-additional quality estimators such as PPV, Pcons score and ProQ4
+additional quality estimators such as PconsC4 and ProQ4
 scores. 
+
+\subsection{Topology}
+The knotted topology was established using an implementation of Alexander polynomial described in the KnotProt database \cite{jamroz2014knotprot}. One hundred random closures are chosen in a way that the endpoints are connected to two randomly 
+chosen points on a sphere encompassing the whole protein. The two new endpoints are 
+connected on the surface of the sphere. The closed backbone is then reduced using a
+KMT algorithm and the Alexander polynomial is computed. The structure is called knotted if the same type of knot
+appear more than 40\% of cases. 
 
 \section{Results}
 
@@ -241,7 +295,10 @@ A similar resource is Baker Lab’s GREMLIN database~\cite{Kamisetty2013} which 
 PFAM 27.0~\cite{Sonnhammer:1997} . However, it has not been updated since
 2013. In contrast we plan to update PconsFam within a few month after
 each Pfam release. This is possible as the pipeline uses a much less
-computationally costly methodology. PconsC4 is at least one order of
+computationally costly methodology and is highly modular. Each of the three steps
+(generate alignments, generate contact maps and generate models) can be changed
+independently with faster/more accurate tools. PconsC4, which is currently
+being implemented, is at least one order of
 magnitude faster than comparative methods and by using CONFOLD the
 folding is much faster than Rosetta.
 
@@ -251,11 +308,25 @@ the pdb structure if one exists. We extend on this by using a tool
 that can visualize the predicted contacts on the models. In our
 database, both contact maps and predicted structure can be
 investigated in detail and downloaded.  We have also used a deep
-learning methodology (currently PconsC3 but will be updated to PconsC4
-before publication) for contact predictions. In general this provide
+learning methodology for contact predictions. In general this provide
 the better coverage of small protein families.
 
 
+Topology plays an ever-increasing role in modern life sciences since
+the discovery and artificial creation of knots in proteins and DNA.
+Nowadays, at least 7\% of proteins are known to be knotted, linked or
+to contain lassos, even though for a long time it was believed that
+proteins should not be entangled \cite{sulkowska2018entangled}. Knotted proteins appear in all
+kingdoms of life, and tend to be preserved throughout evolution \cite{sulkowska2012conservation}. 
+Knots are believed to be functionally advantageous and to provide extra
+stability to protein chains \cite{christian2016methyl}.
+Thus the PconsFam reports also the information about the topology of
+modeled structures. This information should be used as an additional
+descriptor to validate structures \cite{khatib2006rapid}. The figure shows a
+predicted structure from PF01018 family with the so-called Gordian
+knot. It was shown that even though members of this family have very
+low sequence similarity (below 20\%), the topology of all known
+structures is the same \cite{sulkowska2012conservation}.
 
 
 
@@ -370,44 +441,44 @@ $^{**}$ respectively for all columns except the last.}
 
 
 \section{Discussion}
-
-
-
                 
 In summary the novelties of PconsFam are:
 An informative user interface that enables examination of multiple models and contact maps.
 Novel tool to help investigate and interpret contact maps.
 Using the same pipeline for families with and without known structures.
 We use model quality estimation methods (ProQ and Pcons) to evaluate FDR 
-PconsFam is complementary to existing resources, i.e. high quality models exist for other families than in Gremlin.
-PconsFam will be updates at regular times to follow PFAM releases.
-Future directions
+PconsFam is complementary to existing resources, i.e.\ high quality models exist for other families than in Gremlin.
+PconsFam will be updated at regular times to follow PFAM releases.
 
 Modularity of pipeline
+As PconsFold2 is highly modular, each of the three steps in the pipeline
+can be changed independently. Any alignment tool can be used to generate the 
+alignments and any contact prediction tool can be used. This opens up
+the possibility to run different tools for different dataset where
+there are known tools that works better for specific data.
 
+Future directions
+Currently the input to CONFOLD is both predicted contact maps from PConsC3 and
+predicted secondary structure from PSIPRED. Both of these are predicted in PConsC4
+so a change to PConsC4 will streamline the process even further. PConsC4 is also
+much faster than the currently implemented PConsC3 and will therefore enable
+both more frequent updates but also higher quality contact maps.
 
-Conctacts
-
-SS prediciton
-
-Newer PFAM
-
-
-We are working un an  update of the 
-database to use an update to the pipeline based of PconsC4, which is
-much faster enabling frequent updates as well as an improved model
-quality estimator, ProQ4.2
+An improved model quality estimator in ProQ4 is also being worked on to increase
+or quality assessment methods.
 
 \section{Conclusions}
+Here we present an intuative and interactive webinterface for contact maps and 
+models for PFAM-families. We have used the modula PconsFold2 pipeline to predicted
+both multiple contact maps and multiple models for all legible families and presents
+both of these both visually with interactive possibilities together with quality 
+assessment scores to highlight the confidence in both contact maps and models.
+The underlying pipeline is planned to follow each PFAM release and therefore
+show updated and relevant data.
 
+\section{Acknowledgements}
 
-
-
-
-\section{ACKNOWLEDGEMENTS}
-
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text.
+This work was supported by National Science Centre #2012/07/E/NZ1/01900 (to JIS).
 
 
 \subsubsection{Conflict of interest statement.} None declared.
@@ -417,3 +488,56 @@ Text. Text. Text. Text.
 
 
 \end{document}
+
+
+@article{jamroz2014knotprot,
+  title={KnotProt: a database of proteins with knots and slipknots},
+  author={Jamroz, Michal and Niemyska, Wanda and Rawdon, Eric J and Stasiak, Andrzej and Millett, Kenneth C and Su{\l}kowski, Piotr and Sulkowska, Joanna I},
+  journal={Nucleic acids research},
+  volume={43},
+  number={D1},
+  pages={D306--D314},
+  year={2014},
+  publisher={Oxford University Press},
+  note={10.1093/nar/gku1059}
+}
+@article{sulkowska2012conservation,
+  title={Conservation of complex knotting and slipknotting patterns in proteins},
+  author={Su{\l}kowska, Joanna I and Rawdon, Eric J and Millett, Kenneth C and Onuchic, Jose N and Stasiak, Andrzej},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={109},
+  number={26},
+  pages={E1715--E1723},
+  year={2012},
+  publisher={National Acad Sciences},
+  note={10.1073/pnas.1205918109}
+}
+@incollection{sulkowska2018entangled,
+  title={Entangled Proteins: Knots, Slipknots, Links, and Lassos},
+  author={Sulkowska, Joanna I and Su{\l}kowski, Piotr},
+  booktitle={The Role of Topology in Materials},
+  pages={201--226},
+  year={2018},
+  publisher={Springer}
+}
+@article{christian2016methyl,
+  title={Methyl transfer by substrate signaling from a knotted protein fold},
+  author={Christian, Thomas and Sakaguchi, Reiko and Perlinska, Agata P and Lahoud, Georges and Ito, Takuhiro and Taylor, Erika A and Yokoyama, Shigeyuki and Sulkowska, Joanna I and Hou, Ya-Ming},
+  journal={Nature structural \& molecular biology},
+  volume={23},
+  number={10},
+  pages={941},
+  year={2016},
+  publisher={Nature Publishing Group}
+}
+@article{khatib2006rapid,
+  title={Rapid knot detection and application to protein structure prediction},
+  author={Khatib, Firas and Weirauch, Matthew T and Rohl, Carol A},
+  journal={Bioinformatics},
+  volume={22},
+  number={14},
+  pages={e252--e259},
+  year={2006},
+  publisher={Oxford University Press}
+}
+
