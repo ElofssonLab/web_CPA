@@ -177,10 +177,11 @@ additional quality estimators such as PconsC4 and ProQ4
 scores. 
 
 \subsection{Topology}
-The knotted topology was established using an implementation of Alexander polynomial described in the KnotProt database \cite{jamroz2014knotprot}. Several hundred random closures are chosen in a way that the endpoints are connected to two randomly 
+The knotted topology was established using an implementation of Alexander polynomial described in the KnotProt database \cite{jamroz2014knotprot}. One hundred random closures are chosen in a way that the endpoints are connected to two randomly 
 chosen points on a sphere encompassing the whole protein. The two new endpoints are 
 connected on the surface of the sphere. The closed backbone is then reduced using a
-KMT algorithm and the Alexander polynomial is computed.
+KMT algorithm and the Alexander polynomial is computed. The structure is called knotted if the same type of knot
+appear more than 40\% of cases. 
 
 \section{Results}
 
@@ -215,7 +216,7 @@ proteins should not be entangled \cite{sulkowska2018entangled}. Knotted proteins
 kingdoms of life, and tend to be preserved throughout evolution \cite{sulkowska2012conservation}. 
 Knots are believed to be functionally advantageous and to provide extra
 stability to protein chains \cite{christian2016methyl}.
-Thus the Pfcon reports also the information about the topology of
+Thus the PconsFam reports also the information about the topology of
 modeled structures. This information should be used as an additional
 descriptor to validate structures \cite{khatib2006rapid}. The figure shows a
 predicted structure from PF01018 family with the so-called Gordian
