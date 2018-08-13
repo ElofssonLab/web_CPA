@@ -107,7 +107,7 @@ applied a set of model quality estimation methods~\cite{Kryshtafovych28833563}.
 \caption{Number of Pfam families with unknown structure that can be modeled at
 1\% and 10\% FPR.}
 \label{tab:nopdb1}
-    \begin{tabular}{lp{2cm}rp{2cm}rp{2cm}}
+    \begin{tabular}{p{0.2\textwidth}p{0.12\textwidth}rp{0.12\textwidth}r}
   \hline
  & 0.01 & 0.1 \\ 
   \hline
@@ -210,10 +210,8 @@ the better coverage of small protein families.
 \begin{figure}[t]
 \begin{center}
 \end{center}
-\caption{PconsC3/4 vs DCA
-ProQ evaluations 
-The PconsFold pipeline.}
     \includegraphics[width=0.5\textwidth]{figures/flowchart.eps}
+\caption{The PconsFold2 pipeline.}
 \label{fig:Pipeline}
 \end{figure}
 
@@ -221,24 +219,16 @@ The PconsFold pipeline.}
 \begin{figure}[t]
 \begin{center}
 \end{center}
-\caption{Comparison of contact prediction methods and available resources
-Comparison of databases of structure predictions
-Gremlin
-EV-fold ?
-Zhang ?.}
     \includegraphics[width=0.5\textwidth]{figures/fig1_PNAS.eps}
+    \caption{Comparison of contact prediction methods and available resources}
 \label{fig:comparison}
 
 \end{figure}
 \begin{figure}[t]
 \begin{center}
 \end{center}
-\caption{Comparison of contact prediction methods and available resources
-Comparison of databases of structure predictions
-Gremlin
-EV-fold ?
-Zhang ?.}
     \includegraphics[width=0.5\textwidth]{figures/fig4_PNAS.eps}
+    \caption{Comparison of contact prediction methods and available resources}
 \label{fig:comparison}
 \end{figure}
 
@@ -271,7 +261,6 @@ verview of the database.}
 
 \begin{table}[t!]
 \centering
-\caption{Average PPV of top $N/2$ predicted contacts on the benchmark dataset for different secondary structural classes. \label{tab:ss}}
 %{\begin{tabular}{lp{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}}\toprule
 {\begin{tabular}{lcccc}
   \hline
@@ -288,6 +277,7 @@ verview of the database.}
   counts & 210 & 55 & 35 & 110 \\
    \hline
 \end{tabular}}{}
+\caption{Average PPV of top $N/2$ predicted contacts on the benchmark dataset for different secondary structural classes. \label{tab:ss}}
 \end{table}
 
 
@@ -334,7 +324,7 @@ alignments and any contact prediction tool can be used. This opens up
 the possibility to run different tools for different dataset where
 there are known tools that works better for specific data.
 
-Future directions
+\subsection{Future directions}
 Currently the input to CONFOLD is both predicted contact maps from PConsC3 and
 predicted secondary structure from PSIPRED. Both of these are predicted in PConsC4
 so a change to PConsC4 will streamline the process even further. PConsC4 is also
