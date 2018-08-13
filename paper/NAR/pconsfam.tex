@@ -45,9 +45,23 @@ Accepted March 1, 2019}
 
 
 
-
 \begin{abstract}
-
+Predicting contact maps and tertiary structure of proteins continues
+to be important as the progress of experimentally solved structures
+is slow. 
+Even though grouping by both sequence and structure homology can in many
+cases give an idea of the structure of protein there are still
+many groups of proteins that lack a representative structure.
+To help in this, we here present PconsFam which is an intuative and
+interactive webinterface for predicted contact maps and tertiary
+structure models of the entire PFAM-database.
+By modelling all families, both those with and those without a
+representative structure, using the PconsFold2 pipeline, and running
+quality assessment estimator on them we can give an estimation for how
+confident the contact maps and structures are. 
+PconsFam is planned to follow each PFAM release and present predicted
+structures for families both with and without representative structure
+and present them in an easily accessible format.
 
 \end{abstract}
 
@@ -72,7 +86,6 @@ created by Rosetta are of slighlty higher quality than models by
 CNS~\cite{Michel25161237} the advantagae of CNS is clear as it is much
 faster. 
 
-
 Recently we developed the PconsFold2 pipeline~\cite{Michel28881974}, which uses contact
 predictions from PconsC3~\cite{Michel28535189} the CNS based CONFOLD folding
 algorithm~\cite{Adhikari25974172} and most importantly multiple model quality estimations
@@ -82,7 +95,6 @@ proteins. Here we present the related web resource PconsFam
 information for most Pfam families using the PconsFold2
 pipeline.
 
-
 The PconsFold2 pipeline can predict accurate models (TM-score $>0.5$
 for 51\% of the large families ($>1000$ effective sequences). For
 smaller families the fraction of correct models decreases, but they
@@ -90,13 +102,12 @@ still exist. Therefore, a major challenge for large scale predictions
 is to distinguish between correct and incorrect models. Here, we have
 applied a set of model quality estimation methods~\cite{Kryshtafovych28833563}.
 
-
-\begin{table}[bt!]
+\begin{table}[]
 \centering
 \caption{Number of Pfam families with unknown structure that can be modeled at
 1\% and 10\% FPR.}
 \label{tab:nopdb1}
-\begin{tabular}{rrr}
+    \begin{tabular}{lp{2cm}rp{2cm}rp{2cm}}
   \hline
  & 0.01 & 0.1 \\ 
   \hline
@@ -109,8 +120,6 @@ applied a set of model quality estimation methods~\cite{Kryshtafovych28833563}.
    \hline
 \end{tabular}
 \end{table}
-
-
 When the PconsFold2 pipeline was applied to 6379 PFAM families of
 unknown structure 558 models with a predicted specificity over 90\% was
 created. Out of these, 415 had never been reported before.
@@ -124,7 +133,9 @@ For each family in
 PFAM, multiple contact maps are generated and from these a set of
 models are predicted and ranked with quality assessment
 estimators. The model quality estimation gives an indication on the
-reliability of the model. The top ranked models for each predicted
+reliability of the model. 
+\newpage
+The top ranked models for each predicted
 family can be visualised and are available for download. The full set
 of contact predictions for is available for visualisation together
 with the predicted model in an intuitive and powerful user-interface
@@ -303,9 +314,6 @@ $^{**}$ respectively for all columns except the last.}
 
 
 \section{Discussion}
-
-
-
                 
 In summary the novelties of PconsFam are:
 An informative user interface that enables examination of multiple models and contact maps.
@@ -313,31 +321,35 @@ Novel tool to help investigate and interpret contact maps.
 Using the same pipeline for families with and without known structures.
 We use model quality estimation methods (ProQ and Pcons) to evaluate FDR 
 PconsFam is complementary to existing resources, i.e.\ high quality models exist for other families than in Gremlin.
-PconsFam will be updates at regular times to follow PFAM releases.
-Future directions
+PconsFam will be updated at regular times to follow PFAM releases.
 
 Modularity of pipeline
+As PconsFold2 is highly modular, each of the three steps in the pipeline
+can be changed independently. Any alignment tool can be used to generate the 
+alignments and any contact prediction tool can be used. This opens up
+the possibility to run different tools for different dataset where
+there are known tools that works better for specific data.
 
+Future directions
+Currently the input to CONFOLD is both predicted contact maps from PConsC3 and
+predicted secondary structure from PSIPRED. Both of these are predicted in PConsC4
+so a change to PConsC4 will streamline the process even further. PConsC4 is also
+much faster than the currently implemented PConsC3 and will therefore enable
+both more frequent updates but also higher quality contact maps.
 
-Conctacts
-
-SS prediciton
-
-Newer PFAM
-
-
-We are working un an  update of the 
-database to use an update to the pipeline based of PconsC4, which is
-much faster enabling frequent updates as well as an improved model
-quality estimator, ProQ4.2
+An improved model quality estimator in ProQ4 is also being worked on to increase
+or quality assessment methods.
 
 \section{Conclusions}
+Here we present an intuative and interactive webinterface for contact maps and 
+models for PFAM-families. We have used the modula PconsFold2 pipeline to predicted
+both multiple contact maps and multiple models for all legible families and presents
+both of these both visually with interactive possibilities together with quality 
+assessment scores to highlight the confidence in both contact maps and models.
+The underlying pipeline is planned to follow each PFAM release and therefore
+show updated and relevant data.
 
-
-
-
-
-\section{ACKNOWLEDGEMENTS}
+\section{Acknowledgements}
 
 Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
 Text. Text. Text. Text.
