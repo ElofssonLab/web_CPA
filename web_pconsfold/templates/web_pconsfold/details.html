@@ -29,7 +29,10 @@ var PFAM_MODEL = "{{ pfam_id }}";
   <li class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#information">Information</a>
   </li>
-    <li class="nav-item">
+    <li class="nav-item"  >
+    <a class="nav-link" data-toggle="tab" href="#downloads">Downloads</a>
+  </li>
+    <li class="nav-item"  >
     <a class="nav-link" data-toggle="tab" href="#usage">Usage instructions</a>
   </li>
 </ul>
@@ -39,12 +42,12 @@ var PFAM_MODEL = "{{ pfam_id }}";
   <div class ="row" style="margin-bottom: 10px">
       <div class="col-3"><h1>{{ pfam_id }}</h1></div>
       {%  if modelURLs.0 %}
-      <div class="col-3">
-          <button title="Select active structure" type="button" id="org_model_0" class="btn btn-primary btn-sm" onclick="activate_original_model(0)">Our model</button>
-          <button title="Select active structure" type="button" id="org_model_1" class="btn btn-outline-primary btn-sm" onclick="activate_original_model(1)">PDB structure</button>
+      <div class="col-3 only_when_pdb">
+<!--          <button title="Select active structure" type="button" id="org_model_0" class="btn btn-primary btn-sm" onclick="activate_original_model(0)">Our model</button>
+          <button title="Select active structure" type="button" id="org_model_1" class="btn btn-outline-primary btn-sm" onclick="activate_original_model(1)">PDB structure</button>-->
           <div class="btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary btn-sm">
-                <input type="checkbox" id="org_model_hide" onchange="hide_background_model()" autocomplete="off"> Hide gray model
+                <input type="checkbox" id="org_model_hide" onchange="hide_background_model()" autocomplete="off"> Hide PDB model
             </label>
           </div>
       </div>
@@ -63,9 +66,12 @@ var PFAM_MODEL = "{{ pfam_id }}";
               {%  endfor %}
             </div>
             </div>
-        {%  endif %}
         <div class="col-3">
-            Switch DI file
+	{% else %}
+        <div class="col-3 col-offset-3">
+		
+        {%  endif %}
+            Switch Direct Information file
             <div class="btn-group btn-group-toggle" data-toggle="buttons" id="model_radios">
               <label class="btn btn-secondary active btn-sm">
                 <input type="radio" name="di_files" id="di_hh0" onchange="change_di_file(0)" autocomplete="off" checked> HH0
@@ -192,11 +198,11 @@ var PFAM_MODEL = "{{ pfam_id }}";
                 <input type="radio" name="di_files" id="change_map_2" onchange="change_map_mode(2)" autocomplete="off"> Overlayed DI scores and distances
               </label>
               {%  if modelURLs.0 %}
-              <label class="btn btn-outline-secondary btn-sm">
+              <label class="btn btn-outline-secondary btn-sm only_when_pdb">
                 <input type="radio" name="di_files" id="change_map_3" onchange="change_map_mode(3)" autocomplete="off"> Overlayed model/reference contact maps
               </label>
-              <label class="btn btn-outline-secondary btn-sm">
-                <input type="radio" name="di_files" id="change_map_4" onchange="change_map_mode(4)" autocomplete="off"> Model/reference distances side-by-side
+              <label class="btn btn-outline-secondary btn-sm  only_when_pdb">
+                <input type="radio" name="di_files" id="change_map_4" onchange="change_map_mode(4)" autocomplete="off"> Model/reference distances
               </label>
               {% endif %}
             </div>
@@ -220,6 +226,20 @@ var PFAM_MODEL = "{{ pfam_id }}";
                 <input type="number" name="di_lower_bound" id="di_lower_bound" oninput="change_di_lower_bound()" min="0" max="1" step="0.01">
             </div>
         </div>
+{%  if modelURLs.0 %}
+        <div class="row">
+            <div class="col-6 text-left">RMSD (model/reference)</div>
+            <div class="col-2 text-left">
+		<span id="rmsd"></span> A
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 text-left">Calculated over</div>
+            <div class="col-2 text-left">
+		<span id="residues_used"></span> residues
+            </div>
+        </div>
+{% endif %}
     </div>
     <div class="col-4 text-left">
         <div class="row">
@@ -299,26 +319,29 @@ var PFAM_MODEL = "{{ pfam_id }}";
           <div class ="row"><h2>TOPOLOGY</h2></div>
         <div class ="row">
             <div class="col-md-4">
-                <div class ="row"><h4>OUR MODEL</h4></div>
+                <div class ="row"><h4>Model</h4></div>
                 <img class="obrazek_topologiczny" id="our_model_topology_img" im_src="{{STATIC_URL}}images/" src="{{STATIC_URL}}images/{{ topo_data.1.0 }}.png" />
-                <div class="topology_desc" id="our_model_topology">{{ topo_data.0.0 }}</div>
+                <div class="topology_desc" id="our_model_topology">{{ topo_data.0.0|safe }}</div>
             </div>
             {% if topo_data.3.strip|stringformat:"s" != "?"|stringformat:"s" %}
             <div class="col-md-4">
-                <div class ="row"><h4>PDB STRUCTURE</h4></div>
+                <div class ="row"><h4>Reference structure</h4></div>
                 <img class="obrazek_topologiczny" src="{{STATIC_URL}}images/{{ topo_data.4 }}.png" />
                 <div class="topology_desc" id="pdb_model_topology">
                 {%  if topo_data.3 %}
-                    {{ topo_data.3 }}<a href="http://knotprot.cent.uw.edu.pl/view/{{ pdb_id }}/{{ pdb_chain }}" target="_blank"> (view in KnotProt)</a>
+                    {{ topo_data.3|safe }}<a href="http://knotprot.cent.uw.edu.pl/view/{{ pdb_id }}/{{ pdb_chain }}" target="_blank"> (view in KnotProt)</a>
                  {% else %}
                     No data
                 {%  endif %}
                 </div>
             </div>
             <div class="col-md-4">
-                <div class ="row"><h4>EXPERT SAYS</h4></div>
-                <img class="spinacz img_thumbnail" src="http://www.arturgrabias.com/blog/wp-content/uploads/clippy.png" />
+                <div class ="row"><h4>Automatic interpretation</h4></div>
+		<div><p>{{ topo_data.2.0 }}</p></div>
+                <!-- 
+		<img class="spinacz img_thumbnail" src="http://www.arturgrabias.com/blog/wp-content/uploads/clippy.png" />
                 <div id="expert_says">It looks like you're looking at the results. Want some help?<ul style="color:blue"><li ><span id="expert_thinks" text="{{ topo_data.2.0 }}" onclick="expert_says()">Tell me</span> </li><li>I know what I'm doing.</li></ul></div>
+		-->
             </div>
             {% else %}
             <div class="col-md-4">
@@ -362,6 +385,31 @@ var PFAM_MODEL = "{{ pfam_id }}";
   </div>
   <div class="row">
     <a href="{{ pdb_url }}">PDB link</a>
+  </div>
+</div>
+
+<div class="container tab-pane fade" id="downloads" style="padding-top: 25px">
+  <div class ="row">
+    <div class="col-6">
+	Model .pdb files
+    </div>
+	<div class="col-6">
+		{% for file in modelURLs %}
+			{% if forloop.counter0 %}
+			<a href="{{file}}">Model {{forloop.counter0}}</a>
+			{% endif %}
+		{% endfor %}
+	</div>
+  </div>
+  <div class ="row">
+    <div class="col-6">
+	DI files
+    </div>
+	<div class="col-6">
+		{% for file in DIs %}
+			<a href="{{file}}">File {{forloop.counter0}}</a>
+		{% endfor %}
+	</div>
   </div>
 </div>
 

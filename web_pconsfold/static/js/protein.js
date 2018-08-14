@@ -405,7 +405,7 @@ function clone_structure(struct){
         var resids = struct._chains[0]._residues;
         for (var i = 0; i < resids.length; ++i) {
               var r = resids[i];
-              if(!r._isAminoacid){
+              if(!r._isAminoacid){//  && !r._name in SHORT_NAMES){
                 continue;
               }
               var residue = chain.addResidue(r.name(), i);
@@ -427,47 +427,15 @@ function superposition(url){
 //    console.log("spsadd",ORG_STRUCTURE._chains[0]._residues.length,SEQUENCE.length,)
     var org_length=0;
     for(var i=0; i<ORG_STRUCTURE._chains[0]._residues.length; i++){
-                if(ORG_STRUCTURE._chains[0]._residues[i]._isAminoacid) org_length++;
+                if(ORG_STRUCTURE._chains[0]._residues[i]._isAminoacid  /*|| ORG_STRUCTURE._chains[0]._residues[i]._name in SHORT_NAMES*/) org_length++;
     }
     if(org_length > SEQUENCE.length){
             hadToCut =1;
             var new_struct = clone_structure(ORG_STRUCTURE);
-//            new_struct._chains[0].eachBackboneTrace(console.log)
-//            console.log(new_struct)
-//            var new_struct_view = VIEWER.spheres('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('grey')});
-            ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('grey')});
-//            new_struct_view = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('gray')});
+		// REDUCED OPTION
+/*            ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('grey')});
             ORG_STRUCTURE_FULL_OBJ.setOpacity(0.3)
-//            new_struct_view.colorBy(color.uniform("magenta"))
-//            return
-//            console.log("rendering")
-            //console.log(new_struct)
-            //ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('lightblue')});
-            //ORG_STRUCTURE_FULL_OBJ.setOpacity(0.1)
-            //ORG_STRUCTURE_OBJ.colorBy(color.uniform('yellow'))
-            //console.log("rendering")
-
-         //ORG_STRUCTURE_FULL_OBJ = VIEWER.add('org_structure_full.protein', ORG_STRUCTURE_OBJ)
-            //ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',ORG_STRUCTURE_FULL,{ boundingSpheres: false , color: color.rainbow()});
-            //ORG_STRUCTURE_FULL_OBJ.setOpacity(0.5)
-            //ORG_STRUCTURE_FULL_OBJ.colorBy(color.uniform("blue"))
-
-         /*io.fetchPdb(url, function(t) {
-          console.log("fetching again")
-          ORG_STRUCTURE_FULL = t;
-          console.log(ORG_STRUCTURE)
-          console.log(ORG_STRUCTURE_FULL)
-          deleteOtherChains(ORG_STRUCTURE_FULL);
-          if (ORG_STRUCTURE_FULL._chains[0]._residues.length !== SEQUENCE.length) {
-              console.log('kartoning',ORG_STRUCTURE_FULL == ORG_STRUCTURE)
-              ORG_STRUCTURE_FULL_OBJ = VIEWER.spheres('org_structure_full.protein', ORG_STRUCTURE_FULL, {
-                  boundingSpheres: false,
-                  color: color.uniform("blue")
-              });
-              VIEWER.requestRedraw()
-              ORG_STRUCTURE_FULL_OBJ.setOpacity(1);
-          }
-      });*/
+*/
     }
     VIEWER.rm(ORG_STRUCTURE_OBJ.name())
     VIEWER.rm(STRUCTURE_OBJ.name())
@@ -477,7 +445,12 @@ function superposition(url){
     //console.log(relevantIndices)
     var sView = STRUCTURE.select({rindices:relevantIndices,aname:"CA"});
     var osView = ORG_STRUCTURE.select({aname:"CA"});
-    pv.mol.superpose(sView,osView);
+	console.log("tralala",osView)
+	console.log("tralala",sView)
+    pv.mol.superpose(sView,osView)
+	rms = rmsd(osView,sView);
+	document.getElementById("rmsd").innerHTML = Math.round(rms[0] * 100) / 100;
+	document.getElementById("residues_used").innerHTML = rms[1];
 //    STRUCTURE_OBJ.hide()
 //    ORG_STRUCTURE_OBJ.hide()
     preset(ORG_STRUCTURE,1)
@@ -492,6 +465,29 @@ function superposition(url){
     //VIEWER.requestRedraw()
 
 }
+
+function rmsd(view1,view2){
+        var res1 = view1._chains[0]._residues;
+        var res2 = view2._chains[0]._residues;
+
+        var num_matched = res1.length;
+
+        var sum = 0;
+        for(var i=0; i<num_matched; i++){
+                p1 = res1[i]._atoms[0]._atom._pos;
+                p2 = res2[i]._atoms[0]._atom._pos;
+                sum += dist_sq(p1,p2);
+        }
+        return [Math.sqrt(sum/num_matched),num_matched];
+}
+
+
+function dist_sq(p1,p2){
+        d = (p1[0]-p2[0])**2 + (p1[1]-p2[1])**2 + (p1[2]-p2[2])**2;
+        return d;
+}
+
+
 
 function loadServerPDB(idx,original=0) {
  //TODO needs some fixes for multichain structures
@@ -509,6 +505,18 @@ function loadServerPDB(idx,original=0) {
             var maxRow = ORG_DISTANCE_MAP.map(function(row){ return Math.max.apply(Math, row.filter(Boolean)); });//.filter(Boolean);
             ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max( ...maxRow));
             ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
+                if(ORG_MAX_DMAP_DISTANCE<=0){
+                        //add alert for page that reference sucks
+                        PROTEIN_STRUCTURE_FILES = "";
+                        ORG_STRUCTURE = 0;
+    var x = document.getElementsByClassName("only_when_pdb");
+    for(var i =0; i<x.length; i++){
+       x[i].style.display = "none";
+    }
+
+                        return;
+                }
+
             if (ORG_MAX_DMAP_DISTANCE<100){
                ORG_DMAP_DISTANCE_RAINBOW.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
             }else{
@@ -566,9 +574,8 @@ window.preset = preset;
 }*/
 
 
-
 VIEWER = pv.Viewer(document.getElementById('viewer1'), { 
-	width : '500', height: '500', antialias : true, fog : true,
+	width : 'auto', height: '500', antialias : true, fog : true,
 	outline : true, quality : 'high', style : 'phong',
 	selectionColor : '#f088', transparency : 'screendoor', 
 	background : '#ddd', animateTime: 500, doubleClick : null
@@ -629,12 +636,15 @@ function addSelectionToStructure_old(arr){
 
 //window.addSelectionToStructure = addSelectionToStructure
 
+
+
 loadServerPDB(1);
 //document.getElementById('structures_button').click();
 if (PROTEIN_STRUCTURE_FILES[0] !== ""){
     loadServerPDB(0,1);
 }
 
-});
 
+
+});
 
