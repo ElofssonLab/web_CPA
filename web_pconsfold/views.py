@@ -136,13 +136,27 @@ def get_browse(request):
     else:
         initial_search = ''
     listFile = open(os.path.join(settings.DATA_DIR,'list.txt'),'r')
+    statsFile = open(os.path.join(settings.DATA_DIR,'stats.txt'),'r')
     headers = listFile.readline().strip().split(',')
+    statsHeader = statsFile.readline().strip().split(',')
     # tableData.append(headers)
+    stats = {}
+    for line in statsFile:
+        splitline = line.strip().split(",")
+        stats[splitline[0]] = splitline[1:]
+    # print(stats)
+    # print(statsHeader)
     for line in listFile:
         #temp_string = '<tr><td>'
         splitline = line.strip().split(",")
         # tableData.append(splitline)
         # <td><a href="/details/{{ cell }}">{{ cell }}</a> </td>
+        full_id = splitline[0]
+        if full_id in stats:
+            # print(stats[full_id])
+            pcons, proq3, M, N, Meff, ppv, TPR, FPR, tm, fdr = stats[full_id]
+        else: 
+            pcons, proq3, M, N, Meff, ppv, TPR, FPR, tm, fdr = [""] * 10
         pfam_acc = splitline[0].split('.')[0]
         N = splitline[1]
         Meff = '{0:.2f}'.format(float(splitline[2])) if len(splitline[2]) > 0 else ''
@@ -159,9 +173,22 @@ def get_browse(request):
             FDR = '{0:.3f}'.format(float(splitline[5]))
         else:
             FDR = ''
+        if tm.strip() == 'NA':
+            fixed_tm = ''
+        elif len(tm) > 0:
+            fixed_tm = '{0:.3f}'.format(float(tm))
+        else:
+            fixed_tm = ''
+
+        # if tm == 'NA':
+        #     tm = ''
+        # elif len(tm) > 0:
+        # else:
+        #     tm = ''
+        
         clan_acc = splitline[6]
         if has_model == "Yes":
-            processed_lines = [pfam_link, clan_acc, N, Meff, str(FDR), has_pdb_structure, has_model]
+            processed_lines = [pfam_link, clan_acc, N, Meff, str(FDR), '{0:.3f}'.format(float(pcons)), '{0:.3f}'.format(float(proq3)), str(fixed_tm), has_pdb_structure]
             tableData.append(processed_lines)
         # temp_string += "</td><td>".join(splitline[1:]) + "</td></tr>"
         # tableData.append(temp_string)

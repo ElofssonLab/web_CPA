@@ -12,6 +12,9 @@
                <th>Length</th>
                <th>Meff</th>
                <th>FDR</th>
+               <th>Pcons</th>
+               <th>ProQ3</th>
+               <th>TM</th>
                <th>structure</th>
                <!--               <th>model</th> -->
              </tr>
@@ -41,6 +44,15 @@ $.fn.dataTable.ext.search.push(
         var fdrmin = parseFloat( $('#FDRMin').val(), 10 );
         var fdrmax = parseFloat( $('#FDRMax').val(), 10 );
         var fdr = parseFloat( data[4] ) || 0; // use data for the age column
+        var pconsmin = parseFloat( $('#PconsMin').val(), 10 );
+        var pconsmax = parseFloat( $('#PconsMax').val(), 10 );
+        var pcons = parseFloat( data[5] ) || 0; // use data for the age column
+        var proq3min = parseFloat( $('#ProQ3Min').val(), 10 );
+        var proq3max = parseFloat( $('#ProQ3Max').val(), 10 );
+        var proq3 = parseFloat( data[6] ) || 0; // use data for the age column
+        var tmmin = parseFloat( $('#TMMin').val(), 10 );
+        var tmmax = parseFloat( $('#TMMax').val(), 10 );
+        var tm = parseFloat( data[7] ) || 0; // use data for the age column
  
         if ( (( isNaN( lmin ) && isNaN( lmax ) ) ||
              ( isNaN( lmin ) && length <= lmax ) ||
@@ -55,8 +67,22 @@ $.fn.dataTable.ext.search.push(
              (( isNaN( fdrmin ) && isNaN( fdrmax ) ) ||
              ( isNaN( fdrmin ) && fdr <= fdrmax ) ||
              ( fdrmin <= fdr   && isNaN( fdrmax ) ) ||
-             ( fdrmin <= fdr   && fdr <= fdrmax ))
+             ( fdrmin <= fdr   && fdr <= fdrmax )) &&
         
+             (( isNaN( pconsmin ) && isNaN( pconsmax ) ) ||
+             ( isNaN( pconsmin ) && pcons <= pconsmax ) ||
+             ( pconsmin <= pcons   && isNaN( pconsmax ) ) ||
+             ( pconsmin <= pcons   && pcons <= pconsmax )) &&
+
+             (( isNaN( proq3min ) && isNaN( proq3max ) ) ||
+             ( isNaN( proq3min ) && proq3 <= proq3max ) ||
+             ( proq3min <= proq3   && isNaN( proq3max ) ) ||
+             ( proq3min <= proq3   && proq3 <= proq3max )) &&
+
+             (( isNaN( tmmin ) && isNaN( tmmax ) ) ||
+             ( isNaN( tmmin ) && tm <= tmmax ) ||
+             ( tmmin <= tm   && isNaN( tmmax ) ) ||
+             ( tmmin <= tm   && tm <= tmmax ))
         )
         {
             return true;
@@ -67,7 +93,7 @@ $.fn.dataTable.ext.search.push(
 $(document).ready(function() {
     $('#browse_table tfoot th').each( function () {
             var title = $(this).text();
-      if ((title == 'Length') || (title == 'Meff') || (title == 'FDR')) {
+      if ((title == 'Length') || (title == 'Meff') || (title == 'FDR') || (title == 'Pcons') || (title == 'ProQ3') || (title == 'TM')) {
             $(this).html( '<input type="text" id="' + title + 'Min" placeholder="Min" style="width:45%;margin-right:8%"/>' + 
                           '<input type="text" id="' + title + 'Max" placeholder="Max" style="width:45%;"/>'  );
       }
@@ -82,6 +108,9 @@ $(document).ready(function() {
             { title: "Length", className: "text-right"},
             { title: "Meff", className: "text-right"},
             { title: "FDR", className: "text-right" },
+            { title: "Pcons", className: "text-right" },
+            { title: "ProQ3", className: "text-right" },
+            { title: "TM", className: "text-right" },
             { title: "Has structure"},
             // { title: "Has model"}
         ],
@@ -90,7 +119,7 @@ $(document).ready(function() {
       "paging": true,
       "oSearch": {"sSearch": "{{ initial_search }}"}
     } );
-    $('#LengthMin, #LengthMax, #MeffMin, #MeffMax, #FDRMin, #FDRMax').keyup( function() {
+    $('#LengthMin, #LengthMax, #MeffMin, #MeffMax, #FDRMin, #FDRMax, #PconsMin, #PconsMax, #ProQ3Min, #ProQ3Max, #TMMin, #TMMax').keyup( function() {
         table.draw();
     } );
     table.columns().every( function () {
