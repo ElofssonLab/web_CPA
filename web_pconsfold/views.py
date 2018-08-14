@@ -39,6 +39,8 @@ def details(request, pfam_id):
     desc_file = glob.glob(base_url + "/description.txt")[0]
 
     # topology
+    topo_lambda = lambda x: x.split("/")[0][:-1]+"<sub>"+x.split("/")[0][-1]+"</sub>"
+
     topology_calculated = 0
     topo_data = [[],[],[],"",""]
     topo_file = glob.glob(base_url + "/topology.txt")
@@ -47,9 +49,11 @@ def details(request, pfam_id):
         topo_file = topo_file[0]
         with open(topo_file) as topo_in:
             topo_data = topo_in.readlines()
-        topo_data[0] = topo_data[0].strip().split(";")
-        topo_data[1] = topo_data[1].strip().split(";")
+        topo_data[0] = map(topo_lambda,topo_data[0].strip().split(";"))
+        topo_data[1] = map(lambda x: x.split("/")[0],topo_data[1].strip().split(";"))
         topo_data[2] = topo_data[2].strip().split(";")
+        if topo_data[3]:
+             topo_data[3] = topo_lambda(topo_data[3].strip())
     # end topology
 
     with open(desc_file, 'r') as desc_handle:
