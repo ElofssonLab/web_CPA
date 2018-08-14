@@ -27,8 +27,13 @@ Tel: +46 706951045; Email: arne@bioinfo.se}}
 $^{1}$Science for Life Laboratory and Department of Biochemistry and
 biophysics, Stockholm Unviersity, Tomtebodav 23, 171 21 Solna, Sweden
 and
+<<<<<<< HEAD
+$^{2}$ Interdisciplinary Laboratory of Biological Systems Modelling
+ul. S. Banacha 2c, 02-097 Warsaw, Poland 
+=======
 $^{2}$ Centre of New Technologies, University of Warsaw, Banacha 2c, 02-097 Warsaw,
 Poland
+>>>>>>> edddcae0bb6a2db70da710e7fb992811feafc57e
 $^{*}$ contributed equally
 $^{\dagger}$=contributing authors
 % Affiliation must include:
@@ -186,6 +191,104 @@ appear more than 40\% of cases.
 
 \section{Results}
 
+
+\subsection{Overview}
+
+PconsFam contains predictions for 13617 Pfam families, out of these
+6477 have a member of known structure and  7140 not.  The median size
+of the famil
+
+\begin{table}
+\begin{tabular}{lcccccc}
+Dataset & Meff & PPV & TM & FDR & Pcons & ProQ3\\   
+All  &  200 & - & - & 0.40 & 0.19 & 0.35\\
+Structure &  486 &  0.46 & 0.41 & 0.28 & 0.25 & 0.45\\ \\
+NoStructure  111 & - & - & 0.45 & 0.16 & 0.27 \\
+\end{tabular}
+\caption{Median data for PconsFam}
+\label{tab:summary}
+\end{table}
+
+\iffalse
+
+> summary(data)
+          ID            pcons            proq3              M
+ PF00001.18:    1   Min.   :0.0180   Min.   :0.0000   Min.   :     3
+ PF00002.21:    1   1st Qu.:0.1250   1st Qu.:0.2072   1st Qu.:  1099
+ PF00003.19:    1   Median :0.1940   Median :0.3471   Median :  4754
+ PF00004.26:    1   Mean   :0.2217   Mean   :0.3552   Mean   : 21818
+ PF00005.24:    1   3rd Qu.:0.2860   3rd Qu.:0.4981   3rd Qu.: 19908
+ PF00006.22:    1   Max.   :0.8130   Max.   :0.8285   Max.   :706707
+ (Other)   :13611                                     NA's   :7125
+       N             Meff                ppv             TPR
+ Min.   :  50   Min.   :     1.00   Min.   :0.131   Min.   :0.131
+ 1st Qu.:  90   1st Qu.:    67.18   1st Qu.:0.378   1st Qu.:0.378
+ Median : 137   Median :   200.37   Median :0.457   Median :0.457
+ Mean   : 174   Mean   :  2286.23   Mean   :0.452   Mean   :0.452
+ 3rd Qu.: 220   3rd Qu.:   918.42   3rd Qu.:0.528   3rd Qu.:0.528
+ Max.   :1104   Max.   :151761.72   Max.   :0.724   Max.   :0.724
+                                    NA's   :7125    NA's   :7125
+      FPR              tm             fdr
+ Min.   :0.276   Min.   :0.006   Min.   :0.0000
+ 1st Qu.:0.472   1st Qu.:0.272   1st Qu.:0.2346
+ Median :0.543   Median :0.410   Median :0.4047
+ Mean   :0.548   Mean   :0.424   Mean   :0.3749
+ 3rd Qu.:0.622   3rd Qu.:0.566   3rd Qu.:0.5248
+ Max.   :0.869   Max.   :0.846   Max.   :0.6378
+ NA's   :7125    NA's   :7136    NA's   :5
+>
+> summary(structure)
+          ID           pcons            proq3              M
+ PF00001.18:   1   Min.   :0.0320   Min.   :0.0000   Min.   :     3
+ PF00002.21:   1   1st Qu.:0.1690   1st Qu.:0.2792   1st Qu.:  1098
+ PF00003.19:   1   Median :0.2500   Median :0.4482   Median :  4742
+ PF00004.26:   1   Mean   :0.2782   Mean   :0.4198   Mean   : 21770
+ PF00005.24:   1   3rd Qu.:0.3620   3rd Qu.:0.5647   3rd Qu.: 19850
+ PF00006.22:   1   Max.   :0.8130   Max.   :0.8159   Max.   :706707
+ (Other)   :6471
+       N              Meff               ppv              TPR
+ Min.   : 50.0   Min.   :     1.0   Min.   :0.1312   Min.   :0.1312
+ 1st Qu.: 85.0   1st Qu.:   144.1   1st Qu.:0.3785   1st Qu.:0.3785
+ Median :125.0   Median :   486.5   Median :0.4564   Median :0.4564
+ Mean   :156.3   Mean   :  2231.6   Mean   :0.4524   Mean   :0.4524
+ 3rd Qu.:195.0   3rd Qu.:  1418.3   3rd Qu.:0.5284   3rd Qu.:0.5284
+ Max.   :718.0   Max.   :151761.7   Max.   :0.7239   Max.   :0.7239
+
+      FPR               tm              fdr
+ Min.   :0.2761   Min.   :0.0061   Min.   :0.0000
+ 1st Qu.:0.4716   1st Qu.:0.2720   1st Qu.:0.1335
+ Median :0.5436   Median :0.4094   Median :0.2768
+ Mean   :0.5476   Mean   :0.4236   Mean   :0.2887
+ 3rd Qu.:0.6215   3rd Qu.:0.5660   3rd Qu.:0.4323
+ Max.   :0.8688   Max.   :0.8458   Max.   :0.6377
+
+> summary(nostruct)
+          ID           pcons            proq3              M
+ PF00024.23:   1   Min.   :0.0180   Min.   :0.0000   Min.   :   692
+ PF00038.18:   1   1st Qu.:0.1000   1st Qu.:0.1781   1st Qu.:  3420
+ PF00050.18:   1   Median :0.1570   Median :0.26 0.2781   Median :  9138
+ PF00053.21:   1   Mean   :0.1705   Mean   :0.2966   Mean   : 42680
+ PF00084.17:   1   3rd Qu.:0.2240   3rd Qu.:0.4085   3rd Qu.: 75510
+ PF00094.22:   1   Max.   :0.8030   Max.   :0.8285   Max.   :171263
+ (Other)   :7134                                     NA's   :7125
+       N             Meff                ppv             TPR
+ Min.   :  50   Min.   :     1.00   Min.   :0.263   Min.   :0.263
+ 1st Qu.:  94   1st Qu.:    42.43   1st Qu.:0.396   1st Qu.:0.396
+ Median : 149   Median :   111.21   Median :0.524   Median :0.524
+ Mean   : 190   Mean   :  2335.80   Mean   :0.489   Mean   :0.489
+ 3rd Qu.: 243   3rd Qu.:   330.98   3rd Qu.:0.554   3rd Qu.:0.554
+ Max.   :1104   Max.   :118875.61   Max.   :0.704   Max.   :0.704
+                                    NA's   :7125    NA's   :7125
+      FPR              tm             fdr
+ Min.   :0.296   Min.   :0.653   Min.   :0.0000
+ 1st Qu.:0.446   1st Qu.:0.662   1st Qu.:0.3635
+ Median :0.476   Median :0.694   Median :0.4815
+ Mean   :0.511   Mean   :0.702   Mean   :0.4531
+ 3rd Qu.:0.604   3rd Qu.:0.734   3rd Qu.:0.5639
+ Max.   :0.737   Max.   :0.768   Max.   :0.6378
+ NA's   :7125    NA's   :7136    NA's   :5
+\fi
+
 \subsection{Comparison with other resources}
 
 A similar resource is Baker Lab’s GREMLIN database~\cite{Kamisetty2013} which builds contact prediction based on
@@ -224,6 +327,7 @@ predicted structure from PF01018 family with the so-called Gordian
 knot. It was shown that even though members of this family have very
 low sequence similarity (below 20\%), the topology of all known
 structures is the same \cite{sulkowska2012conservation}.
+
 
 
 \begin{figure}[t]
