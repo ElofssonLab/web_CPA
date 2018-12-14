@@ -329,7 +329,7 @@ var PFAM_MODEL = "{{ pfam_id }}";
                 <img class="obrazek_topologiczny" src="{{STATIC_URL}}images/{{ topo_data.4 }}.png" />
                 <div class="topology_desc" id="pdb_model_topology">
                 {%  if topo_data.3 %}
-                    {{ topo_data.3|safe }}<a href="http://knotprot.cent.uw.edu.pl/view/{{ pdb_id }}/{{ pdb_chain }}" target="_blank"> (view in KnotProt)</a>
+                    {{ topo_data.3|safe }}{% if topo_data.4 != "01" %}<a href="http://knotprot.cent.uw.edu.pl/view/{{ pdb_id }}/{{ pdb_chain }}" target="_blank"> (view in KnotProt)</a>{% endif %}
                  {% else %}
                     No data
                 {%  endif %}
