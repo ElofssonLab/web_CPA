@@ -189,20 +189,20 @@ var PFAM_MODEL = "{{ pfam_id }}";
         <div class="col-12 center-block" style="float:none">
             <div class="btn-group btn-group-toggle" data-toggle="buttons" id="change_map">
               <label class="btn btn-outline-secondary active btn-sm">
-                <input type="radio" name="di_files" id="change_map_0" onchange="change_map_mode(0)" autocomplete="off" checked> Only DI scores
+                <input type="radio" name="di_files" id="change_map_0" onchange="change_map_mode(0)" autocomplete="off" checked> Only propensity scores
               </label>
               <label class="btn btn-outline-secondary btn-sm">
-                <input type="radio" name="di_files" id="change_map_1" onchange="change_map_mode(1)" autocomplete="off"> DI scores and model contacts side-by-side
+                <input type="radio" name="di_files" id="change_map_1" onchange="change_map_mode(1)" autocomplete="off"> Propensity scores vs model contacts<br/>(side-by-side)
               </label>
               <label class="btn btn-outline-secondary btn-sm">
-                <input type="radio" name="di_files" id="change_map_2" onchange="change_map_mode(2)" autocomplete="off"> Overlayed DI scores and model contacts
+                <input type="radio" name="di_files" id="change_map_2" onchange="change_map_mode(2)" autocomplete="off"> Propensity scores vs model contacts<br/>(overlay)
               </label>
               {%  if modelURLs.0 %}
               <label class="btn btn-outline-secondary btn-sm only_when_pdb">
-                <input type="radio" name="di_files" id="change_map_3" onchange="change_map_mode(3)" autocomplete="off"> Overlayed model/reference contact maps
+                <input type="radio" name="di_files" id="change_map_3" onchange="change_map_mode(3)" autocomplete="off"> Model vs reference contact maps<br/>(overlay)
               </label>
               <label class="btn btn-outline-secondary btn-sm  only_when_pdb">
-                <input type="radio" name="di_files" id="change_map_4" onchange="change_map_mode(4)" autocomplete="off"> Model/reference distances
+                <input type="radio" name="di_files" id="change_map_4" onchange="change_map_mode(4)" autocomplete="off"> Model vs reference distances<br/>(side by side)
               </label>
               {% endif %}
             </div>
