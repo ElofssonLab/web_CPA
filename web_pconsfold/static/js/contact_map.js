@@ -940,8 +940,17 @@ function drawPoint(x,y,mode,distance_map=0,distance_rainbow=0,count_shown=0){
             break;
         case 3:
             val1 = DISTANCE_MAP[x][y];
+	    if ((x>=ORG_DISTANCE_MAP.length) || (y>=ORG_DISTANCE_MAP.length)){
+		    // if no reference structure for part of a model
+                        color = "white"
+                        if(val1<DMAP_DISTANCE){
+                                color = "lightpink";
+                        }else{
+                                return ppvi;
+                        }
+                        break;
+            }
             val2 = ORG_DISTANCE_MAP[x][y];
-//	   if (COLORING_MODE == 0){
             		if (val2<DMAP_DISTANCE && val1<DMAP_DISTANCE){ //TODO odpowiednie przeliczanie TOP scores? Uwzglednic ten mod odciecia?
                 		color = "purple";
 				ppvi = 1;
@@ -957,6 +966,10 @@ function drawPoint(x,y,mode,distance_map=0,distance_rainbow=0,count_shown=0){
             }
             break;
         case 4:
+	    if ((x>=distance_map.length) || (y>=distance_map.length)){
+                        color = "white"
+                        break;
+            }
             val = distance_map[x][y];
             color= "#"+distance_rainbow.colourAt(val)
             break;
