@@ -189,13 +189,13 @@ var PFAM_MODEL = "{{ pfam_id }}";
         <div class="col-12 center-block" style="float:none">
             <div class="btn-group btn-group-toggle" data-toggle="buttons" id="change_map">
               <label class="btn btn-outline-secondary active btn-sm">
-                <input type="radio" name="di_files" id="change_map_0" onchange="change_map_mode(0)" autocomplete="off" checked> Only propensity scores
+                <input type="radio" name="di_files" id="change_map_0" onchange="change_map_mode(0)" autocomplete="off" checked> Only Direct Information
               </label>
               <label class="btn btn-outline-secondary btn-sm">
-                <input type="radio" name="di_files" id="change_map_1" onchange="change_map_mode(1)" autocomplete="off"> Propensity scores vs model contacts<br/>(side-by-side)
+                <input type="radio" name="di_files" id="change_map_1" onchange="change_map_mode(1)" autocomplete="off"> Direct Information vs model contacts<br/>(side-by-side)
               </label>
               <label class="btn btn-outline-secondary btn-sm">
-                <input type="radio" name="di_files" id="change_map_2" onchange="change_map_mode(2)" autocomplete="off"> Propensity scores vs model contacts<br/>(overlay)
+                <input type="radio" name="di_files" id="change_map_2" onchange="change_map_mode(2)" autocomplete="off"> Direct Information vs model contacts<br/>(overlay)
               </label>
               {%  if modelURLs.0 %}
               <label class="btn btn-outline-secondary btn-sm only_when_pdb">
@@ -461,8 +461,15 @@ var PFAM_MODEL = "{{ pfam_id }}";
                             closer than currently selected "Cutoff distance").
                         </p>
                         <p>
-                            There are multiple methods of calculating DI, which result in differing scores. Currently selected
-                            DI file can be changed with the buttons above the plot (if more than one is available).
+                            We have calculated Direct Information based on various models:
+				<ol>
+					<li> <i>default:</i> <b>HH0</b> - sequences found using HHblits with e-value cutoff e<sup>0</sup> (=1);</li>
+					<li> <b>HH4</b> - sequences found using HHblits with e-value cutoff e<sup>-4</sup> (=0.0001);</li>
+					<li> <b>JH0</b> - sequences found using JackHmmer with e-value cutoff e<sup>0</sup> (=1);</li>
+					<li> <b>JH4</b> - sequences found using JackHmmer with e-value cutoff e<sup>-4</sup> (=0.0001)</li>
+			    	</ol>
+			    which can result in differing scores. Currently selected DI file can be changed with the buttons above the 
+			    plot.
                         </p>
                         <p>
                             <b>Selecting</b>
