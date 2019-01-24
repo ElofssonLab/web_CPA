@@ -14,8 +14,6 @@ function nw_align(s1,s2){
     var END = 42;
 
     /* Adapted from github :  knyga */
-    console.log(s1);
-    console.log(s2);
     var s1 = s1.replace("-","");
     var s2 = s2.replace("-","");
 
