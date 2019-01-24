@@ -495,23 +495,23 @@ var PFAM_MODEL = "{{ pfam_id }}";
                         <p>Other plot modes can be selected using buttons immediately below the sequence:
                             <ul>
                                 <li>
-                                    <p>DI scores and distance (side by side). This keeps the default plot in the lower triangle,
-                                    while changing the upper triangle of the plot to a binary-coded distance map (residues with C-betas closer
+                                    <p>Direct Information vs model contacts (side by side). This keeps the default plot in the lower triangle,
+                                    while changing the upper triangle of the plot to a binary-coded distance map of the model (residues with C-betas closer
                                     than the specified cut-off distance are shown).</p>
                                 </li>
                                 <li><p>
-                                    DI scores and distance (overlayed). Gray points indicate pairs of residues closer than the distance threshold,
+                                    Direct Information vs model contacts (overlayed). Gray points indicate pairs of residues of the model closer than the distance threshold,
                                     with low DI (False negatives). Red points are interactions with DI above the cut-off but further away in the structure
                                     (False positives). Blue points are interactions close in the structure, with high DI scores (True positives).</p>
                                 </li>
                                 When reference structure is available:
                                 <li><p>
-                                Model and reference contact maps (overlayed). Purple points indicate pairs of residues which are in contact 
+                                Model vs reference contact maps (overlayed). Purple points indicate pairs of residues which are in contact 
                                 (distance between C-beta atoms lower than the specified cut-off) both in the model and in the reference structure. 
                                 Red are contacts present only in the model, blue - those exclusive to the reference structure.
                                 </p></li>
                                 <li><p>
-                                Model and reference distance maps (side-by-side). Lower triangle of the plot shows rainbow coloured map
+                                Model vs reference distances (side-by-side). Lower triangle of the plot shows rainbow coloured map
                                 of pairwise distances for the model, upper triangle displayes the same for the reference structure. Upper bound of the 
                                 distances used for colouring depends on the maximum value for the currently active model.
                                 
