@@ -1,4 +1,4 @@
-//PROTEIN_STRUCTURE_FILE = "http://troll.cent.uw.edu.pl/dzarmola/files_for_pcons/model3_h.pdb" //{} to be filled by Django
+// (C) Aleksandra Jarmolinska 2018-2019 a.jarmolinska@mimuw.edu.pl
 
 requirejs.config({
   'baseUrl' : '../../static/js/src' ,
@@ -71,9 +71,7 @@ function calculateSS(structure){
         }
     }
     for (var aa in aas) {
-//        if (aas.hasOwnProperty(aa)) {
                 aad = aas[aa];
-//        console.log(aad)
                 if(!aad.hasOwnProperty("N") || !aad.hasOwnProperty("C") || !aad.hasOwnProperty("O")){
                     continue;
                 }
@@ -86,28 +84,20 @@ function calculateSS(structure){
                 o = ndb["O"];
                 n = aad["N"];
                 H = add(n, vectorize(c,o));
-//                console.log(n)
-//                console.log(vectorize(c,o));
-//                console.log(H)
+
                 aad["H"] = H;
-//        }
     }
     var bonds = [];
     for(var aa1=0; aa1<aas.length; aa1++){
-//        if(aas.hasOwnProperty(aa1)){
             var aad1 = aas[aa1];
             for(var aa2 =0; aa2<aas.length; aa2++){
-//                if(aas.hasOwnProperty(aa2)){
                     var aad2 = aas[aa2];
                     if(!aad2.hasOwnProperty("H") || Math.abs(aa1-aa2)<=1){
                         continue;
                     }
-//                    console.log(aad1,aad2);
-//                    console.log(1/dist(aad1["O"],aad2["N"]),1/dist(aad1["C"],aad2["H"]),1/dist(aad1["O"],aad2["H"]),1/dist(aad1["C"],aad2["N"]));
                     var nawias= 1/dist(aad1["O"],aad2["N"]) + 1/dist(aad1["C"],aad2["H"]) - 1/dist(aad1["O"],aad2["H"]) - 1/dist(aad1["C"],aad2["N"]);
                     E  = nawias * 27.888 // 332 * 0.084
                     if(E < -.5){
-//                    console.log(E);
                         if(!bonds[aa1]){
                             bonds[aa1] = [];
                         }
@@ -117,28 +107,15 @@ function calculateSS(structure){
                         bonds[aa1].push(aa2);
                         bonds[aa2].push(aa1);
                     }
-//                }
             }
-//        }
-//    break
     }
-//    return
     var assign = new Array(aas.length);
-//    for(var i=0;i<Math.max(Object.keys(bonds)); i++){
-//        assign.push();
-//    }
-//    var bkeys = Object.keys(bonds).sort(function(a,b){return a-b});
     for(var i =0; i<bonds.length; i++){
-//        i = bkeys[j]*1;
         bonds_i = bonds[i];
         if(!bonds_i){continue;}
         for(var j =0; j<bonds_i.length;j++){
             b=bonds_i[j];
-//            console.log("within",i,b,bonds_i);
-//            return
-//            b *=1;
             if(Math.abs(b-i)>5){
-                //parallel
                 cnt =2;
                 l = i+cnt;
                 p = b;
@@ -175,7 +152,6 @@ function calculateSS(structure){
 
             }
             if(k>=3){
-//                            console.log("A",i,l,b,p,k);
                    for(var tmp=0;tmp<k;tmp++){
                         assign[i+tmp] = "A";
                         assign[b-tmp] = "A";
@@ -216,43 +192,24 @@ function calculateSS(structure){
             structure._chains[0]._residues[a]._ss = "E";
         }
     }
-//    console.log("atomy",assign);
 
 }
 
 function recolorRainbow(){
-	//VIEWER.clear();
-	//VIEWER.cartoon('structure.protein',ACTIVE_STRUCTURE,{ boundingSpheres: false , color: color.rainbow()});
     ACTIVE_STRUCTURE_OBJ.colorBy(color.rainbow());
-//      VIEWER.autoZoom();
 }
 function recolorBFactor(){
-	//VIEWER.clear();
-	//VIEWER.cartoon('structure.protein',ACTIVE_STRUCTURE,{ boundingSpheres: false , color: color.byResidueProp('tempFactor')});
         ACTIVE_STRUCTURE_OBJ.colorBy(color.byResidueProp('tempFactor'));
-
-//      VIEWER.autoZoom();
-
 }
 window.recolorRainbow = recolorRainbow;
 window.recolorBFactor = recolorBFactor;
 
 function preset(structure,original=0) {
    col =  color.rainbow()
-    //structure = STRUCTURE;
     if(original){
        col=color.uniform("grey");
-       //structure = ORG_STRUCTURE;
     }
-  //console.log(structure, original, color)
   viewer = VIEWER;
-
-  //viewer.clear();
-//  var ligand = structure.select({'rnames' : ['SAH', 'RVP']});
-//  viewer.spheres('structure.ligand', ligand, {
-//  });
-//  viewer.cartoon('structure.protein', structure, { boundingSpheres: false , color: color.byResidueProp('tempFactor')});
-
   if(original){
       var x = viewer.cartoon('org_structure.protein', structure, { boundingSpheres: false , color: col});
 
@@ -264,19 +221,11 @@ function preset(structure,original=0) {
       ACTIVE_STRUCTURE_OBJ = STRUCTURE_OBJ;
   }
   addSelectionToStructure(STRUCTURE_SELECTED);
-//  getIndices();
-
-//  var residues = structure.select({rnums : [1,3,8,9,10,13]});
-//  viewer.spheres('structure.selected_resids', residues, {});
-//  var chainA = structure.select({cname : 'A'});
-//  viewer.spheres('structure.selected_chain', chainA, {});
     if(!original) {
         showSS(STRUCTURE);
     }else{
         x.setOpacity(0.5);
-        //console.log("asd")
     }
-   // superposition()
 }
 
 function showSS(structure){
@@ -364,9 +313,6 @@ var SHORT_NAMES = {'ALA':'A','ARG':'R','ASN':'N','ASP':'D','CYS':'C','GLU':'E','
            'ILE':'I','LEU':'L','LYS':'K','MET':'M','PHE':'F','PRO':'P','SER':'S','THR':'T','TRP':'W',
            'TYR':'Y','VAL':'V'};
 
-//Foundation.global.namespace = '';
-//$(document).foundation();
-
 function deleteOtherChains(structure,chain=""){//,start_resid,end_resid){
     chain = chain || PDB_CHAIN;
     if(!chain){return;}
@@ -376,27 +322,7 @@ function deleteOtherChains(structure,chain=""){//,start_resid,end_resid){
         return;
     }
     var tmp_chain = structure.chain(chain);
-/*    if (start_resid && end_resid){
-        var ress = [];
-        var residues = tmp_chain.residues();
-        for(r=0; r<residues.length; r++){
-            if(residues[r].num()>=start_resid && residues[r].num()<=end_resid){
-                ress.push(residues[r]);
-            }
-        }
-        tmp_chain._residues = ress;
-    }*/
     structure._chains = [tmp_chain];
-//    START_RESIDS[row] = STRUCTURES[row].chains()[0].residues()[0].num();
-/*    VIEWERS[row].clear();
-    for(h=0; h<highlighted.length; h++){
-        if(highlighted[h].row == row){
-            highlighted.splice(h,1);
-        }
-    }
-    loadPDBSeq(row);
-    getIndices();    
-    VIEWERS[row].autoZoom();*/
 }
 
 function clone_structure(struct){
@@ -410,7 +336,6 @@ function clone_structure(struct){
               }
               var residue = chain.addResidue(r.name(), i);
               residue._isAminoacid = true;
-//              console.log(residue.isAminoacid(),residue)
               residue._ss = r._ss;
               for (var j=0 ; j<r.atoms().length; ++j){
                   var at = r.atoms()[j]
@@ -424,7 +349,6 @@ function superposition(url){
     if(!ORG_STRUCTURE){
         return
     }
-//    console.log("spsadd",ORG_STRUCTURE._chains[0]._residues.length,SEQUENCE.length,)
     var org_length=0;
     for(var i=0; i<ORG_STRUCTURE._chains[0]._residues.length; i++){
                 if(ORG_STRUCTURE._chains[0]._residues[i]._isAminoacid  /*|| ORG_STRUCTURE._chains[0]._residues[i]._name in SHORT_NAMES*/) org_length++;
@@ -432,38 +356,37 @@ function superposition(url){
     if(org_length > SEQUENCE.length){
             hadToCut =1;
             var new_struct = clone_structure(ORG_STRUCTURE);
-		// REDUCED OPTION
-/*            ORG_STRUCTURE_FULL_OBJ = VIEWER.cartoon('org_structure_full.protein',new_struct,{ boundingSpheres: false , color: color.uniform('grey')});
-            ORG_STRUCTURE_FULL_OBJ.setOpacity(0.3)
-*/
     }
     VIEWER.rm(ORG_STRUCTURE_OBJ.name())
     VIEWER.rm(STRUCTURE_OBJ.name())
     console.log(ORG_STRUCTURE)
     ORG_STRUCTURE._chains[0]._cachedTraces = [];
     var relevantIndices = getAlignedIndices(SEQUENCE,ORG_STRUCTURE);
-    //console.log(relevantIndices)
     var sView = STRUCTURE.select({rindices:relevantIndices,aname:"CA"});
     var osView = ORG_STRUCTURE.select({aname:"CA"});
-	console.log("tralala",osView)
-	console.log("tralala",sView)
+    ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
+    var maxRow = ORG_DISTANCE_MAP.map(function(row){ return Math.max.apply(Math, row.filter(Boolean)); });//.filter(Boolean);
+    ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max( ...maxRow));
+    ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
+    if(ORG_MAX_DMAP_DISTANCE<=0){
+        PROTEIN_STRUCTURE_FILES = "";
+        ORG_STRUCTURE = 0;
+        var x = document.getElementsByClassName("only_when_pdb");
+        for(var i =0; i<x.length; i++){
+            x[i].style.display = "none";
+        }
+        return;
+    }
+    if (ORG_MAX_DMAP_DISTANCE<100){
+        ORG_DMAP_DISTANCE_RAINBOW.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
+    }
     pv.mol.superpose(sView,osView)
 	rms = rmsd(osView,sView);
 	document.getElementById("rmsd").innerHTML = Math.round(rms[0] * 100) / 100;
 	document.getElementById("residues_used").innerHTML = rms[1];
-//    STRUCTURE_OBJ.hide()
-//    ORG_STRUCTURE_OBJ.hide()
     preset(ORG_STRUCTURE,1)
     preset(STRUCTURE)
-    //VIEWER.centerOn(STRUCTURE)
     VIEWER.autoZoom()
-    //x = VIEWER.tube("costam",STRUCTURE)
-    //STRUCTURE_OBJ = x
-    //console.log(STRUCTURE)
-
-    //VIEWER.clear()
-    //VIEWER.requestRedraw()
-
 }
 
 function rmsd(view1,view2){
@@ -498,63 +421,41 @@ function loadServerPDB(idx,original=0) {
         if(original){
             ORG_STRUCTURE =s;
             deleteOtherChains(ORG_STRUCTURE);
-
-            //STRUCTURE_OBJ.setOpacity(1);
-            ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
-//            ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP));
-            var maxRow = ORG_DISTANCE_MAP.map(function(row){ return Math.max.apply(Math, row.filter(Boolean)); });//.filter(Boolean);
-            ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max( ...maxRow));
-            ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
-                if(ORG_MAX_DMAP_DISTANCE<=0){
-                        //add alert for page that reference sucks
-                        PROTEIN_STRUCTURE_FILES = "";
-                        ORG_STRUCTURE = 0;
-    var x = document.getElementsByClassName("only_when_pdb");
-    for(var i =0; i<x.length; i++){
-       x[i].style.display = "none";
-    }
-
-                        return;
-                }
-
-            if (ORG_MAX_DMAP_DISTANCE<100){
-               ORG_DMAP_DISTANCE_RAINBOW.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
-            }else{
-                                 //   one_color_step = Math.floor(PROTEIN_LEN/100);    
-               1;
-            }
+	    ORG_DISTANCE_MAP = calculate_dmap(ORG_STRUCTURE);
+	    var maxRow = ORG_DISTANCE_MAP.map(function(row){ return Math.max.apply(Math, row.filter(Boolean)); });//.filter(Boolean);
+	    ORG_MAX_DMAP_DISTANCE = Math.ceil(Math.max( ...maxRow));
+	    ORG_DMAP_DISTANCE_RAINBOW = new Rainbow();
+	    if(ORG_MAX_DMAP_DISTANCE<=0){
+		PROTEIN_STRUCTURE_FILES = "";
+		ORG_STRUCTURE = 0;
+		var x = document.getElementsByClassName("only_when_pdb");
+		for(var i =0; i<x.length; i++){
+		    x[i].style.display = "none";
+		}
+		return;
+	    }
+	    if (ORG_MAX_DMAP_DISTANCE<100){
+		ORG_DMAP_DISTANCE_RAINBOW.setNumberRange(0,ORG_MAX_DMAP_DISTANCE+1);
+	    } 
 
         }else{
           STRUCTURE = s;
-          //console.log(STRUCTURE)
           ACTIVE_STRUCTURE = STRUCTURE;
-//          console.log(STRUCTURE)
-//          console.log(PROTEIN_LEN, STRUCTURE._chains[0]._residues.length);
           DISTANCE_MAP = calculate_dmap(STRUCTURE);
           ACTIVE_DISTANCE_MAP = DISTANCE_MAP;
-//        console.log(STRUCTURE);
-//            MAX_DMAP_DISTANCE = Math.ceil(Math.max.apply(null, ACTIVE_DISTANCE_MAP)); 
             var maxRow = ACTIVE_DISTANCE_MAP.map(function(row){ return Math.max.apply(Math, row); }).filter(Boolean);
-//            console.log(...maxRow)
             MAX_DMAP_DISTANCE = Math.ceil(Math.max( ...maxRow));
-//            console.log("maxrow",MAX_DMAP_DISTANCE)
             DMAP_DISTANCE_RAINBOW = new Rainbow();
             if (MAX_DMAP_DISTANCE<100){
                DMAP_DISTANCE_RAINBOW.setNumberRange(0,MAX_DMAP_DISTANCE+1);
-            }else{
-                                 //   one_color_step = Math.floor(PROTEIN_LEN/100);    
-               1;
             }
             ACTIVE_MAX_DMAP_DISTANCE = MAX_DMAP_DISTANCE;
-    //        document.getElementById('max_distance').innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
-
         document.getElementsByName('max_distance').forEach(function(elem){
             elem.innerHTML = ACTIVE_MAX_DMAP_DISTANCE;
         });
             ACTIVE_DMAP_DISTANCE_RAINBOW = DMAP_DISTANCE_RAINBOW;
             calculateSS(STRUCTURE);
         }
-//      START_RESIDS[row] = s.chains()[0].residues()[0].num();
       preset(s,original);
       iviewer.autoZoom();
       superposition(url)
@@ -567,13 +468,6 @@ function loadServerPDB(idx,original=0) {
 window.loadServerPDB = loadServerPDB;
 window.preset = preset;
 
-/*function change_model_file(file_idx){
-        read_in_dmap(DMAP_FILENAMES[file_idx]);
-        loadServerPDB(file_idx);
-        addBonds();
-}*/
-
-
 VIEWER = pv.Viewer(document.getElementById('viewer1'), { 
 	width : 'auto', height: '500', antialias : true, fog : true,
 	outline : true, quality : 'high', style : 'phong',
@@ -582,12 +476,6 @@ VIEWER = pv.Viewer(document.getElementById('viewer1'), {
     });
 
 VIEWER.on('click', function(picked, ev) {
- //console.log(Object.keys(STRUCTURE.select({rtype:"H"})._chains[0]._residueMap));
- //console.log(Object.keys(STRUCTURE.select({rtype:"E"})._chains[0]._residueMap));
-// console.log(Object.keys(STRUCTURE.select({rtype:"H"})._residueView));
-// console.log(STRUCTURE.select({rnum:79}));
-//console.log()
-    //console.log(STRUCTURE)
   if (picked === null || picked.target() === null || picked.target().structure() !== ACTIVE_STRUCTURE) {
     return;
   }
@@ -595,8 +483,6 @@ VIEWER.on('click', function(picked, ev) {
   if (picked.node().structure === undefined) {
     return;
   }
-//  console.log()
-//  console.log(picked);
   var resnum=picked.target()._residue._num;
   // when the shift key is pressed, extend the selection, otherwise
   // only select the clicke atom.
@@ -604,7 +490,6 @@ VIEWER.on('click', function(picked, ev) {
   var sel;
   if (extendSelection) {
     var sel = picked.node().selection();
-//    add2SS(resnum);
   } else {
     var sel = picked.node().structure().createEmptyView();
     delSS();
@@ -634,17 +519,9 @@ function addSelectionToStructure_old(arr){
   VIEWER.requestRedraw();
 }
 
-//window.addSelectionToStructure = addSelectionToStructure
-
-
-
 loadServerPDB(1);
-//document.getElementById('structures_button').click();
 if (PROTEIN_STRUCTURE_FILES[0] !== ""){
     loadServerPDB(0,1);
 }
-
-
-
 });
 
