@@ -945,6 +945,7 @@ function drawPoint(x,y,mode,distance_map=0,distance_rainbow=0,count_shown=0){
                         color = "white"
                         if(val1<DMAP_DISTANCE){
                                 color = "lightpink";
+				if(count_shown){SHOWN_CONTACTS_CNT +=1;}
                         }else{
                                 return ppvi;
                         }
@@ -954,16 +955,18 @@ function drawPoint(x,y,mode,distance_map=0,distance_rainbow=0,count_shown=0){
             		if (val2<DMAP_DISTANCE && val1<DMAP_DISTANCE){ //TODO odpowiednie przeliczanie TOP scores? Uwzglednic ten mod odciecia?
                 		color = "purple";
 				ppvi = 1;
+				if(count_shown){SHOWN_CONTACTS_CNT +=1;}
             		}else if(val2<DMAP_DISTANCE){
                 		color = "lightblue";
             		}else if(val1<DMAP_DISTANCE){
                 		color = "lightpink";
-            		}else{
+                		if(count_shown){SHOWN_CONTACTS_CNT +=1;}
+			}else{
                 		return ppvi;
             		}
-            if(count_shown){
+/*            if(count_shown){
                 SHOWN_CONTACTS_CNT +=1;
-            }
+            }*/
             break;
         case 4:
 	    if ((x>=distance_map.length) || (y>=distance_map.length)){
