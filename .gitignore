@@ -1,4 +1,4 @@
 env
 .DS_Store
 *.pyc
-web_pconsfold/static/all_data/
+web_CPA/static/all_data/

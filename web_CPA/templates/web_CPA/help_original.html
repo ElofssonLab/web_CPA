@@ -1,7 +1,9 @@
-{% extends "web_pconsfold/base_layout.html" %}
+{% extends "web_CPA/base_layout.html" %}
 
-{%block content_main %}
-      <div class="container" style="padding-top: 25px">
+{%block content_right_panel %}
+   <!--  {% if username %}
+      {% include "pred/user_header.html" %}
+    {% endif %} -->
   <h2>Help</h2>
   <table cellspacing=0 cellpadding=0 border=0>
     <tr>
@@ -26,7 +28,7 @@
         </tr>
         <tr><td>
         <p>
-        The PconsFold2 pipeline uses contact predictions from PconsC3, the <a href="https://www.ncbi.nlm.nih.gov/pubmed/25974172" target="_blank">CONFOLD folding algorithm</a> and model quality estimations to predict the structure of proteins. Here we show the result of applying PconsFold2 to Pfam families, both with and without known structures.
+	The Pconsfold2 pipeline uses the contact predictions from PconsC3, the CONFOLD folding algorithm and model quality estimations to predict structure of proteins. Here we show the result of applying this to Pfam families, both with and without known models.
         </p>
         </td></tr>
       </table>
@@ -42,11 +44,11 @@
         </tr>
         <tr><td>
             <p>
-		The main site shows a list of all Pfam families and whether they have a generated model or known structure. The table can be sorted and filtered by the search bar. Click on a family of interest to see details.
+		The main site shows a list of all Pfam families and their generated models. 
+		Click on a family of interest to see details.
             </p>
-            
-      </td></tr>
 
+      </td></tr>
     </table>
 
     <br><br>
@@ -59,28 +61,7 @@
           <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
           <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td></tr>
         <tr><td>
-            <p>
-            For each family a set of models has been predicted with the PconsFold2 pipeline. These models are ranked by model quality assessment. These model quality assessment scores further provide the basis for an estimate on the trustworhtiness of each model. This is especially helpful for families that do not have a known structure. The top ranked model is shown in the detail pages along with its predicted contacts. See <a href="https://www.ncbi.nlm.nih.gov/pubmed/28881974" target="_blank">PconsFold2</a> for more details.
-            </p>
-      </td></tr>
-      <tr><td>
-              <h5>Length</h5>
-              <p>
-              Length of the representative sequence of the PFAM family.
-              </p>
-      </td></tr>
-      <tr><td>
-              <h5>M<sub>eff</sub></h5>
-              <p>
-              Number of effective sequences as described by <a href="https://doi.org/10.1103/PhysRevE.87.012707">Ekeberg <i>et al.</i>,2013</a>.
-              This is calculated from the alignments run by HHblits and Jackhmmer from the representative sequences for each family. The Pfam alignments were ignored.
-              </p>
-      </td></tr>
-      <tr><td>
-              <h5>FDR</h5>
-              <p>
-              False Discovery Rate, the expected proportion of type I errors.
-              </p>
+            <br><br>
       </td></tr>
     </table>
     <br><br>
@@ -92,8 +73,9 @@
       <tr><td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
         <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
       </tr>
-      {% include "web_pconsfold/refs.html" %}
+      {% include "pred/refs.html" %}
   </table>
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28881974">Large-scale structure prediction by improved contact predictions and model quality assessment</a>
   <br><br>
   <a name="5"></a>
 
@@ -124,6 +106,6 @@
   </table>
 
   </table>
-</div>
+
 {% endblock %}
 

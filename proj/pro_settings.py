@@ -13,7 +13,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 # BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-DATA_DIR = os.path.join(BASE_DIR,'../web_pconsfold/static/data')
+DATA_DIR = os.path.join(BASE_DIR,'../web_CPA/static/data')
 #try:
 #    from shared_settings import *
 #except ImportError:
@@ -38,7 +38,7 @@ ALLOWED_HOSTS = ['*']
 #        pass
 #   ALLOWED_HOSTS += nodelist
 INSTALLED_APPS = (
-        'web_pconsfold',
+        'web_CPA',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

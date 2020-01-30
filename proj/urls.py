@@ -1,16 +1,16 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = ['',
     # Examples:
-    url(r'^', include('web_pconsfold.urls', namespace='web_pconsfold')),
-    url(r'^$', include('web_pconsfold.urls', namespace='web_pconsfold')),
+    url(r'^', include('web_CPA.urls', namespace='web_CPA')),
+    url(r'^$', include('web_CPA.urls', namespace='web_CPA')),
     # url(r'^help/', include('web_pconsfold.urls', namespace='web_pconsfold')),
     # url(r'^news/', include('web_pconsfold.urls', namespace='web_pconsfold')),
     # url(r'^reference/', include('web_pconsfold.urls', namespace='web_pconsfold')),
     # url(r'^download/', include('web_pconsfold.urls', namespace='web_pconsfold')),
     # url(r'^blog/', include('blog.urls')),
     url(r'^admin/', include(admin.site.urls)),
-)
+]

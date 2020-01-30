@@ -1,18 +1,18 @@
-{% extends "web_pconsfold/base_layout.html" %}
+{% extends "web_CPA/base_layout.html" %}
 
 {%block content_right_panel %}
 
     {% if username %}
-      {% include "web_pconsfold/user_header.html" %}
+      {% include "web_CPA/user_header.html" %}
     {% endif %}
 
-<h2>SubCons: a new ensemble method for improved human subcellular localization web_pconsfoldictions</h2>
+<h2>SubCons: a new ensemble method for improved human subcellular localization web_CPAictions</h2>
 <p>Please paste your amino acid sequences in <a href='http://blast.ncbi.nlm.nih.gov/blastcgihelp.shtml' target=\'_blank\'>FASTA</a> format (max 100000 chars)<br>Allowed characters: "ABCDEFGHIKLMNPQRSTUVWYZX*", of which "BUZ*" will be converted to 'X'
 <br>
 (Sequences should be no shorter than 10 amino acids)
 </p>
 
-<form name="seq_form" action="/web_pconsfold/" enctype="multipart/form-data" method="post">
+<form name="seq_form" action="/web_CPA/" enctype="multipart/form-data" method="post">
     {% csrf_token %}
     {{form.as_p}}
 
@@ -33,7 +33,7 @@ document.getElementById('options').style.display = 'none';
      </tr>
      <tr><td>
          <h3>Reference</h3>
-            {% include "web_pconsfold/refs.html" %}
+            {% include "web_CPA/refs.html" %}
      </td></tr>
  </table>
 

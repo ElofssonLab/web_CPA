@@ -18,7 +18,7 @@ def index(request):
 	# temp_string += '<a href="/details/' + splitline[0] + '">' + splitline[0] + '</a></td><td>'
 	# temp_string += "</td><td>".join(splitline[1:]) + "</td></tr>"
     #     tableData.append(temp_string)
-    return render(request, 'web_pconsfold/index.html') # ,{'headers':headers, 'tableData': tableData})
+    return render(request, 'web_CPA/index.html') # ,{'headers':headers, 'tableData': tableData})
 
 
 def details(request, pfam_id):
@@ -29,7 +29,7 @@ def details(request, pfam_id):
     base_url = os.path.join(settings.DATA_DIR, '29.0/', pfam_id)
     ls_list = []
     fasta_url = ''
-    # for f in os.listdir('/big/pfam/web_pconsfold/static/data/29.0/' + pfam_id):
+    # for f in os.listdir('/big/pfam/web_CPA/static/data/29.0/' + pfam_id):
     # prot_di = fix(id,glob.glob("{}/*.l3".format(jobDir)))
     di_list = []
     model_list = []
@@ -105,7 +105,7 @@ def details(request, pfam_id):
     model_list = sorted(model_list, key=lambda x: "".join(x.split(".")[:-1]))
     modelURLs = [org_pdb_file] + model_list
 
-    return render(request, 'web_pconsfold/details.html', {'pfam_id': pfam_id,
+    return render(request, 'web_CPA/details.html', {'pfam_id': pfam_id,
                                                           'pfam_url': pfam_url,
                                                           'modelURL': modelURL,
                                                           'modelURLs': modelURLs,
@@ -193,24 +193,24 @@ def get_browse(request):
         # temp_string += "</td><td>".join(splitline[1:]) + "</td></tr>"
         # tableData.append(temp_string)
     jsondata = json.dumps(tableData)
-    return render(request, 'web_pconsfold/browse.html',{'headers':headers,
+    return render(request, 'web_CPA/browse.html',{'headers':headers,
         'tableData': jsondata, 'initial_search': initial_search})
 
 def get_contact(request):
     # return HttpResponse('In help site')
-    return render(request, 'web_pconsfold/contact.html', {})
+    return render(request, 'web_CPA/contact.html', {})
 def get_search(request):
     # return HttpResponse('In help site')
-    return render(request, 'web_pconsfold/search.html', {})
+    return render(request, 'web_CPA/search.html', {})
 def get_help(request):
     # return HttpResponse('In help site')
-    return render(request, 'web_pconsfold/help.html', {})
+    return render(request, 'web_CPA/help.html', {})
 def get_news(request):
     # return HttpResponse('In help site')
-    return render(request, 'web_pconsfold/news.html', {})
+    return render(request, 'web_CPA/news.html', {})
 def get_download(request):
     # return HttpResponse('In help site')
-    return render(request, 'web_pconsfold/download.html', {})
+    return render(request, 'web_CPA/download.html', {})
 def get_reference(request):
     # return HttpResponse('In help site')
-    return render(request, 'web_pconsfold/reference.html', {})
+    return render(request, 'web_CPA/reference.html', {})

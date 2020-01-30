@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-from web_pconsfold import views
-urlpatterns = patterns('',
+from web_web_CPA import views
+urlpatterns = ['',
         url(r'(?P<pfam_id>[PF]{2}[0-9]{5}.[0-9]{1,2})/$', views.details, name='details'),
         url(r'^browse$', views.get_browse, name='browse'),
         # url(r'^browse/([a-zA-Z0-9]{,20})', views.get_browse, name='browse'),
@@ -13,4 +13,4 @@ urlpatterns = patterns('',
         url(r'^reference$', views.get_reference, name='reference'),
         url(r'^$', views.index, name='index'),
         # url(r'^news/$', views.get_news, name='get_news'),
-        )
+        ]
