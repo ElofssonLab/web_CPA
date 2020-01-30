@@ -1,4 +1,5 @@
 {% extends "pred/base_layout.html" %}
+{% load static %}
 
 
 {%block content_right_panel %}
@@ -106,7 +107,7 @@
        </form>
         <p>
             <img id="imgNumJobSubmit"
-            src="{{STATIC_URL}}log/stat/submit_month.stat.txt.numjob.png"
+				 src="{% static "log/stat/submit_month.stat.txt.numjob.png" %}"
             alt="" height="400">
         </p>
        <form>
@@ -117,7 +118,7 @@
        </form>
         <p>
             <img id="imgNumSeqSubmit"
-            src="{{STATIC_URL}}log/stat/submit_month.stat.txt.numseq.png"
+				 src="{% static "log/stat/submit_month.stat.txt.numseq.png" %}"
             alt="" height="400">
         </p>
     </p>
@@ -127,21 +128,21 @@
 
         <font color="#6633CC"><b>Average running time</b></font><br>
         <img
-        src="{{STATIC_URL}}log/stat/avg_runtime.stat.txt.rot.png"
+			src="{% static "log/stat/avg_runtime.stat.txt.rot.png" %}"
         alt="Average running time" height="400">
         <br> <br>
 
         <font color="#6633CC"><b>Average running time versus length of 
                 query sequences</b></font><br>
         <img
-        src="{{STATIC_URL}}log/stat/length_runtime.pfam.stat.txt.mtp.avgline.png"
+			src="{% static "log/stat/length_runtime.pfam.stat.txt.mtp.avgline.png" %}"
         alt="average running time versus sequence length" height="400">
         <br> <br>
 
         <font color="#6633CC"><b>Dot plot for running time versus length of 
                 query sequences</b></font><br>
         <img
-        src="{{STATIC_URL}}log/stat/length_runtime.pfam.stat.txt.mtp.png"
+		src="{% static "log/stat/length_runtime.pfam.stat.txt.mtp.png" %}"
         alt="running time versus sequence length" height="400">
         <br> <br>
 

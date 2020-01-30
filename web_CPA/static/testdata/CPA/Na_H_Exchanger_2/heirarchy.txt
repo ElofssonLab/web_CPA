@@ -1,0 +1,14 @@
+Topology:14H-Nin 
+Superfamily:CPA/AT
+Fold-type:7 helical broken fold-type
+Family:Na_H_Exchanger
+Subfamily:Na_H_Exchanger_2
+N-Scaffold:1-4
+N-core:5-7
+N-repeat:1-7
+C-Scaffold:8-11
+C-core:12-14
+C-repeat:8-14
+Pfam:PF00999
+PDB:
+KRbias-broken/KRbias-reentrant:14.23/-2.93

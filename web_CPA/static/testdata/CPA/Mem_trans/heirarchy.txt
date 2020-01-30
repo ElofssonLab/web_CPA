@@ -1,0 +1,14 @@
+Topology:10H-Nout 
+Superfamily:CPA/AT
+Fold-type:5 helical broken fold-type
+Family:Mem_trans
+Subfamily:
+N-Scaffold:1-2
+N-core:3-5
+N-repeat:1-5
+C-Scaffold:6-7
+C-core:8-10
+C-repeat:6-10
+Pfam:PF03547
+PDB:
+KRbias-broken/KRbias-reentrant:-10.71/-0.31

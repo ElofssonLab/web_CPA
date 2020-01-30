@@ -1,15 +1,16 @@
 {% extends "web_CPA/base_layout.html" %}
+{% load static %}
 
 {%block content_main %}
       <div class="container" style="padding-top: 25px">
   <h2>Help</h2>
   <table cellspacing=0 cellpadding=0 border=0>
     <tr>
-      <td class="Greylink"><a href="#1">1.&nbsp;Summary<img src="{{STATIC_URL}}/images/0.gif" height=1 width=5 border=0><img src="{{STATIC_URL}}/images/arrow.png" border=0><img src="{{STATIC_URL}}/images/0.gif" height=1 width=40 border=0></a><td>
-      <td class="Greylink"><a href="#2">2.&nbsp;Usage<img src="{{STATIC_URL}}/images/0.gif" height=1 width=5 border=0><img src="{{STATIC_URL}}/images/arrow.png" border=0><img src="{{STATIC_URL}}/images/0.gif" height=1 width=40 border=0></a><td>
-      <td class="Greylink"><a href="#3">3.&nbsp;Output<img src="{{STATIC_URL}}/images/0.gif" height=1 width=5 border=0><img src="{{STATIC_URL}}/images/arrow.png" border=0><img src="{{STATIC_URL}}/images/0.gif" height=1 width=40 border=0></a><td>
-      <td class="Greylink"><a href="#4">4.&nbsp;References<img src="{{STATIC_URL}}/images/0.gif" height=1 width=5 border=0><img src="{{STATIC_URL}}/images/arrow.png" border=0><img src="{{STATIC_URL}}/images/0.gif" height=1 width=40 border=0></a><td>
-      <td class="Greylink"><a href="#5">5.&nbsp;Contact<img src="{{STATIC_URL}}/images/0.gif" height=1 width=5 border=0><img src="{{STATIC_URL}}/images/arrow.png" border=0><img src="{{STATIC_URL}}/images/0.gif" height=1 width=40 border=0></a><td>
+		<td class="Greylink"><a href="#1">1.&nbsp;Summary<img src="{% static "/images/0.gif" %}" height=1 width=5 border=0><img src="{% static "/images/arrow.png" %}" border=0><img src="{% static "/images/0.gif" %}" height=1 width=40 border=0></a><td>
+				<td class="Greylink"><a href="#2">2.&nbsp;Usage<img src="{% static "/images/0.gif" %}" height=1 width=5 border=0><img src="{% static "/images/arrow.png" %}" border=0><img src="{% static "/images/0.gif" %}" height=1 width=40 border=0></a><td>
+						<td class="Greylink"><a href="#3">3.&nbsp;Output<img src="{% static "/images/0.gif" %}" height=1 width=5 border=0><img src="{% static "/images/arrow.png" %}" border=0><img src="{% static "/images/0.gif" %}" height=1 width=40 border=0></a><td>
+								<td class="Greylink"><a href="#4">4.&nbsp;References<img src="{% static "/images/0.gif" %}" height=1 width=5 border=0><img src="{% static "/images/arrow.png" %}" border=0><img src="{% static "/images/0.gif" %}" height=1 width=40 border=0></a><td>
+										<td class="Greylink"><a href="#5">5.&nbsp;Contact<img src="{% static "/images/0.gif" %}" height=1 width=5 border=0><img src="{% static "/images/arrow.png" %}" border=0><img src="{% static "/images/0.gif" %}" height=1 width=40 border=0></a><td>
       </tr>
   </table>
 
@@ -21,8 +22,8 @@
       <h3>1. Summary</h3><br>
       <table cellspacing=0 cellpadding=0 border=0>
         <tr>
-          <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
-          <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
+			<td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=400></td>
+			<td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=50></td>
         </tr>
         <tr><td>
         <p>
@@ -37,8 +38,8 @@
       <h3>2. Usage</h3><br>
       <table cellspacing=0 cellpadding=0 border=0>
         <tr>
-          <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
-          <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
+			<td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=400></td>
+			<td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=50></td>
         </tr>
         <tr><td>
             <p>
@@ -56,8 +57,8 @@
       <h3>3. Output</h3><br>
       <table cellspacing=0 cellpadding=0 border=0>
         <tr>
-          <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
-          <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td></tr>
+			<td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=400></td>
+			<td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=50></td></tr>
         <tr><td>
             <p>
             For each family a set of models has been predicted with the PconsFold2 pipeline. These models are ranked by model quality assessment. These model quality assessment scores further provide the basis for an estimate on the trustworhtiness of each model. This is especially helpful for families that do not have a known structure. The top ranked model is shown in the detail pages along with its predicted contacts. See <a href="https://www.ncbi.nlm.nih.gov/pubmed/28881974" target="_blank">PconsFold2</a> for more details.
@@ -89,8 +90,8 @@
 
     <h3>4. References</h3><br>
     <table cellspacing=0 cellpadding=5 border=0>
-      <tr><td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
-        <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
+		<tr><td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=400></td>
+			<td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=50></td>
       </tr>
       {% include "web_CPA/refs.html" %}
   </table>
@@ -100,8 +101,8 @@
   <h3>5. Contact</h3><br>
     <table cellspacing=0 cellpadding=0 border=0>
       <tr>
-        <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=400></td>
-        <td><img src="{{STATIC_URL}}/images/0.gif" border=0 height=1 width=50></td>
+		  <td><img src="{% static "/images/0.gif" %}" border=0 height=1 width=400></td>
+		  <td><img src="{% static "/images/0.gif" %}" %}" border=0 height=1 width=50></td>
       </tr>
       <tr><td>
           <b>Arne Elofsson group</b><br><br>

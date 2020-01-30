@@ -1,0 +1,14 @@
+Topology:12H-Nin 
+Superfamily:CPA/AT
+Fold-type:7 helical broken fold-type
+Family:Na_H_antiport_1
+Subfamily:
+N-Scaffold:1-2
+N-core:3-5
+N-repeat:1-5
+C-Scaffold:6-9
+C-core:10-12
+C-repeat:6-12
+Pfam:PF06965
+PDB:1ZCD(NHAA_ECOLI)
+KRbias-broken/KRbias-reentrant:18.47/-3.10

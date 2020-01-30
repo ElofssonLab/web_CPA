@@ -1,7 +1,8 @@
+{% load static %}
 {% extends "web_CPA/base_layout.html" %}
 {%block content_main %}
 
-<script src="{{STATIC_URL}}js/modernizr-2.8.3.min.js"></script>
+<script src="{% static "js/modernizr-2.8.3.min.js" %}"></script>
 <script>
 var PROTEIN_STRUCTURE_FILE = "{{ modelURL }}";// to be filled by Django
 var PROTEIN_STRUCTURE_FILES = ["{{ modelURL }}"];// to be filled by Django
@@ -13,9 +14,9 @@ var FASTA_FILENAME = "{{ fasta_url }}";//
 var PROTEIN_LEN = {{ prot_len }};
 
 </script>
-<script data-main='{{STATIC_URL}}js/protein' src='{{STATIC_URL}}js/require.js'></script>
-<script src="{{STATIC_URL}}js/main.js"></script>
-<link rel="stylesheet" href="{{STATIC_URL}}css/style.css">
+<script data-main="{% static "js/protein" %}" src="{% static "js/require.js" }%"></script>
+<script src="{% static "js/main.js" %}"></script>
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 
 <div class="panel2 center-block" style="max-width:100%">
     <div class="structure">
@@ -87,6 +88,6 @@ B-factor<br/><br/>
 
 </div>
 
-<script src="{{STATIC_URL}}js/rainbowvis.js"></script>
-<script src="{{STATIC_URL}}js/contact_map.js"></script> 
+<script src="{% static "js/rainbowvis.js" %}"></script>
+<script src="{% static "js/contact_map.js" %}"></script> 
 {% endblock %}

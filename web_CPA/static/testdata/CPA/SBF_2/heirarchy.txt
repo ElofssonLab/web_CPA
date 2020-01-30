@@ -1,0 +1,14 @@
+Topology:9H-Nout 
+Superfamily:CPA/AT
+Fold-type:5 helical broken fold-type
+Family:SBF
+Subfamily:SBF_2
+N-Scaffold:1
+N-core:2-4
+N-repeat:1-4
+C-Scaffold:5-6
+C-core:7-9
+C-repeat:5-9
+Pfam:PF01758
+PDB:
+KRbias-broken/KRbias-reentrant:-10.72/0.72

@@ -1,0 +1,14 @@
+Topology:13H-Nin
+Superfamily:CPA/AT
+Fold-type:6 helical reentrant fold-type
+Family:2HCT
+Subfamily:
+N-Scaffold:1-4
+N-core:5-7
+N-repeat:1-7
+C-Scaffold:8-10
+C-core:11-13
+C-repeat:8-13
+Pfam:PF03390
+PDB:5X9R(CITN_KLEPN),5A1S(G4BX92_SALIN)
+KRbias-broken/KRbias-reentrant:-0.46/14.67

@@ -1,7 +1,8 @@
 {% extends "web_CPA/base_layout.html" %}
+{% load static %}
 {%block content_main %}
 
-<script src="{{STATIC_URL}}js/modernizr-2.8.3.min.js"></script>
+<script src="{% static "js/modernizr-2.8.3.min.js" %}"></script>
 <script>
 var PROTEIN_STRUCTURE_FILE = "{{ modelURL }}";// to be filled by Django
 var PROTEIN_STRUCTURE_FILES = {{ modelURLs|safe }};// to be filled by Django
@@ -17,9 +18,9 @@ var FASTA_FILENAME = "{{ fasta_url }}";//
 var PROTEIN_LEN = {{ prot_len }};
 var PFAM_MODEL = "{{ pfam_id }}";
 </script>
-<script data-main='{{STATIC_URL}}js/protein' src='{{STATIC_URL}}js/require.js'></script>
-<script src="{{STATIC_URL}}js/main.js"></script>
-<link rel="stylesheet" href="{{STATIC_URL}}css/style.css">
+<script data-main="{% static "js/protein" %}" src="{% static "js/require.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 
 <div class="container" id="general_container">
 <ul class="nav nav-tabs">
@@ -320,13 +321,13 @@ var PFAM_MODEL = "{{ pfam_id }}";
         <div class ="row">
             <div class="col-md-4">
                 <div class ="row"><h4>Model</h4></div>
-                <img class="obrazek_topologiczny" id="our_model_topology_img" im_src="{{STATIC_URL}}images/" src="{{STATIC_URL}}images/{{ topo_data.1.0 }}.png" />
+				<img class="obrazek_topologiczny" id="our_model_topology_img" im_src="{% static "images/" %}" src="{% static "images/{{ topo_data.1.0 }}.png" %}" />
                 <div class="topology_desc" id="our_model_topology">{{ topo_data.0.0|safe }}</div>
             </div>
             {% if topo_data.3.strip|stringformat:"s" != "?"|stringformat:"s" %}
             <div class="col-md-4">
                 <div class ="row"><h4>Reference structure</h4></div>
-                <img class="obrazek_topologiczny" src="{{STATIC_URL}}images/{{ topo_data.4 }}.png" />
+				<img class="obrazek_topologiczny" src="{% static "images/{{ topo_data.4 }}.png" %}" />
                 <div class="topology_desc" id="pdb_model_topology">
                 {%  if topo_data.3 %}
                     {{ topo_data.3|safe }}{% if topo_data.4 != "01" %}<a href="http://knotprot.cent.uw.edu.pl/view/{{ pdb_id }}/{{ pdb_chain }}" target="_blank"> (view in KnotProt)</a>{% endif %}
@@ -563,7 +564,7 @@ var PFAM_MODEL = "{{ pfam_id }}";
 </div>
 </div>
 <!--</div>-->
-<script src="{{STATIC_URL}}js/rainbowvis.js"></script>
-<script src="{{STATIC_URL}}js/contact_map.js"></script> 
-<script src="{{STATIC_URL}}js/needle.js"></script> 
+<script src="{% static "js/rainbowvis.js" %}"></script>
+<script src="{% static "js/contact_map.js" %}"></script> 
+<script src="{% static "js/needle.js" %}"></script> 
 {% endblock %}

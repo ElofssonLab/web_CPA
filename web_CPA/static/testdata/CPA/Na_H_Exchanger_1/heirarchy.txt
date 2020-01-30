@@ -1,0 +1,14 @@
+Topology:13H-Nout 
+Superfamily:CPA/AT
+Fold-type:7 helical broken fold-type
+Family:Na_H_Exchanger
+Subfamily:Na_H_Exchanger_1
+N-Scaffold:1-3
+N-core:4-6
+N-repeat:1-6
+C-Scaffold:7-10
+C-core:11-13
+C-repeat:7-13
+Pfam:PF00999
+PDB:4CZB(NAH1_METJA),5BZ2(Q5SIA2_THET8),4BWZ(Q72IM4_THET2),4CZ8(Q9UZ55_PYRAB)
+KRbias-broken/KRbias-reentrant:-14.73/3.46

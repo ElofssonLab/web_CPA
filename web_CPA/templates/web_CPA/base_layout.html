@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,20 +10,20 @@
 
     <title>PconsFam database</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="{{STATIC_URL}}css/jumbotron.css" type="text/css" />
-    <link rel="stylesheet" href="{{STATIC_URL}}css/dataTables.bootstrap4.min.css" type="text/css" />
+	<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" type="text/css" />
+	<link rel="stylesheet" href="{% static "css/jumbotron.css" %}" type="text/css" />
+	<link rel="stylesheet" href="{% static "css/dataTables.bootstrap4.min.css" %}" type="text/css" />
 
 <link rel="shortcut icon"
       type="image/png"
-      href="{{STATIC_URL}}images/favicon.ico" />    
+	  href="{% static "images/favicon.ico" %}" />    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="{{STATIC_URL}}js/jquery-3.3.1.min.js"></script>
-    <script src="{{STATIC_URL}}js/popper.min.js"></script>
-    <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
-    <script src="{{STATIC_URL}}js/jquery.dataTables.min.js"></script>
-    <script src="{{STATIC_URL}}js/dataTables.bootstrap4.min.js"></script>
+	<script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
+	<script src="{% static "js/popper.min.js" %}"></script>
+	<script src="{% static "js/bootstrap.min.js" %}"></script>
+	<script src="{% static "js/jquery.dataTables.min.js" %}"></script>
+	<script src="{% static "js/dataTables.bootstrap4.min.js" %}"></script>
   </head>
   <body>
 
@@ -48,7 +49,7 @@
                   href="http://c3.pcons.net/static/download/pfam.tar.gz">All
                   predictions</a>
               <a class="dropdown-item"
-                  href="{{STATIC_URL}}/data/benchmarkset.tar.gz">Benchmark dataset</a>
+				 href="{% static "/data/benchmarkset.tar.gz" %}">Benchmark dataset</a>
             </div>
           </li>
           <li class="nav-item">
