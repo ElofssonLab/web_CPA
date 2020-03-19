@@ -7,15 +7,12 @@
              style="width:100%;padding:.25em">
            <tfoot>
              <tr>
-               <th>Acc</th>
-               <th>Clan</th>
-               <th>Length</th>
-               <th>Meff</th>
-               <th>FDR</th>
-               <th>Pcons</th>
-               <th>ProQ3</th>
-               <th>TM</th>
-               <th>structure</th>
+               <th>Subfamily</th>
+               <th>Family</th>
+               <th>Superfamily</th>
+               <th>Fold-type</th>
+               <th>Topology</th>
+               <th>Pfam</th>
                <!--               <th>model</th> -->
              </tr>
              </tfoot>
@@ -29,13 +26,14 @@ tfoot {
 table.dataTable td, table.dataTable th {
   padding: .25em;
 }
+    /*headers = ["Superfamily", "Fold-type","Family","Subfamily","Topology", "Pfam"]*/
 </style>
 <script type="text/javascript">
 	var dataset = {{ tableData|safe }};
   var inital_search = "";
 $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
-        var lmin = parseInt( $('#LengthMin').val(), 10 );
+        /* var lmin = parseInt( $('#LengthMin').val(), 10 );
         var lmax = parseInt( $('#LengthMax').val(), 10 );
         var length = parseFloat( data[2] ) || 0; // use data for the age column
         var meffmin = parseInt( $('#MeffMin').val(), 10 );
@@ -87,31 +85,29 @@ $.fn.dataTable.ext.search.push(
         {
             return true;
         }
-        return false;
+        return false; */
+		return true;
     }
 );
 $(document).ready(function() {
     $('#browse_table tfoot th').each( function () {
             var title = $(this).text();
-      if ((title == 'Length') || (title == 'Meff') || (title == 'FDR') || (title == 'Pcons') || (title == 'ProQ3') || (title == 'TM')) {
+      /*if ((title == 'Length') || (title == 'Meff') || (title == 'FDR') || (title == 'Pcons') || (title == 'ProQ3') || (title == 'TM')) {
             $(this).html( '<input type="text" id="' + title + 'Min" placeholder="Min" style="width:45%;margin-right:8%"/>' + 
                           '<input type="text" id="' + title + 'Max" placeholder="Max" style="width:45%;"/>'  );
       }
-      else {
+      else { */
             $(this).html( '<input type="text" id="' + title + '" placeholder="Search '+title+'" style="width: 100%" />' );
-      }} );
+      /*} */} );
     var table = $('#browse_table').DataTable( {
         data: dataset,
         columns: [
-            { title: "PFAM-A acc"},
-            { title: "Clan"},
-            { title: "Length", className: "text-right"},
-            { title: "Meff", className: "text-right"},
-            { title: "FDR", className: "text-right" },
-            { title: "Pcons", className: "text-right" },
-            { title: "ProQ3", className: "text-right" },
-            { title: "TM", className: "text-right" },
-            { title: "Has structure"},
+            { title: "Subfamily"},
+            { title: "Family"}, /*, className: "text-right"*/
+            { title: "Superfamily"},
+            { title: "Fold-type"},
+            { title: "Topology"},
+			{ title: "Pfam"},
             // { title: "Has model"}
         ],
       "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -119,13 +115,13 @@ $(document).ready(function() {
       "paging": true,
       "oSearch": {"sSearch": "{{ initial_search }}"}
     } );
-    $('#LengthMin, #LengthMax, #MeffMin, #MeffMax, #FDRMin, #FDRMax, #PconsMin, #PconsMax, #ProQ3Min, #ProQ3Max, #TMMin, #TMMax').keyup( function() {
+    /*$('#LengthMin, #LengthMax, #MeffMin, #MeffMax, #FDRMin, #FDRMax, #PconsMin, #PconsMax, #ProQ3Min, #ProQ3Max, #TMMin, #TMMax').keyup( function() {
         table.draw();
-    } );
+    } );*/
     table.columns().every( function () {
             var that = this;
      
-            $( '#Acc, #Clan, #structure', this.footer() ).on( 'keyup change', function () {
+            $( '#Superfamily, #Fold-type, #Family, #Subfamily, #Topology, #Pfam', this.footer() ).on( 'keyup change', function () {
                 if ( that.search() !== this.value ) {
                     that
                         .search( this.value )

@@ -7,6 +7,7 @@ app_name="web_CPA"
 urlpatterns = [
         url(r'^$', views.index, name="index"),
         url(r'(?P<pfam_id>[PF]{2}[0-9]{5}.[0-9]{1,2})/$', views.details, name='details'),
+        url(r'(?P<subfamily_id>[a-zA-Z0-9\_\-]+)/$', views.details, name='details'),
         url(r'^browse$', views.get_browse, name='browse'),
         # url(r'^browse/([a-zA-Z0-9]{,20})', views.get_browse, name='browse'),
         url(r'^search$', views.get_search, name='search'),
