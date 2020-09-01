@@ -179,7 +179,7 @@ def get_browse(request):
     headers = ["Subfamily", "Family", "Superfamily", "Fold-type","Topology", "Pfam"]
 
 
-    sub_families= [f.split("/")[-1] for f in glob.glob(settings.DATA_DIR + "/CPA/*")]
+    sub_families= [f.split("/")[-1] for f in glob.glob(settings.DATA_DIR + "/CPA/*") if os.path.isdir(f)]
     family_stats = []
 
 

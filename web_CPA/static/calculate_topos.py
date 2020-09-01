@@ -2,12 +2,14 @@ import sys
 from os import path
 import re
 import glob
+import urllib.request
+from urllib.error import HTTPError
 
 if len(sys.argv) != 2:
     print("Error, takes a subfamily folder as input")
 
 in_folder = sys.argv[1].rstrip('/')
-
+pdbURL = "https://files.rcsb.org/download/"
 sf_id = in_folder.split('/')[-1]
 # colors = ["0x6495ED", "'blue'", "0xF08080", "'red'"]
 colors = {'N-broken-core-5':"0x800080",
@@ -41,6 +43,7 @@ helices = ''
 topo_file = in_folder + "/" + sf_id + ".rtopo" 
 heir_file = in_folder + "/heirarchy.txt"
 pdb_file = glob.glob(in_folder + "/*.pdb")
+pdb_id = ''
 
 with open(heir_file) as heir_handle:
     for line in heir_handle:
@@ -76,12 +79,25 @@ with open(heir_file) as heir_handle:
             fold_type = line.strip().split(":")[-1]
             fold_nr = fold_type.split(' ')[0]
             fold_subtype = fold_type.split(' ')[2]
+        elif line.startswith("PDB"):
+            pot_pdb = line.strip().split(":")
+            if len(pot_pdb[1]) > 1:
+                # Need to fetch pdb
+                pdb_id = pot_pdb[1].split('(')[0]
+                # print(pdb_id)
 # N-Scaffold:1-4
 # N-core:5-7
 # N-repeat:1-7
 # C-Scaffold:8-10
 # C-core:11-13
 # C-repeat:8-13
+if not pdb_file:
+    print("Need structures for the following:")
+    print("{}: {}".format(sf_id, pdb_id))
+    # try:
+    #     urllib.request.urlretrieve(pdbURL + pdb_id + '.pdb', in_folder + '/' + sf_id + '_struct.pdb')
+    # except HTTPError as err:
+    #     print("{} not exists, skipping...".format(pdb_id), file=sys.stderr)
 if not path.exists(topo_file):
     topo_file = in_folder + "/" + sf_id + ".btopo" 
 
