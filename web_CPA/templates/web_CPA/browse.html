@@ -1,7 +1,9 @@
 {% extends "web_CPA/base_layout.html" %}
+{% load static %}
 
 {%block content_main %}
       <div class="container" style="padding-top: 25px">
+		<img class="img-responsive" style="max-width:100%" src="{% static "data/CPA/Heirarchy_figure.svg" %}" alt="CPAfold">
         <div class="row">
          <table id="browse_table" class="table table-striped table-bordered"
              style="width:100%;padding:.25em">

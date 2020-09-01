@@ -39,16 +39,52 @@ def details(request, subfamily_id):
     di_list = []
     model_list = []
     cpa_models = glob.glob(cpa_url + "/*.pdb")
+    pir_models = glob.glob(cpa_url + "/*.pir")
+    seed_models_raw = glob.glob(cpa_url + "/*-seed.msa")
+    fasta_topo_files = glob.glob(cpa_url + "/*topo")
     cases_path = glob.glob(cpa_url + "/*_cases.txt")
     buttons_path = glob.glob(cpa_url + "/*_buttons.txt")
-    if len(cpa_models) > 0:
-        cpa_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, cpa_models[0].split("/")[-1])
+    topAnnot_names = glob.glob(cpa_url + "/*-topology_annotation.svg")  # [0].split('/')[-1]
+    # if len(cpa_models) > 0:
+    cpa_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, cpa_models[0].split("/")[-1])
+    pir_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, pir_models[0].split("/")[-1])
+    seed_models = [os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, seed_model.split("/")[-1]) for seed_model in seed_models_raw]
+    fasta_topo_file = [os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, fasta_topo_file.split("/")[-1]) for fasta_topo_file in fasta_topo_files][0]
+    # print(fasta_topo_file)
+    
+    ######################
+    # Data from heirarchy.txt
+    info = {}
+    with open(os.path.join(settings.DATA_DIR, "CPA", subfamily_id, "heirarchy.txt"), 'r') as heir_stat:
+        for d in heir_stat.read().strip().split('\n'):
+            key, value = d.split(':')
+            # if key == "Subfamily":
+            #     detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
+            #     info[key] = detail_link
+            # elif key == "Pfam":
+            #     pfam_link = '<a href="https://pfam.xfam.org/family/' + value + '" target="_blank">' + value + '</a>' 
+            #     info[key] = pfam_link
+            # else:
+            if key.startswith("KR"):
+                p_type = key.split('/')
+                values = value.split('/')
+                info["KRbroken"] = [p_type[0], values[0]]
+                info["KRreentrant"] = [p_type[1], values[1]]
+            else:
+                info[key] = value
+    if "_struct.pdb" in cpa_model:
+        model_type = "Known structure"
     else:
-        cpa_model = "false"
+        model_type = "Model structure"
     cartoon_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-cartoon.svg")
     krbias_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-KRbias.png")
-    topAnnot_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-topology_annotation.svg")
+    motif_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-NC_CC.png")
+    # topAnnot_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, topAnnot_name)
+    topAnnot_urls = [os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, topAnnot.split("/")[-1]) for topAnnot in topAnnot_names]
+    # print(topAnnot_urls)
 
+    fasta_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + ".fasta")
+    family_msa_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-msa.fasta")
     # cases_path = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, cases[0].split("/")[-1])
     # print(cpa_model)
     # print(modelURL)
@@ -85,6 +121,7 @@ def details(request, subfamily_id):
         topo_data[2] = topo_data[2].strip().split(";")
         if topo_data[3]:
              topo_data[3] = topo_lambda(topo_data[3].strip())
+    # print(topo_file)
     # end topology
 
     # with open(desc_file, 'r') as desc_handle:
@@ -139,9 +176,11 @@ def details(request, subfamily_id):
     return render(request, 'web_CPA/details.html', {# 'pfam_id': pfam_id,
                                                           # 'pfam_url': pfam_url,
                                                           'modelURL': cpa_model,
+                                                          'pirURL': pir_model,
+                                                          'modelType': model_type,
                                                           'cartoonURL': cartoon_url,
                                                           'krbiasURL': krbias_url,
-                                                          'topannotURL': topAnnot_url,
+                                                          'topannotURLs': topAnnot_urls,
                                                           # 'modelURLs': modelURLs,
                                                           # 'dmapURL': dmapURL,
                                                           # 'topology_calculated' : topology_calculated,
@@ -162,6 +201,15 @@ def details(request, subfamily_id):
                                                           # 'clan_id': clan_id,
                                                           # 'clan_name': clan_name,
                                                           # 'ls_list': ls_list,
+                                                          'nrepeat': info["N-repeat"],
+                                                          'crepeat': info["C-repeat"],
+                                                          'krbroken': info["KRbroken"],
+                                                          'krreentrant': info["KRreentrant"],
+                                                          'motif_url': motif_url,
+                                                          'seed_models': seed_models,
+                                                          'fasta_url': fasta_url,
+                                                          'fasta_topo_file': fasta_topo_file,
+                                                          'family_msa_url': family_msa_url,
                                                           'subfamily_id': subfamily_id,
                                                           'cases_text': cases_text,
                                                           'buttons_text': buttons_text})
