@@ -1,3 +1,3 @@
 [submodule "web_CPA/static/testdata/CPA"]
-	path = web_CPA/static/testdata/CPA
+	path = web_CPA/static/data/CPA
 	url = https://github.com/gsudha/CPA_AT_database
