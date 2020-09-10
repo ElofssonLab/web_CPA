@@ -97,9 +97,11 @@ var SUBFAMILY_ID = "";
 				<div class="col-sm">
 					<a href="{{ modelURL }}">{{ modelType }}</a>
 				</div>
+				{% if pirURL %}
 				<div class="col-sm">
 						<a href="{{ pirURL }}">PIR file</a>
 				</div>
+				{% endif %}
 			</div>
 		</div>
 
