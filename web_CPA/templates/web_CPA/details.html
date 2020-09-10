@@ -30,60 +30,111 @@ var SUBFAMILY_ID = "";
   position: relative;
 }
 </style>
+
 <div class="container" id="general_container">
-	<div class="col" style="padding-top: 10px;"><h1>{{ subfamily_id }}</h1> <h3>({{ modelType }})</h3> <h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div>
-	<div class="row">
-		<div id="container-01" class="mol-container"></div>
-	</div>
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+		<a class="nav-link active" data-toggle="tab" href="#visualization">Visualization</a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#references">Reference files</a>
+	  </li>
+		<li class="nav-item"  >
+		<a class="nav-link" data-toggle="tab" href="#logos">Logos</a>
+	  </li>
+		<li class="nav-item"  >
+		<a class="nav-link" data-toggle="tab" href="#cartoon">Cartoon and KR-bias</a>
+	  </li>
+		<li class="nav-item"  >
+		<a class="nav-link" data-toggle="tab" href="#topology">Topology</a>
+	  </li>
+		<li class="nav-item"  >
+		<a class="nav-link" data-toggle="tab" href="#full">Full alignments</a>
+	  </li>
+		<li class="nav-item"  >
+		<a class="nav-link" data-toggle="tab" href="#repeat">Repeat alignments</a>
+	  </li>
+	</ul>
 
-	<div class="row">
-	{% for button in buttons_text %}
-		<input type="button" value="{{button.0}} {{ button.1}}" onclick="highlight_helix(this, {{button.2}}, {{button.3}})"/>
-	{% endfor %}
-		<div class="slidecontainer" style="width: 100%; height:50px">
-			<input type="range" min="1" max="300" value="1" id="mySelection">
-		</div>
-		<!-- 	<input type="button" value="sphere" onclick="viewer.setStyle({resi:['20-50']}, {cartoon:{color:'red', thickness:1.0}});viewer.render();"> -->
-	</div>
+	<div class="tab-content">
 
-	<div class="row">
-		<div class="col-sm">
-		{% for seed in seed_models %}
+		<div class="container tab-pane active" id="visualization" style="padding-top: 25px; padding-bottom: 150px">
+			<div class="col" style="padding-top: 10px;"><h1>{{ subfamily_id }}</h1> <h3>({{ modelType }})</h3> <h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div>
+
 			<div class="row">
-				<a href="{{ seed }}">Seed model {{forloop.counter }}</a>
+				<div id="container-01" class="mol-container"></div>
 			</div>
+
+			<div class="row">
+			{% for button in buttons_text %}
+				<input type="button" value="{{button.0}} {{ button.1}}" onclick="highlight_helix(this, {{button.2}}, {{button.3}})"/>
+			{% endfor %}
+				<div class="slidecontainer" style="width: 100%; height:50px">
+					<input type="range" min="1" max="{{ fa_len }}" value="1" id="mySelection">
+				</div>
+				<!-- 	<input type="button" value="sphere" onclick="viewer.setStyle({resi:['20-50']}, {cartoon:{color:'red', thickness:1.0}});viewer.render();"> -->
+			</div>
+		</div>
+
+		<div class="container tab-pane fade" id="references" style="padding-top: 25px; padding-bottom: 150px">
+			<div class="row">
+				<div class="col-sm">
+						<a href="{{ fasta_url }}">Representative fasta</a>
+				</div>
+				<div class="col-sm">
+						<a href="{{ family_msa_url }}">Family MSA</a>
+				</div>
+				<div class="col-sm">
+						<a href="{{ fasta_topo_file }}">Topology of representative fasta</a>
+				</div>
+			</div>
+			<div class="row">
+				{% for seed in seed_models %}
+					<div class="col-sm">
+						<a href="{{ seed }}">Seed model {{forloop.counter }}</a>
+					</div>
+				{% endfor %}
+				<div class="col-sm">
+					<a href="{{ modelURL }}">{{ modelType }}</a>
+				</div>
+				<div class="col-sm">
+						<a href="{{ pirURL }}">PIR file</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="container tab-pane fade" id="logos" style="padding-top: 25px; padding-bottom: 150px">
+			<div>
+				<img class="img-fluid" style="width: 100%;height:auto" src="{{ motif_url }}" alt="{{ subfamily_id }} motif">
+			</div>
+		</div>
+
+		<div class="container tab-pane fade" id="cartoon" style="padding-top: 25px; padding-bottom: 150px">
+			<div class="row">
+				<div class="col"><img src="{{ cartoonURL }}" alt="{{ subfamily_id }} cartoon"></div>
+				<div class="col"><img src="{{ krbiasURL }}" alt="{{ subfamily_id }} KRbias" style="width: 100%">{{ krbroken.0 }} {{ krbroken.1 }} : {{ krreentrant.0 }} {{ krreentrant.1 }}</div>
+			</div>
+		</div>
+
+		<div class="container tab-pane fade" id="topology" style="padding-top: 25px; padding-bottom: 150px">
+			<div class="row">
+				{% for annot in topannotURLs %}
+				<div class="col-sm"><img src="{{ annot }}" alt="{{ subfamily_id }} topology"></div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<div class="container tab-pane fade" id="full" style="padding-top: 25px; padding-bottom: 150px">
+		{% for full_image in full_images %}
+			<div class="row" style="padding-bottom:100px"><img class="mw-100" src="{{ full_image }}" alt="{{ subfamily_id }}"></div>
 			{% endfor %}
 		</div>
-		<div class="col-sm">
-				<a href="{{ fasta_url }}">Representative fasta</a>
-		</div>
-		<div class="col-sm">
-				<a href="{{ family_msa_url }}">Family MSA</a>
-		</div>
-		<div class="col-sm">
-				<a href="{{ fasta_topo_file }}">Topology of representative fasta</a>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm">
-				<a href="{{ modelURL }}">PDB file</a>
-		</div>
-		<div class="col-sm">
-				<a href="{{ pirURL }}">PIR file</a>
-		</div>
 
-	</div>
-	<div>
-		<img style="width: 100%" src="{{ motif_url }}" alt="{{ subfamily_id }} motif">
-	</div>
-	<div class="row">
-		<div class="col"><img src="{{ cartoonURL }}" alt="{{ subfamily_id }} cartoon"></div>
-		<div class="col"><img src="{{ krbiasURL }}" alt="{{ subfamily_id }} KRbias" style="width: 100%">{{ krbroken.0 }} {{ krbroken.1 }} : {{ krreentrant.0 }} {{ krreentrant.1 }}</div>
-	</div>
-	<div class="row">
-		{% for annot in topannotURLs %}
-		<div class="col-sm"><img src="{{ annot }}" alt="{{ subfamily_id }} topology"></div>
-		{% endfor %}
+		<div class="container tab-pane fade" id="repeat" style="padding-top: 25px; padding-bottom: 150px">
+			{% for repeat_image in repeat_images %}
+				<div class="row" style="padding-bottom:100px"><img class="mw-100" src="{{ repeat_image }}" alt="{{ subfamily_id }}"></div>
+			{% endfor %}
+		</div>
 	</div>
 </div>
 {% if modelURL %}
@@ -107,7 +158,7 @@ var SUBFAMILY_ID = "";
 					// rec1.setStyle({resn:'VIA'},{sphere:{colorscheme:'redCarbon'}});
 					// let v = viewer;
 					let m = viewer.addModel( data, "pdb");
-					m.setStyle({cartoon: {colorfunc: colorHelix}});
+					m.setStyle({cartoon: {colorfunc: colorHelix, thickness:0.4}});
 					m.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
 					// v.setStyle({chain:'B'}, {}),;
 					// v.setStyle({}, {cartoon: {colorscheme: 'chainHetatm'}});
@@ -130,21 +181,23 @@ var SUBFAMILY_ID = "";
 <script>
 	function highlight_helix(b, s_index, e_index) {
 	viewer.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
+		model=viewer.getModel();
 		if (b.style.color == "red") {
 		b.style.color = "black";
-		viewer.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon: {colorfunc: colorHelix}});
+		model.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon: {colorfunc: colorHelix, thickness:0.4}});
 		} else {
 		b.style.color = "red";
-		viewer.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon:{color:'red', thickness:1.0}});
+		model.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon:{color:'red', thickness:3.0, width:2}});
 		};
 	viewer.render();}
 </script>
 	<script>
 var slider = document.getElementById("mySelection");
 slider.oninput = function() {
-	viewer.setStyle({cartoon: {colorfunc: colorHelix}});
-	viewer.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
-	viewer.setStyle({resi:['1-'.concat(this.value)]}, {cartoon:{color:'red', thickness:1.0}});
+	model=viewer.getModel();
+	model.setStyle({cartoon: {colorfunc: colorHelix, thickness:0.4}});
+	model.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
+	model.setStyle({resi:['1-'.concat(this.value)]}, {cartoon:{color:"red", width:2}});
 	viewer.render();}
 	</script>
 	{% endif %}
