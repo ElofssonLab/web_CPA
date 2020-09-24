@@ -51,6 +51,7 @@ def details(request, subfamily_id):
     # if len(cpa_models) > 0:
     # print(cpa_models)
     # print(pir_models)
+    # print(cpa_models)
     cpa_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, cpa_models[0].split("/")[-1])
     if len(pir_models) > 0:
         pir_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, pir_models[0].split("/")[-1])
@@ -85,7 +86,7 @@ def details(request, subfamily_id):
     if "_struct.pdb" in cpa_model:
         model_type = "Crystal structure"
     else:
-        model_type = "Homology structure"
+        model_type = "Homology model"
     cartoon_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-cartoon.svg")
     krbias_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-KRbias.png")
     motif_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-NC_CC.png")
@@ -209,7 +210,7 @@ def details(request, subfamily_id):
                                                           # 'base_url': base_url,
                                                           # 'fasta_url': fasta_url,
                                                           # 'prot_len': protein_len,
-                                                          # 'pdb_id': pdb_name[:4],
+                                                          'pdb_id': info["PDB"],
                                                           # 'pdb_chain' : pdb_name[4:],
                                                           # 'pdb_url': pdb_url,
                                                           # 'pdb_chain': pdb_chain,
@@ -219,6 +220,7 @@ def details(request, subfamily_id):
                                                           # 'clan_id': clan_id,
                                                           # 'clan_name': clan_name,
                                                           # 'ls_list': ls_list,
+                                                          'topology': info["Topology"],
                                                           'nrepeat': info["N-repeat"],
                                                           'crepeat': info["C-repeat"],
                                                           'krbroken': info["KRbroken"],
@@ -248,7 +250,7 @@ def get_browse(request):
     headers = ["Subfamily", "Family", "Superfamily", "Fold-type","Topology", "Pfam"]
 
 
-    sub_families= [f.split("/")[-1] for f in glob.glob(settings.DATA_DIR + "/CPA/*") if os.path.isdir(f) and "images" not in f]
+    sub_families= [f.split("/")[-1] for f in glob.glob(settings.DATA_DIR + "/CPA/*") if os.path.isdir(f) and "images" not in f and "Backup" not in f]
     family_stats = []
 
 
