@@ -36,9 +36,11 @@ var SUBFAMILY_ID = "";
 	  <li class="nav-item">
 		<a class="nav-link active" data-toggle="tab" href="#visualization">Visualization</a>
 	  </li>
+	  <!--
 	  <li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#references">Data files</a>
 	  </li>
+	  -->
 		<li class="nav-item"  >
 		<a class="nav-link" data-toggle="tab" href="#logos">Broken and Reentrant core motifs</a>
 	  </li>
@@ -82,6 +84,33 @@ var SUBFAMILY_ID = "";
 					<input type="range" min="1" max="{{ fa_len }}" value="1" id="mySelection">
 				</div>
 				<!-- 	<input type="button" value="sphere" onclick="viewer.setStyle({resi:['20-50']}, {cartoon:{color:'red', thickness:1.0}});viewer.render();"> -->
+			</div>
+			<h3><b>Downloads</b></h3>
+			<div class="row">
+				<div class="col-sm">
+						<a href="{{ fasta_url }}">Representative sequence</a>
+				</div>
+				<div class="col-sm">
+						<a href="{{ family_msa_url }}">Family MSA</a>
+				</div>
+				<div class="col-sm">
+						<a href="{{ fasta_topo_file }}">Topology of representative sequence</a>
+				</div>
+			</div>
+			<div class="row">
+				{% for seed in seed_models %}
+					<div class="col-sm">
+						<a href="{{ seed }}">Seed MSA {{forloop.counter }}</a>
+					</div>
+				{% endfor %}
+				<div class="col-sm">
+					<a href="{{ modelURL }}">{{ modelType }}</a>
+				</div>
+				{% if pirURL %}
+				<div class="col-sm">
+						<a href="{{ pirURL }}">PIR file</a>
+				</div>
+				{% endif %}
 			</div>
 		</div>
 

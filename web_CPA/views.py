@@ -249,8 +249,11 @@ def get_browse(request):
     # headers = ["ID","N","Meff","hasPDB","hasModel","FDR"]
     headers = ["Subfamily", "Family", "Superfamily", "Fold-type","Topology", "Pfam"]
 
+    protein_list = []
+    with open(os.path.join(settings.DATA_DIR, "CPA", "protein_list.txt"), 'r') as protein_list_handle:
+        protein_list = protein_list_handle.read().strip().split('\n')
 
-    sub_families= [f.split("/")[-1] for f in glob.glob(settings.DATA_DIR + "/CPA/*") if os.path.isdir(f) and "images" not in f and "Backup" not in f]
+    sub_families= [f.split("/")[-1] for f in glob.glob(settings.DATA_DIR + "/CPA/*") if os.path.isdir(f) and f.split("/")[-1] in protein_list]
     family_stats = []
 
 
