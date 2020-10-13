@@ -41,7 +41,7 @@ def details(request, subfamily_id):
     Full_alignment_images_raw = glob.glob(settings.DATA_DIR + "/CPA/images/Full_length_seq_topo_figures/*" + subfamily_id + "*")
     Repeat_alignment_images_raw = glob.glob(settings.DATA_DIR + "/CPA/images/Repeat_seq_topo_figures/*" + subfamily_id + "*")
     # Repeat_alignment_images = glob.glob(cpa_url + "/*.pdb")
-    cpa_models = glob.glob(cpa_url + "/*.pdb")
+    raw_cpa_models = glob.glob(cpa_url + "/*.pdb")
     pir_models = glob.glob(cpa_url + "/*.pir")
     seed_models_raw = glob.glob(cpa_url + "/*-seed.msa")
     fasta_topo_files = glob.glob(cpa_url + "/*topo")
@@ -52,7 +52,23 @@ def details(request, subfamily_id):
     # print(cpa_models)
     # print(pir_models)
     # print(cpa_models)
-    cpa_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, cpa_models[0].split("/")[-1])
+    models = [os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, c.split("/")[-1]) for c in raw_cpa_models]
+    cpa_models = []
+    model_type = ''
+    for model in models:
+        if 'Tr' in model:
+            cpa_models.append(["Tr Homology model", str(model)])
+            if not model_type:
+                model_type = "Homology model"
+        elif "_struct.pdb" in model:
+            cpa_models.append(["Crystal structure", str(model)])
+            if not model_type:
+                model_type = "Crystal structure"
+        else:
+            cpa_models.append(["CONFOLD Homology model", str(model)])
+            if not model_type:
+                model_type = "Homology model"
+
     if len(pir_models) > 0:
         pir_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, pir_models[0].split("/")[-1])
     else:
@@ -83,10 +99,6 @@ def details(request, subfamily_id):
                 info["KRreentrant"] = [p_type[1], values[1]]
             else:
                 info[key] = value
-    if "_struct.pdb" in cpa_model:
-        model_type = "Crystal structure"
-    else:
-        model_type = "Homology model"
     cartoon_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-cartoon.svg")
     krbias_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-KRbias.png")
     motif_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-NC_CC.png")
@@ -194,7 +206,7 @@ def details(request, subfamily_id):
     #print(cpa_model)
     return render(request, 'web_CPA/details.html', {# 'pfam_id': pfam_id,
                                                           # 'pfam_url': pfam_url,
-                                                          'modelURL': cpa_model,
+                                                          'modelURLs': cpa_models,
                                                           'pirURL': pir_model,
                                                           'modelType': model_type,
                                                           'cartoonURL': cartoon_url,

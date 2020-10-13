@@ -6,7 +6,7 @@
 <!-- <script>
 var PDB_FILE = "{{ modelURL }}";// to be filled by Django
 var model_type = "{{ modelType }}";// to be filled by Django
-var PROTEIN_STRUCTURE_FILES = {{ modelURLs|safe }};// to be filled by Django
+var PDB_FILES = {{ modelURLs|safe }};// to be filled by Django
 var topo_other_imgs = {{ topo_data.1|safe }};
 var topo_other_descs = {{ topo_data.0|safe }};
 var topo_other_comms = {{ topo_data.2|safe }};
@@ -62,6 +62,14 @@ var SUBFAMILY_ID = "";
 
 		<div class="container tab-pane active" id="visualization" style="padding-top: 25px; padding-bottom: 150px">
 			<div class="col" style="padding-top: 10px;"><h1>{{ subfamily_id }}</h1> <h3>({{ modelType }})</h3> <h5>{{ pdb_id }}</h5><h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div>
+
+			<div class="row">
+				<select name="modelType" id="modelType" class="selectpicker show-tick" onChange="viewer=load_pdb();">
+				{% for modelURL in modelURLs %}
+				<option value="{{ modelURL.1 }}">{{ modelURL.0 }}</option>
+				{% endfor %}
+				</select>
+			</div>
 			<div class="row">
 				<div id="container-01" class="mol-container"> </div>
 			</div>
@@ -104,7 +112,9 @@ var SUBFAMILY_ID = "";
 					</div>
 				{% endfor %}
 				<div class="col-sm">
-					<a href="{{ modelURL }}">{{ modelType }}</a>
+				{% for modelURL in modelURLs %}
+					<a href="{{ modelURL.1 }}">{{ modelURL.0 }}</a>
+				{% endfor %}
 				</div>
 				{% if pirURL %}
 				<div class="col-sm">
@@ -185,7 +195,7 @@ var SUBFAMILY_ID = "";
 		</div>
 	</div>
 </div>
-{% if modelURL %}
+{% if modelURLs %}
 
 	<script>
 		let colorHelix = function(atom) {
@@ -194,11 +204,11 @@ var SUBFAMILY_ID = "";
 			}
 			return 'white';
 		};
-		// $(function () {
+		function load_pdb() {
 			let element = $('#container-01');
 			let config = { backgroundColor: 'white' };
 			let viewer = $3Dmol.createViewer( element, config );
-			let pdbUri = "{{ modelURL }}";
+			let pdbUri = $('.selectpicker').val(); //"{{ modelURL }}";
 			jQuery.ajax( pdbUri, {
 				success: function(data) {
 					// var rec1 = viewer.addModel($('#1udt').val(), "pdb");
@@ -222,31 +232,34 @@ var SUBFAMILY_ID = "";
 					console.error("Failed to load PDB " + pdbUri + ": " + err );
 				},
 			});
+			return viewer;
 			// viewer.zoomTo();
 			// viewer.render();
-		// });
-	</script>
-<script>
-	function highlight_helix(b, s_index, e_index) {
-	viewer.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
-		model=viewer.getModel();
-		if (b.style.color == "red") {
-		b.style.color = "black";
-		model.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon: {colorfunc: colorHelix, thickness:0.4}});
-		} else {
-		b.style.color = "red";
-		model.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon:{color:'red', thickness:3.0, width:2}});
 		};
-	viewer.render();}
-</script>
-	<script>
-var slider = document.getElementById("mySelection");
-slider.oninput = function() {
-	model=viewer.getModel();
-	model.setStyle({cartoon: {colorfunc: colorHelix, thickness:0.4}});
-	model.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
-	model.setStyle({resi:['1-'.concat(this.value)]}, {cartoon:{color:"red", width:2}});
-	viewer.render();}
+	viewer = load_pdb();
 	</script>
-	{% endif %}
+	<script>
+		function highlight_helix(b, s_index, e_index) {
+		viewer.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
+			model=viewer.getModel();
+			if (b.style.color == "red") {
+			b.style.color = "black";
+			model.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon: {colorfunc: colorHelix, thickness:0.4}});
+			} else {
+			b.style.color = "red";
+			model.setStyle({resi:[''.concat(s_index).concat('-').concat(e_index)]}, {cartoon:{color:'red', thickness:3.0, width:2}});
+			};
+		viewer.render();}
+	</script>
+	<script>
+		var slider = document.getElementById("mySelection");
+		slider.oninput = function() {
+			model=viewer.getModel();
+			model.setStyle({cartoon: {colorfunc: colorHelix, thickness:0.4}});
+			model.setStyle({resn:'DUM'}, {sphere: {opacity:0.8}});
+			model.setStyle({resi:['1-'.concat(this.value)]}, {cartoon:{color:"red", width:2}});
+			viewer.render();
+		}
+	</script>
+{% endif %}
 {% endblock %}
