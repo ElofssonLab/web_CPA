@@ -111,11 +111,11 @@ var SUBFAMILY_ID = "";
 						<a href="{{ seed }}">Seed MSA {{forloop.counter }}</a>
 					</div>
 				{% endfor %}
-				<div class="col-sm">
 				{% for modelURL in modelURLs %}
+				<div class="col-sm">
 					<a href="{{ modelURL.1 }}">{{ modelURL.0 }}</a>
-				{% endfor %}
 				</div>
+				{% endfor %}
 				{% if pirURL %}
 				<div class="col-sm">
 						<a href="{{ pirURL }}">PIR file</a>
