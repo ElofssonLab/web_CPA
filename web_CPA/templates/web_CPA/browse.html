@@ -38,7 +38,11 @@
                <th>Superfamily</th>
                <th>Fold-type</th>
                <th>Topology</th>
+               <th>Pfam-Clan</th>
                <th>Pfam</th>
+               <th>TCDB</th>
+               <th>OPM</th>
+               <th>CATH</th>
                <!--               <th>model</th> -->
              </tr>
              </tfoot>
@@ -52,7 +56,7 @@ tfoot {
 table.dataTable td, table.dataTable th {
   padding: .25em;
 }
-    /*headers = ["Superfamily", "Fold-type","Family","Subfamily","Topology", "Pfam"]*/
+    /*headers = ["Superfamily", "Fold-type","Family","Subfamily","Topology", "Pfam-Clan", "Pfam"]*/
 </style>
 <script type="text/javascript">
 	var dataset = {{ tableData|safe }};
@@ -133,7 +137,11 @@ $(document).ready(function() {
             { title: "Superfamily"},
             { title: "Fold-type"},
             { title: "Topology"},
+			{ title: "Pfam-Clan"},
 			{ title: "Pfam"},
+			{ title: "TCDB"},
+			{ title: "OPM"},
+			{ title: "CATH"},
             // { title: "Has model"}
         ],
       "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -147,7 +155,7 @@ $(document).ready(function() {
     table.columns().every( function () {
             var that = this;
      
-            $( '#Superfamily, #Fold-type, #Family, #Subfamily, #Topology, #Pfam', this.footer() ).on( 'keyup change', function () {
+            $( '#Superfamily, #Fold-type, #Family, #Subfamily, #Topology, #Pfam-Clan, #Pfam, #TCDB #OPM #CATH', this.footer() ).on( 'keyup change', function () {
                 if ( that.search() !== this.value ) {
                     that
                         .search( this.value )

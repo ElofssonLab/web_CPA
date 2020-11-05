@@ -61,8 +61,20 @@ var SUBFAMILY_ID = "";
 	<div class="tab-content">
 
 		<div class="container tab-pane active" id="visualization" style="padding-top: 25px; padding-bottom: 150px">
-			<div class="col" style="padding-top: 10px;"><h1>{{ subfamily_id }}</h1> <h3>({{ modelType }})</h3> <h5>{{ pdb_id }}</h5><h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div>
-
+		<!--	
+		<div class="col" style="padding-top: 10px;"><h1>{{ subfamily_id }}</h1> <h3>({{ modelType }})</h3> <h5>{{ pdb_id|safe }}</h5><h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div> -->
+			<div class="col" style="padding-top: 10px;">
+				<div class="row"><h1>{{ subfamily_id }}</h1></div>
+				<div class="row"><h3>({{ modelType }})</h3></div>
+				<div class="row"><h5>PDB: {{ pdb_id|safe }}</h5></div>
+				<div class="row"><h5>Pfam: {{ pfam_link|safe }}</h5></div>
+				<div class="row"><h5>Pfam Clan: {{ pfam_clan_link|safe }}</h5></div>
+				<div class="row"><h5>TCDB: {{ tcdb_link|safe }}</h5></div>
+				<div class="row"><h5>OPM: {{ opm_link|safe }}</h5></div>
+				<div class="row"><h5>CATH: {{ cath_link|safe }}</h5></div>
+				<div class="row"><h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div>
+			</div>
+			
 			<div class="row">
 				<select name="modelType" id="modelType" class="selectpicker show-tick" onChange="viewer=load_pdb();">
 				{% for modelURL in modelURLs %}

@@ -74,7 +74,9 @@ def details(request, subfamily_id):
     else:
         pir_model = ''
     seed_models = [os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, seed_model.split("/")[-1]) for seed_model in seed_models_raw]
-    fasta_topo_file = [os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, fasta_topo_file.split("/")[-1]) for fasta_topo_file in fasta_topo_files][0]
+    fasta_topo_file = ''
+    if len(fasta_topo_files) > 0:
+        fasta_topo_file = [os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, fasta_topo_file.split("/")[-1]) for fasta_topo_file in fasta_topo_files][0]
     Full_alignment_images = [os.path.join(settings.STATIC_URL, 'data/CPA/images/Full_length_seq_topo_figures', full_image.split("/")[-1]) for full_image in Full_alignment_images_raw]
     Repeat_alignment_images = [os.path.join(settings.STATIC_URL, 'data/CPA/images/Repeat_seq_topo_figures', repeat_image.split("/")[-1]) for repeat_image in Repeat_alignment_images_raw]
     # print(fasta_topo_file)
@@ -84,7 +86,8 @@ def details(request, subfamily_id):
     info = {}
     with open(os.path.join(settings.DATA_DIR, "CPA", subfamily_id, "heirarchy.txt"), 'r') as heir_stat:
         for d in heir_stat.read().strip().split('\n'):
-            key, value = d.split(':')
+            key = d.split(':')[0]
+            values = d.split(':')[1:]
             # if key == "Subfamily":
             #     detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
             #     info[key] = detail_link
@@ -93,12 +96,59 @@ def details(request, subfamily_id):
             #     info[key] = pfam_link
             # else:
             if key.startswith("KR"):
+                info["KRbroken"] = ''
+                info["KRreentrant"] = ''
                 p_type = key.split('/')
-                values = value.split('/')
-                info["KRbroken"] = [p_type[0], values[0]]
-                info["KRreentrant"] = [p_type[1], values[1]]
+                value = values[0].split('/')
+                if len(value[0]) > 0:
+                    info["KRbroken"] = [p_type[0], value[0]]
+                    info["KRreentrant"] = [p_type[1], value[1]]
+            elif key == "CPAfold":
+                info["Superfamily"] = values[0]
+                info["Family"] = values[1]
+                # detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
+                # info["Subfamily"] = detail_link
+            elif key == "Pfam":
+                pfam_link = ''
+                pfam_clan_link = ''
+                pfam_link = '<a href="https://pfam.xfam.org/family/' + values[1] + '" target="_blank">' + values[1] + '</a>' 
+                pfam_clan_link = '<a href="https://pfam.xfam.org/clan/' + values[0] + '" target="_blank">' + values[0] + '</a>' 
+                info["Pfam-Clan"] = pfam_clan_link
+                info[key] = pfam_link
+            elif key == "Fold-type": 
+                info[key] = values[0].replace(" fold-type", '')
+            elif key == "TCDB":
+                tcdb_link = ''
+                for l in values[1].split(','):
+                    if len(tcdb_link) > 0:
+                        tcdb_link += ','
+                    tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + l + '" target="_blank">' + l + '</a>' 
+                info[key] = tcdb_link
+            elif key == "OPM":
+                info[key] = ''
+                if len([x for x in values if len(x.strip()) > 0]) > 0:
+                    opm_sup_family = values[0]
+                    opm_family = values[1]
+                    opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[1] + '" target="_blank">Superfamily</a>' 
+                    opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[0] + '" target="_blank">Family</a>' 
+                    info[key] = opm_s_link + ',' + opm_link
+                
+            elif key in ["cath","CATH"]:
+                info[key] = ''
+                if len([x for x in values if len(x.strip()) > 0]) > 0:
+                    cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">superfamily</a>' 
+                    info["CATH"] = cath_link
+            elif key == "PDB":
+                info[key] = ''
+                if len(values) > 0:
+                    pdb_link = ''
+                    for pdb in values[0].split(','):
+                        pdb_link += '<a href="https://www.rcsb.org/structure/' + pdb[:4] + '" target="_blank">' + pdb + '</a>,' 
+                    info[key] = pdb_link[:-1]
+            # TCDB::2.A.24:
+            # http://www.tcdb.org/search/result.php?tc=2.A.10
             else:
-                info[key] = value
+                info[key] = values[0]
     cartoon_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-cartoon.svg")
     krbias_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-KRbias.png")
     motif_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-NC_CC.png")
@@ -125,17 +175,20 @@ def details(request, subfamily_id):
     # print(buttons_text)
     # raw_models = glob.glob(base_url + "/*.pdb")
     # raw_DIs = glob.glob(base_url + "/*.l3")
-    temp_fasta_url = glob.glob(cpa_url + "/" + subfamily_id +".fasta")[0]
+    temp_fasta_url = ''
+    if len(fasta_topo_files) > 0:
+        temp_fasta_url = glob.glob(cpa_url + "/" + subfamily_id +".fasta")[0]
     # desc_file = glob.glob(base_url + "/description.txt")[0]
 
     fa_len = 0
-    with open(temp_fasta_url) as fa_handle:
-        fa_handle.readline()
-        seq = ''.join(fa_handle.readlines())
-        # print(seq)
-        fa_len = len(seq)
-        # print seq
-        # print len(seq)
+    if len(fasta_topo_files) > 0:
+        with open(temp_fasta_url) as fa_handle:
+            fa_handle.readline()
+            seq = ''.join(fa_handle.readlines())
+            # print(seq)
+            fa_len = len(seq)
+            # print seq
+            # print len(seq)
     # topology
     topo_lambda = lambda x: x.split("/")[0][:-1]+"<sub>"+x.split("/")[0][-1]+"</sub>"
 
@@ -212,6 +265,11 @@ def details(request, subfamily_id):
                                                           'cartoonURL': cartoon_url,
                                                           'krbiasURL': krbias_url,
                                                           'topannotURLs': topAnnot_urls,
+                                                          'pfam_link':info["Pfam"],
+                                                          'pfam_clan_link':info["Pfam-Clan"],
+                                                          'tcdb_link':info["TCDB"],
+                                                          'opm_link':info["OPM"],
+                                                          'cath_link':info["CATH"],
                                                           # 'modelURLs': modelURLs,
                                                           # 'dmapURL': dmapURL,
                                                           # 'topology_calculated' : topology_calculated,
@@ -273,15 +331,47 @@ def get_browse(request):
         info = {}
         with open(os.path.join(settings.DATA_DIR, "CPA", sub_family, "heirarchy.txt"), 'r') as heir_stat:
             for d in heir_stat.read().strip().split('\n'):
-                key, value = d.split(':')
-                if key == "Subfamily":
+                key = d.split(':')[0]
+                values = d.split(':')[1:]
+                if key == "CPAfold":
+                    info["Superfamily"] = values[0]
+                    info["Family"] = values[1]
                     detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
-                    info[key] = detail_link
+                    info["Subfamily"] = detail_link
                 elif key == "Pfam":
-                    pfam_link = '<a href="https://pfam.xfam.org/family/' + value + '" target="_blank">' + value + '</a>' 
+                    pfam_link = ''
+                    pfam_clan_link = ''
+                    pfam_link = '<a href="https://pfam.xfam.org/family/' + values[1] + '" target="_blank">' + values[1] + '</a>' 
+                    pfam_clan_link = '<a href="https://pfam.xfam.org/clan/' + values[0] + '" target="_blank">' + values[0] + '</a>' 
+                    info["Pfam-Clan"] = pfam_clan_link
                     info[key] = pfam_link
+                elif key == "Fold-type": 
+                    info[key] = values[0].replace(" fold-type", '')
+                elif key == "TCDB":
+                    tcdb_link = ''
+                    for l in values[1].split(','):
+                        if len(tcdb_link) > 0:
+                            tcdb_link += ','
+                        tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + l + '" target="_blank">' + l + '</a>' 
+                    info[key] = tcdb_link
+                elif key == "OPM":
+                    info[key] = ''
+                    if len([x for x in values if len(x.strip()) > 0]) > 0:
+                        opm_sup_family = values[0]
+                        opm_family = values[1]
+                        opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[1] + '" target="_blank">Superfamily</a>' 
+                        opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[0] + '" target="_blank">Family</a>' 
+                        info[key] = opm_s_link + ',' + opm_link
+                    
+                elif key == "CATH":
+                    info[key] = ''
+                    if len([x for x in values if len(x.strip()) > 0]) > 0:
+                        cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">Superfamily</a>' 
+                        info[key] = cath_link
+                # TCDB::2.A.24:
+                # http://www.tcdb.org/search/result.php?tc=2.A.10
                 else:
-                    info[key] = value
+                    info[key] = values
                 # elif key == "PDB":
                 #     info.append(value)
                 #     if value:
@@ -294,7 +384,9 @@ def get_browse(request):
             # family_stats.append(info)
             tableData.append([info["Subfamily"], info["Family"],
                               info["Superfamily"], info["Fold-type"],
-                              info["Topology"], info["Pfam"]])
+                              info["Topology"], info["Pfam-Clan"],
+                              info["Pfam"], info["TCDB"],
+                              info["OPM"], info["CATH"]])
                             
     # print(family_stats)
 
