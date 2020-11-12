@@ -257,6 +257,8 @@ def details(request, subfamily_id):
     # model_list = sorted(model_list, key=lambda x: "".join(x.split(".")[:-1]))
     # modelURLs = [org_pdb_file] + model_list
     #print(cpa_model)
+    if subfamily_id.startswith("Cons_hypoth698"):
+        subfamily_id = subfamily_id + "(" + subfamily_id.replace('Cons_hypoth698', 'PSE') + ')'
     return render(request, 'web_CPA/details.html', {# 'pfam_id': pfam_id,
                                                           # 'pfam_url': pfam_url,
                                                           'modelURLs': cpa_models,
@@ -336,7 +338,10 @@ def get_browse(request):
                 if key == "CPAfold":
                     info["Superfamily"] = values[0]
                     info["Family"] = values[1]
-                    detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
+                    if sub_family.startswith("Cons_hypoth698"):
+                        detail_link = '<a href="/details/' + sub_family + '">' + sub_family + "(" + sub_family.replace('Cons_hypoth698', 'PSE') + ')</a>'
+                    else:
+                        detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
                     info["Subfamily"] = detail_link
                 elif key == "Pfam":
                     pfam_link = ''
