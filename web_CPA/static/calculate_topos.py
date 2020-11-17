@@ -2,8 +2,8 @@ import sys
 from os import path
 import re
 import glob
-import urllib.request
-from urllib.error import HTTPError
+# import urllib.request
+# from urllib.error import HTTPError
 
 if len(sys.argv) != 2:
     print("Error, takes a subfamily folder as input")
@@ -77,8 +77,9 @@ with open(heir_file) as heir_handle:
             c_scaff_range = range(c_start, c_stop+1)
         elif line.startswith("Fold-type"):
             fold_type = line.strip().split(":")[-1]
-            fold_nr = fold_type.split(' ')[0]
-            fold_subtype = fold_type.split(' ')[2]
+            if len(fold_type.split(' ')) > 1:
+                fold_nr = fold_type.split(' ')[0]
+                fold_subtype = fold_type.split(' ')[2]
         elif line.startswith("PDB"):
             pot_pdb = line.strip().split(":")
             if len(pot_pdb[1]) > 1:
@@ -100,6 +101,8 @@ if not pdb_file:
     #     print("{} not exists, skipping...".format(pdb_id), file=sys.stderr)
 if not path.exists(topo_file):
     topo_file = in_folder + "/" + sf_id + ".btopo" 
+if not path.exists(topo_file):
+    topo_file = in_folder + "/" + sf_id + ".topo" 
 
 with open(topo_file) as in_file:
     in_file.readline()  # Read header line

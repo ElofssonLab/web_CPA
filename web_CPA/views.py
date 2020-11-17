@@ -31,6 +31,14 @@ def details(request, subfamily_id):
     # # dmapURLs = [dmapURL]
     # base_url = os.path.join(settings.DATA_DIR, '29.0/', pfam_id)
     # base_url = os.path.join(settings.DATA_DIR, 'CPA/', subfamily_id)
+    partial_protein_list = []
+    with open(os.path.join(settings.DATA_DIR, "CPA", "partial_protein_list.txt"), 'r') as partial_protein_list_handle:
+        partial_protein_list = partial_protein_list_handle.read().strip().split('\n')
+
+    if subfamily_id in partial_protein_list:
+        partial = True
+    else:
+        partial = False
     cpa_url = os.path.join(settings.DATA_DIR, 'CPA/', subfamily_id)
     ls_list = []
     fasta_url = ''
@@ -43,7 +51,7 @@ def details(request, subfamily_id):
     # Repeat_alignment_images = glob.glob(cpa_url + "/*.pdb")
     raw_cpa_models = glob.glob(cpa_url + "/*.pdb")
     pir_models = glob.glob(cpa_url + "/*.pir")
-    seed_models_raw = glob.glob(cpa_url + "/*-seed.msa")
+    seed_models_raw = glob.glob(cpa_url + "/*seed.msa")
     fasta_topo_files = glob.glob(cpa_url + "/*topo")
     cases_path = glob.glob(cpa_url + "/*_cases.txt")
     buttons_path = glob.glob(cpa_url + "/*_buttons.txt")
@@ -129,14 +137,14 @@ def details(request, subfamily_id):
                 if len([x for x in values if len(x.strip()) > 0]) > 0:
                     opm_sup_family = values[0]
                     opm_family = values[1]
-                    opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[1] + '" target="_blank">Superfamily</a>' 
-                    opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[0] + '" target="_blank">Family</a>' 
+                    opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[0] + '" target="_blank">Superfamily</a>' 
+                    opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[1] + '" target="_blank">Family</a>' 
                     info[key] = opm_s_link + ',' + opm_link
                 
             elif key in ["cath","CATH"]:
                 info[key] = ''
                 if len([x for x in values if len(x.strip()) > 0]) > 0:
-                    cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">superfamily</a>' 
+                    cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">Superfamily</a>' 
                     info["CATH"] = cath_link
             elif key == "PDB":
                 info[key] = ''
@@ -257,8 +265,8 @@ def details(request, subfamily_id):
     # model_list = sorted(model_list, key=lambda x: "".join(x.split(".")[:-1]))
     # modelURLs = [org_pdb_file] + model_list
     #print(cpa_model)
-    if subfamily_id.startswith("Cons_hypoth698"):
-        subfamily_id = subfamily_id + "(" + subfamily_id.replace('Cons_hypoth698', 'PSE') + ')'
+    # if subfamily_id.startswith("Cons_hypoth698"):
+    #     subfamily_id = subfamily_id + "(" + subfamily_id.replace('Cons_hypoth698', 'PSE') + ')'
     return render(request, 'web_CPA/details.html', {# 'pfam_id': pfam_id,
                                                           # 'pfam_url': pfam_url,
                                                           'modelURLs': cpa_models,
@@ -272,6 +280,7 @@ def details(request, subfamily_id):
                                                           'tcdb_link':info["TCDB"],
                                                           'opm_link':info["OPM"],
                                                           'cath_link':info["CATH"],
+                                                          'partial':partial,
                                                           # 'modelURLs': modelURLs,
                                                           # 'dmapURL': dmapURL,
                                                           # 'topology_calculated' : topology_calculated,
@@ -338,10 +347,10 @@ def get_browse(request):
                 if key == "CPAfold":
                     info["Superfamily"] = values[0]
                     info["Family"] = values[1]
-                    if sub_family.startswith("Cons_hypoth698"):
-                        detail_link = '<a href="/details/' + sub_family + '">' + sub_family + "(" + sub_family.replace('Cons_hypoth698', 'PSE') + ')</a>'
-                    else:
-                        detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
+                    # if sub_family.startswith("Cons_hypoth698"):
+                    #     detail_link = '<a href="/details/' + sub_family + '">' + sub_family + "(" + sub_family.replace('Cons_hypoth698', 'PSE') + ')</a>'
+                    # else:
+                    detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
                     info["Subfamily"] = detail_link
                 elif key == "Pfam":
                     pfam_link = ''
@@ -364,8 +373,8 @@ def get_browse(request):
                     if len([x for x in values if len(x.strip()) > 0]) > 0:
                         opm_sup_family = values[0]
                         opm_family = values[1]
-                        opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[1] + '" target="_blank">Superfamily</a>' 
-                        opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[0] + '" target="_blank">Family</a>' 
+                        opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[0] + '" target="_blank">Superfamily</a>' 
+                        opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[1] + '" target="_blank">Family</a>' 
                         info[key] = opm_s_link + ',' + opm_link
                     
                 elif key == "CATH":

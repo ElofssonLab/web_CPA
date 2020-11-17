@@ -41,6 +41,7 @@ var SUBFAMILY_ID = "";
 		<a class="nav-link" data-toggle="tab" href="#references">Data files</a>
 	  </li>
 	  -->
+	  {% if not partial %}
 		<li class="nav-item"  >
 		<a class="nav-link" data-toggle="tab" href="#logos">Broken and Reentrant core motifs</a>
 	  </li>
@@ -56,6 +57,7 @@ var SUBFAMILY_ID = "";
 		<li class="nav-item"  >
 		<a class="nav-link" data-toggle="tab" href="#repeat">Repeat alignments</a>
 	  </li>
+	  {% endif %}
 	</ul>
 
 	<div class="tab-content">
@@ -118,16 +120,20 @@ var SUBFAMILY_ID = "";
 				</div>
 			</div>
 			<div class="row">
-				{% for seed in seed_models %}
 					<div class="col-sm">
-						<a href="{{ seed }}">Seed MSA {{forloop.counter }}</a>
+						{% for seed in seed_models %}
+								{% if forloop.counter > 1 %}
+								<a href="{{ seed }}">Topology seed MSA {{forloop.counter }}</a><br>
+								{% else %}
+								<a href="{{ seed }}">Topology seed MSA</a><br>
+								{% endif %}
+						{% endfor %}
 					</div>
-				{% endfor %}
-				{% for modelURL in modelURLs %}
 				<div class="col-sm">
-					<a href="{{ modelURL.1 }}">{{ modelURL.0 }}</a>
+					{% for modelURL in modelURLs %}
+					<a href="{{ modelURL.1 }}">{{ modelURL.0 }}</a><br>
+					{% endfor %}
 				</div>
-				{% endfor %}
 				{% if pirURL %}
 				<div class="col-sm">
 						<a href="{{ pirURL }}">PIR file</a>
