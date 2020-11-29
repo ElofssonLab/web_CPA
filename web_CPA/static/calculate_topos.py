@@ -2,8 +2,8 @@ import sys
 from os import path
 import re
 import glob
-import urllib.request
-from urllib.error import HTTPError
+# import urllib.request
+# from urllib.error import HTTPError
 
 if len(sys.argv) != 2:
     print("Error, takes a subfamily folder as input")
@@ -18,24 +18,31 @@ colors = {'N-broken-core-5':"0x800080",
           'N-reentrant-core-5':"0x6495ED",
           'N-reentrant-core-6':"0x008000",
           'N-reentrant-core-7':"0x6495ED",
+          'N-reentrant-core-0':"0x6495ED",
           'N-broken-scaffold-5':"0x800000",
           'N-broken-scaffold-6':"0x800000",
           'N-broken-scaffold-7':"0x800000",
+          'N-broken-scaffold-0':"0x800000",
           'N-reentrant-scaffold-5':"0x800000",
           'N-reentrant-scaffold-6':"0x800000",
           'N-reentrant-scaffold-7':"0x800000",
+          'N-reentrant-scaffold-0':"0x800000",
           'C-broken-core-5':"0x800080",
           'C-broken-core-6':"0x6495ED",
           'C-broken-core-7':"0xE60073",
+          'C-broken-core-0':"0xE60073",
           'C-reentrant-core-5':"0x6495ED",
           'C-reentrant-core-6':"0x008000",
           'C-reentrant-core-7':"0x6495ED",
+          'C-reentrant-core-0':"0x6495ED",
           'C-broken-scaffold-5':"0x800000",
           'C-broken-scaffold-6':"0x800000",
           'C-broken-scaffold-7':"0x800000",
+          'C-broken-scaffold-0':"0x800000",
           'C-reentrant-scaffold-5':"0x800000",
           'C-reentrant-scaffold-6':"0x800000",
-          'C-reentrant-scaffold-7':"0x800000"}
+          'C-reentrant-scaffold-7':"0x800000",
+          'C-reentrant-scaffold-0':"0x800000"}
 topo_colors = ["0xFFFF80", "0x99FFFF"]
 
 case_string = ''
@@ -44,41 +51,49 @@ topo_file = in_folder + "/" + sf_id + ".rtopo"
 heir_file = in_folder + "/heirarchy.txt"
 pdb_file = glob.glob(in_folder + "/*.pdb")
 pdb_id = ''
-
+n_core_range=range(0)
+n_scaff_range = range(0)
+c_core_range = range(0)
+c_scaff_range = range(0)
 with open(heir_file) as heir_handle:
     for line in heir_handle:
         if line.startswith("N-core"):
-            temp = line.strip().split(':')[1].split('-')
-            if len(temp) > 1:
-                n_start, n_stop = [int(i) for i in temp]
-            else:
-                n_start = n_stop = int(temp[0])
-            n_core_range = range(n_start, n_stop+1)
+            temp = line.strip().split(':')[1].strip().split('-')
+            if len(temp[0]) > 0:
+                if len(temp) > 1:
+                    n_start, n_stop = [int(i) for i in temp]
+                else:
+                    n_start = n_stop = int(temp[0])
+                n_core_range = range(n_start, n_stop+1)
         elif line.startswith("N-Scaffold"):
-            temp = line.strip().split(':')[1].split('-')
-            if len(temp) > 1:
-                n_start, n_stop = [int(i) for i in temp]
-            else:
-                n_start = n_stop = int(temp[0])
-            n_scaff_range = range(n_start, n_stop+1)
+            temp = line.strip().split(':')[1].strip().split('-')
+            if len(temp[0]) > 0:
+                if len(temp) > 1:
+                    n_start, n_stop = [int(i) for i in temp]
+                else:
+                    n_start = n_stop = int(temp[0])
+                n_scaff_range = range(n_start, n_stop+1)
         elif line.startswith("C-core"):
-            temp = line.strip().split(':')[1].split('-')
-            if len(temp) > 1:
-                c_start, c_stop = [int(i) for i in temp]
-            else:
-                c_start = c_stop = int(temp[0])
-            c_core_range = range(c_start, c_stop+1)
+            temp = line.strip().split(':')[1].strip().split('-')
+            if len(temp[0]) > 0:
+                if len(temp) > 1:
+                    c_start, c_stop = [int(i) for i in temp]
+                else:
+                    c_start = c_stop = int(temp[0])
+                c_core_range = range(c_start, c_stop+1)
         elif line.startswith("C-Scaffold"):
-            temp = line.strip().split(':')[1].split('-')
-            if len(temp) > 1:
-                c_start, c_stop = [int(i) for i in temp]
-            else:
-                c_start = c_stop = int(temp[0])
-            c_scaff_range = range(c_start, c_stop+1)
+            temp = line.strip().split(':')[1].strip().split('-')
+            if len(temp[0]) > 0:
+                if len(temp) > 1:
+                    c_start, c_stop = [int(i) for i in temp]
+                else:
+                    c_start = c_stop = int(temp[0])
+                c_scaff_range = range(c_start, c_stop+1)
         elif line.startswith("Fold-type"):
             fold_type = line.strip().split(":")[-1]
-            fold_nr = fold_type.split(' ')[0]
-            fold_subtype = fold_type.split(' ')[2]
+            if len(fold_type.split(' ')) > 1:
+                fold_nr = fold_type.split(' ')[0]
+                fold_subtype = fold_type.split(' ')[2]
         elif line.startswith("PDB"):
             pot_pdb = line.strip().split(":")
             if len(pot_pdb[1]) > 1:
@@ -100,6 +115,8 @@ if not pdb_file:
     #     print("{} not exists, skipping...".format(pdb_id), file=sys.stderr)
 if not path.exists(topo_file):
     topo_file = in_folder + "/" + sf_id + ".btopo" 
+if not path.exists(topo_file):
+    topo_file = in_folder + "/" + sf_id + ".topo" 
 
 with open(topo_file) as in_file:
     in_file.readline()  # Read header line
