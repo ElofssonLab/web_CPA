@@ -14,10 +14,6 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 # BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DATA_DIR = os.path.join(BASE_DIR,'../web_CPA/static/data')
-#try:
-#    from shared_settings import *
-#except ImportError:
-#    pass
 
 with open('/etc/django_pro_secret_key.txt') as f:
     SECRET_KEY = f.read().strip()
@@ -25,18 +21,25 @@ with open('/etc/django_pro_secret_key.txt') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['*']
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug':DEBUG,
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
-#computenodefile = "%s/pred/static/computenode.txt"%(BASE_DIR)
-#if os.path.exists(computenodefile):
-#    nodelist = []
-#    try:
-#        nodelist = open(computenodefile, "r").read().split()
-#    except:
-#        pass
-#   ALLOWED_HOSTS += nodelist
+
 INSTALLED_APPS = (
         'web_CPA',
     'django.contrib.admin',
@@ -47,7 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
