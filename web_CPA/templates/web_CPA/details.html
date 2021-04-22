@@ -65,35 +65,34 @@ var SUBFAMILY_ID = "";
 		<div class="container tab-pane active" id="visualization" style="padding-top: 25px; padding-bottom: 150px">
 		<!--	
 		<div class="col" style="padding-top: 10px;"><h1>{{ subfamily_id }}</h1> <h3>({{ modelType }})</h3> <h5>{{ pdb_id|safe }}</h5><h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div> -->
-			<div class="col" style="padding-top: 10px;">
-				<div class="row"><h1>{{ subfamily_id }}</h1></div>
-				<div class="row"><h3>({{ modelType }})</h3></div>
-				<div class="row"><h5>PDB: {{ pdb_id|safe }}</h5></div>
-				<div class="row"><h5>Pfam: {{ pfam_link|safe }}</h5></div>
-				<div class="row"><h5>Pfam Clan: {{ pfam_clan_link|safe }}</h5></div>
-				<div class="row"><h5>TCDB: {{ tcdb_link|safe }}</h5></div>
-				<div class="row"><h5>OPM: {{ opm_link|safe }}</h5></div>
-				<div class="row"><h5>CATH: {{ cath_link|safe }}</h5></div>
-				<div class="row"><h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div>
-			</div>
-			
 			<div class="row">
+				<div class="col" style="padding-top: 10px;">
+					<div class="row"><h1>{{ subfamily_id }}</h1></div>
+					{% if pdb_id|length > 0 %}
+					<div class="row"><h5>PDB: {{ pdb_id|safe }}</h5></div>
+					  {% endif %}
 				<select name="modelType" id="modelType" class="selectpicker show-tick" onChange="viewer=load_pdb();">
 				{% for modelURL in modelURLs %}
 				<option value="{{ modelURL.1 }}">{{ modelURL.0 }}</option>
 				{% endfor %}
 				</select>
+				</div>
+			
+				<div class="col" style="padding-top: 10px;">
+						<p><b><center>{{ topology }} topology</center></b></p>
+						<img src="{{ cartoonURL }}" alt="{{ subfamily_id }} cartoon">
+				</div>
 			</div>
 			<div class="row">
 				<div id="container-01" class="mol-container"> </div>
 			</div>
+				<div class="row"><h4>{{ modelType }}</h4></div>
 			<div class="row">
 				<b><i>
 					<table style="border:solid 5px white">
-						<tr><td>Inside loop</td><td bgcolor="#FFFF80" style="color:#FFFF80;border:solid 3px white">TEST</td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>Outside loop</td><td bgcolor="#99FFFF" style="color:#99FFFF;border:solid 3px white">TEST</td></tr>
-						<tr><td>Reentrant in-in</td><td bgcolor="#FFFF80" style="color:#FFFF80;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>Reentrant out-out</td><td bgcolor="#99FFFF" style="color:#99FFFF;border:solid 3px white"></td></tr>
-						<tr><td>N & C scaffold</td><td bgcolor="#800000" style="color:#800000;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>N & C core (6 reentrant)</td><td bgcolor="#008000" style="color:#008000;border:solid 3px white"></td></tr>
-						<tr><td>N & C core (7 broken)</td><td bgcolor="#E60073" style="color:#E60073;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>N & C core (5 broken)</td><td bgcolor="#800080" style="color:#800080;border:solid 3px white"></td></tr>
+						<tr><td>Inside loop</td><td bgcolor="#FFFF80" style="color:#FFFF80;border:solid 3px white">TEST</td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>Outside loop</td><td bgcolor="#99FFFF" style="color:#99FFFF;border:solid 3px white">TEST</td><td>CPA-broken fold</td><td bgcolor="#E60073" style="color:#E60073;border:solid 3px white">TEST</td></tr>
+						<tr><td>Reentrant in-in</td><td bgcolor="#FFFF80" style="color:#FFFF80;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>Reentrant out-out</td><td bgcolor="#99FFFF" style="color:#99FFFF;border:solid 3px white"></td><td>BART-fold</td><td bgcolor="#800080" style="color:#800080;border:solid 3px white"></td></tr>
+						<tr><td>N & C scaffold</td><td bgcolor="#800000" style="color:#800000;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>CPA-reentrant fold</td><td bgcolor="#008000" style="color:#008000;border:solid 3px white"></td><td>N & C core (RHR fold)</td><td bgcolor="#0099ff" style="color:#0099ff;border:solid 3px white"></td></tr>
 					</table>
 				</i></b>
 			</div>
@@ -106,6 +105,26 @@ var SUBFAMILY_ID = "";
 					<input type="range" min="1" max="{{ fa_len }}" value="1" id="mySelection">
 				</div>
 				<!-- 	<input type="button" value="sphere" onclick="viewer.setStyle({resi:['20-50']}, {cartoon:{color:'red', thickness:1.0}});viewer.render();"> -->
+			</div>
+			<div class="col" style="padding-top: 10px;">
+				{% if pfam_link|length > 0 %}
+				<div class="row"><h5>Pfam: {{ pfam_link|safe }}</h5></div>
+				{% endif %}
+				{% if pfam_clan_link|length > 0 %}
+				<div class="row"><h5>Pfam Clan: {{ pfam_clan_link|safe }}</h5></div>
+				{% endif %}
+				{% if tcdb_link|length > 0 %}
+				<div class="row"><h5>TCDB: {{ tcdb_link|safe }}</h5></div>
+				{% endif %}
+				{% if opm_link|length > 0 %}
+				<div class="row"><h5>OPM: {{ opm_link|safe }}</h5></div>
+				{% endif %}
+				{% if cath_link|length > 0 %}
+				<div class="row"><h5>CATH: {{ cath_link|safe }}</h5></div>
+				{% endif %}
+				{% if nrepeat|length > 0 %}
+				<div class="row"><h4>N-repeat {{ nrepeat }} : C-repeat {{ crepeat }}</h4></div>
+				{% endif %}
 			</div>
 			<h3><b>Downloads</b></h3>
 			<div class="row">

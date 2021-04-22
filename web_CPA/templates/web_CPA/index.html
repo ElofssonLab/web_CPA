@@ -6,12 +6,19 @@
       <div class="jumbotron">
         <div class="container" style="background-color:white;padding-bottom:15px">
 			<img id="logo_img" class="img-responsive" style="max-width:100%" src="{% static "images/CPAfold.png" %}" alt="CPAfold">
+			<img id="logo_img" class="img-responsive" style="max-width:100%;padding-bottom:10px" src="{% static "images/cpa_logo.svg" %}" alt="CPAfold">
 			<div class="row justify-content-md-center">
   <a href="{% url 'web_CPA:search' %}" class="btn btn-lg btn-outline-success">Start searching</a>
   <a href="{% url 'web_CPA:browse' %}" class="btn btn-lg
       btn-outline-success">Start browsing</a>
 			</div>
-			<img id="intro_img" class="img-responsive" style="max-width:100%" src="{% static "data/CPA/Introductory_figure.svg" %}" alt="Introduction">
+			<img id="intro_img" class="img-responsive" style="max-width:100%" src="{% static "images/Introduction.svg" %}" alt="Introduction">
+		<p>
+		Proteins from the Pfam CPA_AT clan (Monovalent cation/proton antiporter /Anion transporter) transport a variety of ions, amino acids and other charged compounds. Due to their functional importance, CPA/AT transporters are ubiquitously present in all the three kingdoms of life.
+		<br>
+		<br>
+The figure shows the sodium bile acid symporter (PDB id:4n7w). CPA/AT transporters generally consist of two structurally and evolutionarily related inverted repeat units, each of them with one core and one scaffold subdomain. The repeats are shaded in grey. In structure space, both the N-scaffold and C-scaffold subdomain come together to form a scaffold domain. Similarly, the N-core and C-core subdomain come together to form the core domain. The lipid bilayer is coloured red and blue to denote outside and inside respectively.  Scaffold subdomain can be 2 or 3 helices long.  Central to the function of the transporters is the existence of non-canonical helices that are involved in the transport process.Core domain can have broken (Coloured in dark pink) or reentrant (Coloured in green). The third type of  non-canonical helix has been identified for the first time in this work using ab initio modelling.It is named as the “Reentrant-Helix-Reentrant” (Coloured in blue).
+		</p>
         </div>
       </div>
 

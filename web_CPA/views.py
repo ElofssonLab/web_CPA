@@ -65,17 +65,17 @@ def details(request, subfamily_id):
     model_type = ''
     for model in models:
         if 'Tr' in model:
-            cpa_models.append(["Tr Homology model", str(model)])
+            cpa_models.append(["trRosetta model", str(model)])
             if not model_type:
-                model_type = "Homology model"
+                model_type = "Predicted model"
         elif "_struct.pdb" in model:
             cpa_models.append(["Crystal structure", str(model)])
             if not model_type:
                 model_type = "Crystal structure"
-        else:
-            cpa_models.append(["CONFOLD Homology model", str(model)])
-            if not model_type:
-                model_type = "Homology model"
+        # else:
+        #     cpa_models.append(["CONFOLD Homology model", str(model)])
+        #     if not model_type:
+        #         model_type = "Homology model"
 
     if len(pir_models) > 0:
         pir_model = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, pir_models[0].split("/")[-1])
@@ -94,7 +94,7 @@ def details(request, subfamily_id):
     info = {}
     with open(os.path.join(settings.DATA_DIR, "CPA", subfamily_id, "heirarchy.txt"), 'r') as heir_stat:
         for d in heir_stat.read().strip().split('\n'):
-            key = d.split(':')[0]
+            key = d.split(':')[0].strip()
             values = d.split(':')[1:]
             # if key == "Subfamily":
             #     detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
@@ -116,47 +116,58 @@ def details(request, subfamily_id):
                 info["Family"] = values[1]
                 # detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
                 # info["Subfamily"] = detail_link
-            elif key == "Pfam":
+            elif key == "Pfam family":
                 pfam_link = ''
+                pfam_link = '<a href="https://pfam.xfam.org/family/' + values[0] + '" target="_blank">' + values[0] + '</a>' 
+                info["Pfam-Family"] = pfam_link
+            elif key == "Pfam clan":
                 pfam_clan_link = ''
-                pfam_link = '<a href="https://pfam.xfam.org/family/' + values[1] + '" target="_blank">' + values[1] + '</a>' 
                 pfam_clan_link = '<a href="https://pfam.xfam.org/clan/' + values[0] + '" target="_blank">' + values[0] + '</a>' 
                 info["Pfam-Clan"] = pfam_clan_link
-                info[key] = pfam_link
             elif key == "Fold-type": 
                 info[key] = values[0].replace(" fold-type", '')
-            elif key == "TCDB":
+            elif key == "TCDB family":
                 tcdb_link = ''
-                for l in values[1].split(','):
-                    if len(tcdb_link) > 0:
-                        tcdb_link += ','
-                    tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + l + '" target="_blank">' + l + '</a>' 
-                info[key] = tcdb_link
-            elif key == "OPM":
-                info[key] = ''
-                if len([x for x in values if len(x.strip()) > 0]) > 0:
-                    opm_sup_family = values[0]
-                    opm_family = values[1]
-                    opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[0] + '" target="_blank">Superfamily</a>' 
-                    opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[1] + '" target="_blank">Family</a>' 
-                    info[key] = opm_s_link + ',' + opm_link
+                # for l in values[1].split(','):
+                #     if len(tcdb_link) > 0:
+                #         tcdb_link += ','
+                # tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + values[0] + '" target="_blank">' + values[0] + '</a>' 
+                info["TCDB-Family"] = values[0]
+            elif key == "TCDB superfamily":
+                tcdb_link = ''
+                # for l in values[1].split(','):
+                #     if len(tcdb_link) > 0:
+                #         tcdb_link += ','
+                #tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + values[0] + '" target="_blank">' + values[0] + '</a>' 
+                info["TCDB-Superfamily"] = values[0]
+            # elif key == "OPM family":
+            #     info[key] = ''
+            #     if len([x for x in values if len(x.strip()) > 0]) > 0:
+            #         # opm_sup_family = values[0]
+            #         opm_family = values[0]
+            #         #opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[0] + '" target="_blank">Superfamily</a>' 
+            #         opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[0] + '" target="_blank">Family</a>' 
+            #         info["OPM"] =  opm_link
                 
-            elif key in ["cath","CATH"]:
+            elif key in ["cath","CATH","CATH family"]:
                 info[key] = ''
+                cath_link = ''
                 if len([x for x in values if len(x.strip()) > 0]) > 0:
-                    cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">Superfamily</a>' 
-                    info["CATH"] = cath_link
+                    cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">' + values[0] + '</a>' 
+                info["CATH"] = cath_link
             elif key == "PDB":
                 info[key] = ''
-                if len(values) > 0:
-                    pdb_link = ''
-                    for pdb in values[0].split(','):
-                        pdb_link += '<a href="https://www.rcsb.org/structure/' + pdb[:4] + '" target="_blank">' + pdb + '</a>,' 
-                    info[key] = pdb_link[:-1]
+                if values != ['']:
+                    if len(values) > 0:
+                        pdb_link = ''
+                        for pdb in values[0].split(','):
+                            pdb_link += '<a href="https://www.rcsb.org/structure/' + pdb[:4] + '" target="_blank">' + pdb + '</a>,' 
+                        info[key] = pdb_link[:-1]
+
             # TCDB::2.A.24:
             # http://www.tcdb.org/search/result.php?tc=2.A.10
             else:
-                info[key] = values[0]
+                info[key] = values[0].strip()
     cartoon_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-cartoon.svg")
     krbias_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-KRbias.png")
     motif_url = os.path.join(settings.STATIC_URL, 'data/CPA/', subfamily_id, subfamily_id + "-NC_CC.png")
@@ -265,8 +276,8 @@ def details(request, subfamily_id):
     # model_list = sorted(model_list, key=lambda x: "".join(x.split(".")[:-1]))
     # modelURLs = [org_pdb_file] + model_list
     #print(cpa_model)
-    # if subfamily_id.startswith("Cons_hypoth698"):
-    #     subfamily_id = subfamily_id + "(" + subfamily_id.replace('Cons_hypoth698', 'PSE') + ')'
+    if subfamily_id.startswith("Cons_hypoth698"):
+        subfamily_id = subfamily_id.replace('Cons_hypoth698', 'PSE')
     return render(request, 'web_CPA/details.html', {# 'pfam_id': pfam_id,
                                                           # 'pfam_url': pfam_url,
                                                           'modelURLs': cpa_models,
@@ -275,10 +286,10 @@ def details(request, subfamily_id):
                                                           'cartoonURL': cartoon_url,
                                                           'krbiasURL': krbias_url,
                                                           'topannotURLs': topAnnot_urls,
-                                                          'pfam_link':info["Pfam"],
+                                                          'pfam_link':info["Pfam-Family"],
                                                           'pfam_clan_link':info["Pfam-Clan"],
-                                                          'tcdb_link':info["TCDB"],
-                                                          'opm_link':info["OPM"],
+                                                          'tcdb_link':info["TCDB-Family"],
+                                                          'opm_link':info["OPM family"],
                                                           'cath_link':info["CATH"],
                                                           'partial':partial,
                                                           # 'modelURLs': modelURLs,
@@ -328,7 +339,8 @@ def get_browse(request):
     # statsFile = open(os.path.join(settings.DATA_DIR,'stats.txt'),'r')
     # headers = listFile.readline().strip().split(',')
     # headers = ["ID","N","Meff","hasPDB","hasModel","FDR"]
-    headers = ["Subfamily", "Family", "Superfamily", "Fold-type","Topology", "Pfam"]
+    # <!-- Family, Topology,Fold-type, Pfam family, Pfam clan, TCDB family, TCDB superfamily -->	
+    # headers = ["Subfamily", "Family", "Superfamily", "Fold-type","Topology", "Pfam"]
 
     protein_list = []
     with open(os.path.join(settings.DATA_DIR, "CPA", "protein_list.txt"), 'r') as protein_list_handle:
@@ -341,47 +353,60 @@ def get_browse(request):
     for sub_family in sub_families:
         info = {}
         with open(os.path.join(settings.DATA_DIR, "CPA", sub_family, "heirarchy.txt"), 'r') as heir_stat:
+
             for d in heir_stat.read().strip().split('\n'):
                 key = d.split(':')[0]
                 values = d.split(':')[1:]
-                if key == "CPAfold":
-                    info["Superfamily"] = values[0]
-                    info["Family"] = values[1]
+                if key == "Family":
+                    #info["Superfamily"] = values[0]
+                    #info["Family"] = values[1]
                     # if sub_family.startswith("Cons_hypoth698"):
                     #     detail_link = '<a href="/details/' + sub_family + '">' + sub_family + "(" + sub_family.replace('Cons_hypoth698', 'PSE') + ')</a>'
                     # else:
-                    detail_link = '<a href="/details/' + sub_family + '">' + sub_family + '</a>'
-                    info["Subfamily"] = detail_link
-                elif key == "Pfam":
+
+                    sub_family_name = sub_family
+                    if sub_family.startswith("Cons_hypoth698"):
+                        sub_family_name = sub_family.replace('Cons_hypoth698', 'PSE')
+                    detail_link = '<a href="/details/' + sub_family + '">' + sub_family_name + '</a>'
+                    info["Family"] = detail_link
+                elif key == "Pfam family":
                     pfam_link = ''
+                    pfam_link = '<a href="https://pfam.xfam.org/family/' + values[0] + '" target="_blank">' + values[0] + '</a>' 
+                    info["Pfam-Family"] = pfam_link
+                elif key == "Pfam clan":
                     pfam_clan_link = ''
-                    pfam_link = '<a href="https://pfam.xfam.org/family/' + values[1] + '" target="_blank">' + values[1] + '</a>' 
                     pfam_clan_link = '<a href="https://pfam.xfam.org/clan/' + values[0] + '" target="_blank">' + values[0] + '</a>' 
                     info["Pfam-Clan"] = pfam_clan_link
-                    info[key] = pfam_link
                 elif key == "Fold-type": 
                     info[key] = values[0].replace(" fold-type", '')
-                elif key == "TCDB":
+                elif key == "TCDB family":
                     tcdb_link = ''
-                    for l in values[1].split(','):
-                        if len(tcdb_link) > 0:
-                            tcdb_link += ','
-                        tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + l + '" target="_blank">' + l + '</a>' 
-                    info[key] = tcdb_link
-                elif key == "OPM":
-                    info[key] = ''
-                    if len([x for x in values if len(x.strip()) > 0]) > 0:
-                        opm_sup_family = values[0]
-                        opm_family = values[1]
-                        opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[0] + '" target="_blank">Superfamily</a>' 
-                        opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[1] + '" target="_blank">Family</a>' 
-                        info[key] = opm_s_link + ',' + opm_link
-                    
-                elif key == "CATH":
-                    info[key] = ''
-                    if len([x for x in values if len(x.strip()) > 0]) > 0:
-                        cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">Superfamily</a>' 
-                        info[key] = cath_link
+                    # for l in values[1].split(','):
+                    #     if len(tcdb_link) > 0:
+                    #         tcdb_link += ','
+                    #     tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + l + '" target="_blank">' + l + '</a>' 
+                    info["TCDB-Family"] = values
+                elif key == "TCDB superfamily":
+                    tcdb_link = ''
+                    # for l in values[1].split(','):
+                    #     if len(tcdb_link) > 0:
+                    #         tcdb_link += ','
+                    #     tcdb_link += '<a href="http://www.tcdb.org/search/result.php?tc=' + l + '" target="_blank">' + l + '</a>' 
+                    info["TCDB-Superfamily"] = values
+                # elif key == "OPM":
+                #     info[key] = ''
+                #     if len([x for x in values if len(x.strip()) > 0]) > 0:
+                #         opm_sup_family = values[0]
+                #         opm_family = values[1]
+                #         opm_s_link = '<a href="https://opm.phar.umich.edu/protein_superfamilies/' + values[0] + '" target="_blank">Superfamily</a>' 
+                #         opm_link = '<a href="https://opm.phar.umich.edu/protein_families/' + values[1] + '" target="_blank">Family</a>' 
+                #         info[key] = opm_s_link + ',' + opm_link
+                #     
+                # elif key == "CATH":
+                #     info[key] = ''
+                #     if len([x for x in values if len(x.strip()) > 0]) > 0:
+                #         cath_link = '<a href="http://www.cathdb.info/version/latest/superfamily/' + values[0] + '" target="_blank">Superfamily</a>' 
+                #         info[key] = cath_link
                 # TCDB::2.A.24:
                 # http://www.tcdb.org/search/result.php?tc=2.A.10
                 else:
@@ -396,11 +421,17 @@ def get_browse(request):
                 # else:
                 #     info.append(value)
             # family_stats.append(info)
-            tableData.append([info["Subfamily"], info["Family"],
-                              info["Superfamily"], info["Fold-type"],
-                              info["Topology"], info["Pfam-Clan"],
-                              info["Pfam"], info["TCDB"],
-                              info["OPM"], info["CATH"]])
+    # <!-- Family, Topology,Fold-type, Pfam family, Pfam clan, TCDB family, TCDB superfamily -->	
+            # tableData.append([info["Subfamily"], info["Family"],
+            #                   info["Superfamily"], info["Fold-type"],
+            #                   info["Topology"], info["Pfam-Clan"],
+            #                   info["Pfam"], info["TCDB"],
+            #                   info["OPM"], info["CATH"]])
+            tableData.append([info["Family"],
+                              info["Topology"], info["Fold-type"],
+                              info["Pfam-Family"], info["Pfam-Clan"],
+                              info["TCDB-Family"], info["TCDB-Superfamily"]
+                              ])
                             
     # print(family_stats)
 
@@ -460,7 +491,7 @@ def get_browse(request):
     #     # tableData.append(temp_string)
     # print(tableData)
     jsondata = json.dumps(tableData)
-    return render(request, 'web_CPA/browse.html',{'headers':headers,
+    return render(request, 'web_CPA/browse.html',{#'headers':headers,
         'tableData': jsondata, 'initial_search': initial_search})
 
 def get_contact(request):
