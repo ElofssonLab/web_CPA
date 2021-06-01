@@ -379,6 +379,7 @@ def get_browse(request):
                     info["Pfam-Clan"] = pfam_clan_link
                 elif key == "Fold-type": 
                     info[key] = values[0].replace(" fold-type", '')
+                    # info[key] = values[0]
                 elif key == "TCDB family":
                     tcdb_link = ''
                     # for l in values[1].split(','):

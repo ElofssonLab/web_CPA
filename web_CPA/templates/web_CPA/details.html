@@ -46,7 +46,7 @@ var SUBFAMILY_ID = "";
 		<a class="nav-link" data-toggle="tab" href="#logos">Broken and Reentrant core motifs</a>
 	  </li>
 		<li class="nav-item"  >
-		<a class="nav-link" data-toggle="tab" href="#cartoon">Topology Cartoon and KR-bias plot</a>
+		<a class="nav-link" data-toggle="tab" href="#cartoon">KR-bias plot</a>
 	  </li>
 		<li class="nav-item"  >
 		<a class="nav-link" data-toggle="tab" href="#topology">Topology annotation</a>
@@ -92,7 +92,7 @@ var SUBFAMILY_ID = "";
 					<table style="border:solid 5px white">
 						<tr><td>Inside loop</td><td bgcolor="#FFFF80" style="color:#FFFF80;border:solid 3px white">TEST</td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>Outside loop</td><td bgcolor="#99FFFF" style="color:#99FFFF;border:solid 3px white">TEST</td><td>CPA-broken fold</td><td bgcolor="#E60073" style="color:#E60073;border:solid 3px white">TEST</td></tr>
 						<tr><td>Reentrant in-in</td><td bgcolor="#FFFF80" style="color:#FFFF80;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>Reentrant out-out</td><td bgcolor="#99FFFF" style="color:#99FFFF;border:solid 3px white"></td><td>BART-fold</td><td bgcolor="#800080" style="color:#800080;border:solid 3px white"></td></tr>
-						<tr><td>N & C scaffold</td><td bgcolor="#800000" style="color:#800000;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>CPA-reentrant fold</td><td bgcolor="#008000" style="color:#008000;border:solid 3px white"></td><td>N & C core (RHR fold)</td><td bgcolor="#0099ff" style="color:#0099ff;border:solid 3px white"></td></tr>
+						<tr><td>N & C scaffold</td><td bgcolor="#800000" style="color:#800000;border:solid 3px white"></td><td bgcolor="#FFFFFF" style="color:#FFFFFF">BR</td><td>CPA-reentrant fold</td><td bgcolor="#008000" style="color:#008000;border:solid 3px white"></td><td>Reentrant-helix-reentrant fold</td><td bgcolor="#0099ff" style="color:#0099ff;border:solid 3px white"></td></tr>
 					</table>
 				</i></b>
 			</div>
@@ -199,11 +199,12 @@ var SUBFAMILY_ID = "";
 
 		<div class="container tab-pane fade" id="cartoon" style="padding-top: 25px; padding-bottom: 150px">
 			<div class="row">
+				<!--
 				<div class="col align-items-center">
 					<p><b><center>{{ topology }} topology</center></b></p>
 					<img src="{{ cartoonURL }}" alt="{{ subfamily_id }} cartoon">
 				</div>
-
+				-->
 				<div class="col">
 					<p><b><center>{{ krbroken.0 }} {{ krbroken.1 }} : {{ krreentrant.0 }} {{ krreentrant.1 }}</center></b></p>
 					<img src="{{ krbiasURL }}" alt="{{ subfamily_id }} KRbias" style="width: 100%">

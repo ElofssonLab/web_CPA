@@ -9,6 +9,8 @@
 	  <li class="nav-item">
 		<a class="nav-link active" data-toggle="tab" href="#btable">Table</a>
 	  <li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#summary">Summary</a>
+	  <li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#overview">Overview</a>
 	  </li>
 	</ul>
@@ -67,11 +69,15 @@
 		<div class="container tab-pane fade" id="overview" style="padding-top: 25px; padding-bottom: 150px">
 			<div class="row">
 				<p>
-				Availability of experimentally solved structures of transmembrane transporters are sparse. We expand the structural knowledge of the CPA_AT clan by using integrated topology annotation and protein modelling approaches. It combines transmembrane topology prediction, homology/ab initio protein modelling, and the difference in positively charged residues present in inside and outside loops in alternative topological models. CPA_AT clan includes very challenging cases with non-canonical broken or reentrant helices. There are 4 folds in this clan. They are the (1) CPA-Broken-fold (2) CPA-Reentrant-fold (3)BART-fold (4) Reentrant-helix-reentrant fold.
+				The availability of experimentally solved structures of transmembrane transporters is sparse. First, we expanded the structural knowledge of CPA/AT transporters by using integrated topology annotation and protein modelling approaches. It combines evolution guided transmembrane topology prediction, difference in positively charged residues present in inside and outside loops in alternative topological models, homology- and ab initio protein modelling approaches. A few evolutionary related Pfam families were added to Pfam CPA/AT clan to form the CPA/AT  transporter  dataset.  It includes 23 protein families. CPA/AT transporters are classified into 4 fold-types based on their structure; (1) CPA-Broken fold-type (2) CPA-Reentrant fold-type, (3) BART fold-type, and  (4) Reentrant-helix-reentrant fold-type.
 				<br><br>
-	The database presents new topologies, 3D structure models and their folds for all the families in this clan. The Reentrant-helix-reentrant fold is a novel fold that has been identified in this work and was not known previously.Novel reentrant motifs for the reentrant type transporters have been identified. Full length and repeat level topology and sequence alignments of a particular protein family with all the other families in the superfamily are provided. This becomes helpful for comparison of structure and function of related families of interest. The alignments are very easy to follow with topology being mapped on to the sequence alignment.User can check which family his/her protein of interest belongs to.The protein of interest can be aligned with the family MSA belonging to all the families using HHalign program. The protein can be assigned to that particular family that shows the lowest evalue with protein of interest.Topology seed MSA can be used to  extrapolate the topology, repeat regions, core and scaffold regions. This can be carried out by aligning the protein of interest and topology seed MSA by HHalign program. Once family has been assigned to the protein of interest, fold-type, broken/reeentrant type can 
-
+The CPAfold database can be useful to experimentalists interested in studying the structure, function, mutation and design of any protein belonging to this fold. 3D structure models are available for all the families in this fold. Functional and mutational studies can be supported by these models. Novel reentrant motifs for the reentrant type transporters have been identified. Full length and repeat level topology and sequence alignments of a particular protein family with all the other families in the fold are provided. This becomes helpful for comparison of structure and function of related families of interest. The alignments are very easy to follow figures with topology being mapped on to the sequence alignment. Other details such as  representative sequences, topology, multiple sequence alignments, Core and scaffold domain annotation, KR-bias, fold-type classifications  etc. are also available. 
 				</p>
+			</div> <!-- /row -->
+	    </div> <!-- /container -->
+		<div class="container tab-pane fade" id="summary" style="padding-top: 25px; padding-bottom: 150px">
+			<div class="row">
+		<img id="summary_img" src="{% static "data/CPA/Summary.tif" %}" width=100% height=100% alt="Pipeline">
 			</div> <!-- /row -->
 	    </div> <!-- /container -->
       </div> <!-- /tab-content -->
